@@ -1,0 +1,28 @@
+#!/bin/sh
+# Enforces English Conventional Commits. Rules: AGENTS.md section 6.
+
+subject=$(head -n 1 "$1")
+
+# Let git's own merge/revert/fixup messages through.
+case "$subject" in
+  Merge*|Revert*|fixup!*|squash!*) exit 0 ;;
+esac
+
+if ! echo "$subject" | grep -Eq '^(feat|fix|docs|refactor|test|chore|style|perf|build|ci)(\([a-z0-9._/-]+\))?!?: .+'; then
+  echo "Vaquita: commit message must be an English Conventional Commit, e.g." >&2
+  echo "         feat(core): add fair-pot schedule with bigint math" >&2
+  echo "         Scopes: core, bot, web, scripts, docs, ci, repo." >&2
+  echo "         got: $subject" >&2
+  exit 1
+fi
+
+if [ ${#subject} -gt 72 ]; then
+  echo "Vaquita: keep the subject line under 72 characters (it has ${#subject})." >&2
+  exit 1
+fi
+
+# Non-ASCII is a cheap proxy for "not Spanish"; it won't catch Spanish without accents.
+if LC_ALL=C grep -q '[^ -~]' "$1"; then
+  echo "Vaquita: commit message contains non-ASCII characters (accents, n tilde, inverted marks). Write it in English." >&2
+  exit 1
+fi

@@ -1,0 +1,21 @@
+{
+  "name": "@vaquita/core",
+  "version": "0.1.0",
+  "description": "Tubería de transacciones, política, pagos y reglas de La Vaquita. El único paquete que habla con Celo.",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "@celo/attribution-tags": "0.5.0",
+    "dotenv": "^18.0.8",
+    "viem": "^2.57.7",
+    "zod": "^4.6.7"
+  }
+}

@@ -1,0 +1,46 @@
+#!/bin/sh
+# 1. Blocks secrets (keys, tokens, .env files).
+# 2. Blocks commits that change code without the member's log in docs/miembros/<member>/bitacora.md.
+# 3. Blocks edits to other members' folders in docs/miembros/.
+# Rules: AGENTS.md sections 4 and 8. Never bypass with --no-verify.
+
+root=$(git rev-parse --show-toplevel)
+cd "$root" || exit 1
+
+git diff --cached -U0 --no-color --diff-filter=ACMR | sh .githooks/lib/scan-secrets.sh || exit 1
+
+# While resolving a merge, the staged files include other members' work: skip the docs checks.
+[ -f "$(git rev-parse --git-dir)/MERGE_HEAD" ] && exit 0
+
+member=$(git config vaquita.member)
+if [ -z "$member" ]; then
+  echo "Vaquita: who are you? Run: git config vaquita.member <daniel|esteban|santos|maximiliano>" >&2
+  exit 1
+fi
+mine="docs/miembros/$member"
+if [ ! -f "$mine/bitacora.md" ]; then
+  echo "Vaquita: unknown member '$member' (no $mine/bitacora.md). See docs/equipo.md." >&2
+  exit 1
+fi
+
+staged=$(git diff --cached --name-only --diff-filter=ACMRD)
+[ -z "$staged" ] && exit 0
+
+# Modified or deleted only: creating a new member's empty folder is fine.
+others=$(git diff --cached --name-only --diff-filter=MD | grep '^docs/miembros/' | grep -v "^$mine/")
+if [ -n "$others" ]; then
+  echo "Vaquita: you can only edit your own folder ($mine/). Unstage:" >&2
+  echo "$others" | sed 's/^/  /' >&2
+  exit 1
+fi
+
+# Docs-only commits are fine; otherwise the log must be in this commit.
+echo "$staged" | grep -qv '^docs/' || exit 0
+if ! echo "$staged" | grep -qx "$mine/bitacora.md"; then
+  echo "Vaquita: this commit changes files outside docs/ but $mine/bitacora.md is not staged." >&2
+  echo "         Add a log entry (and update estado.md), then stage them. See AGENTS.md section 4." >&2
+  exit 1
+fi
+if ! echo "$staged" | grep -qx "$mine/estado.md"; then
+  echo "Vaquita: reminder: $mine/estado.md is not in this commit. Update it if your focus or blockers changed." >&2
+fi

@@ -5,6 +5,7 @@
 import { createPublicClient, http, type Hex } from "viem";
 import { celo } from "viem/chains";
 import { verifyTx } from "@celo/attribution-tags";
+import "../src/config/load-env.js";
 
 const hash = process.argv[2] as Hex | undefined;
 if (!hash?.match(/^0x[0-9a-fA-F]{64}$/)) throw new Error("Uso: npm run tx:verificar -- 0x<hash>");

@@ -2,7 +2,7 @@
  * Link para cargar pesos en la wallet del agente vía Ripio (sin credenciales).
  *   npm run ramp:link -- 1000
  */
-import "dotenv/config";
+import "../src/config/load-env.js";
 import { privateKeyToAccount } from "viem/accounts";
 import { buildRampUrl } from "../src/ramp/ripio.js";
 

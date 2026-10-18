@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [staging, main]
+  push:
+    branches: [staging, main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # Tests never touch the network (rule 9): no RPC or keys needed here.
+      - name: Tests
+        run: npm test
+
+      - name: Team rules
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+          else
+            base="${{ github.event.before }}"
+          fi
+          # First push of a new branch: no previous commit to compare, only run the tree checks.
+          if echo "$base" | grep -qE '^0+$'; then base=HEAD; fi
+          sh .github/scripts/check-pr.sh "$base" HEAD

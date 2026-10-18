@@ -1,0 +1,10 @@
+{
+  "name": "@vaquita/web",
+  "version": "0.1.0",
+  "description": "Página web pública de estado de cada vaquita. Solo lectura.",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@vaquita/core": "*"
+  }
+}

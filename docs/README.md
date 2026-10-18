@@ -1,36 +1,44 @@
-# Docs · Agents on Open Rails (Celo × Ripio)
+# Docs de La Vaquita · segundo cerebro del equipo
 
-Contexto del hackathon y material para el brainstorming, organizado para usar como documentación del proyecto y como contexto para el coding agent.
+Esta carpeta es la memoria compartida del proyecto **La Vaquita**. Está en español, igual que todo lo que ve el usuario; commits, ramas y PRs van en inglés (ver [AGENTS.md](../AGENTS.md)).
 
-Fuentes: Builder Session Jujuy (17/10/2026, francoduran23.github.io/builder-session-jujuy), página del hackathon (loops.house/agents-on-open-rails) y recursos que compartieron los organizadores.
+Se puede abrir como bóveda de Obsidian (abrir la carpeta `docs/` como vault). Los links son relativos para que también funcionen en GitHub.
 
-| # | Documento | Contenido |
-| --- | --- | --- |
-| 01 | [Hackathon](01-hackathon.md) | Fechas, tracks, premios, cómo evalúan |
-| 02 | [Requisitos](02-requisitos.md) | Requisitos eliminatorios y reglas que no se negocian |
-| 03 | [Celo](03-celo.md) | Datos de la red, ERC-8021, ERC-8004, x402, fee abstraction, MiniPay |
-| 04 | [Ripio y wFIAT](04-ripio-wfiat.md) | Direcciones de tokens, ramps, bridge |
-| 05 | [Stack y recursos](05-stack-recursos.md) | Skills, librerías, links, canales de ayuda |
-| 06 | [Principios de diseño](06-principios-diseno.md) | Cómo debe comportarse el agente |
-| 07 | [Prompt base](07-prompt-base.md) | Prompt para arrancar el coding agent |
-| 08 | [Brainstorming](08-brainstorming.md) | Ideas semilla, filtro de ideas, ángulos locales, argumentos |
-| 09 | [Próximos pasos](09-proximos-pasos.md) | Checklist hasta la entrega |
-| 10 | [Scaffold stable-agent](10-scaffold-stable-agent.md) | Código base existente: estructura, tubería de tx, política, scripts, qué falta |
-| 11 | [Ideas T1](11-ideas.md) | 5 ideas desarrolladas, comparación y recomendación |
-| 12 | [Idea Mesada](12-idea-mesada.md) | Candidata anterior: pitch, flujos, reglas, MVP, demo, riesgos |
-| 13 | [La Vaquita: referentes y mejoras](13-vaquita-benchmark-y-mejoras.md) | Benchmark (MoneyFellows, Tanda, Esusu, Ronda, CeloSusu…), 6 mejoras, riesgos |
-| 14 | [La Vaquita: modelo de negocio](14-vaquita-modelo-de-negocio.md) | Lean canvas, segmentos, ingresos, unit economics, regulación PSAV, go-to-market |
-| 15 | [Qué cambia con La Vaquita](15-que-cambia-con-la-vaquita.md) | Contexto argentino, "junta justa" indexada por inflación, antes y después por actor |
+## Cómo funciona
 
-## Idea actual: La Vaquita
+- Cada integrante tiene su carpeta en [`miembros/`](miembros/) con tres archivos:
+  - `estado.md`: en qué está ahora, qué sigue y qué lo bloquea. Siempre al día.
+  - `bitacora.md`: una entrada por commit, la más nueva arriba.
+  - `ideas.md`: ideas y propuestas que va dejando.
+  - `relevamientos/` (opcional): investigaciones largas, por ejemplo conversaciones con IA hechas fuera del repo. Un archivo por tema: `AAAA-MM-DD-tema.md`.
+- Con cada commit que toca código, el agente (o la persona) actualiza su `bitacora.md` y su `estado.md` **en el mismo commit**. El hook `pre-commit` no deja commitear si falta, y la CI rechaza el PR.
+- Las decisiones que afectan a todos van en [`proyecto/decisiones.md`](proyecto/decisiones.md).
+- Cada uno edita solo su carpeta de `miembros/` (el hook lo controla). En los archivos compartidos se agrega, no se reescribe lo de otros.
 
-> **La Vaquita** es un agente que organiza la junta, la tanda o la vaca de tu grupo en pesos digitales (wARS): cobra a cada uno, paga el pozo a quien le toca y reparte la inflación de forma justa, con reglas que nadie, ni el agente, puede romper.
+## Mapa
 
-Pitch: **"crédito entre conocidos a la mitad del costo del banco, sin que nadie pierda contra la inflación"** (ver doc 15).
+| Archivo | Qué tiene |
+|---|---|
+| [proyecto/contexto.md](proyecto/contexto.md) | **Fuente de verdad:** qué es, reglas duras, direcciones, estado, junta justa, mora, restricciones |
+| [proyecto/stack.md](proyecto/stack.md) | Stack por workspace, con versiones y lo pendiente de decidir |
+| [proyecto/decisiones.md](proyecto/decisiones.md) | Registro de decisiones del equipo |
+| [equipo.md](equipo.md) | Integrantes, alias, roles y carpeta de cada uno |
+| [tareas/](tareas/README.md) | Áreas de trabajo, responsables y plan de cada integrante |
+| [investigacion/](investigacion/README.md) | Docs 01–15: hackathon, Celo, Ripio, brainstorming, benchmark, modelo de negocio |
 
-Recorrido de la idea: 5 candidatas (doc 11) → Mesada (doc 12) → **La Vaquita** (docs 13–15).
+## Onboarding (una vez por compu)
 
-Skills instaladas en el proyecto: `.claude/skills/celopedia-skill` y `.claude/skills/docs-watch` (Celopedia v2.12.1).
+```sh
+git clone https://github.com/HyNuwa/vaquita.git
+cd vaquita
+npm install                          # instala todo y activa los hooks del equipo
+git config vaquita.member <tu-slug>  # daniel, esteban, santos o maximiliano
+npm run check                        # typecheck + tests, sin red
+```
+
+Para verificar: `git config vaquita.member` tiene que mostrar tu slug y `git config core.hooksPath` tiene que mostrar `.githooks`.
+
+Solo quien maneja la wallet del agente necesita un `.env` con valores reales (`cp .env.example .env`). Nunca se comparte por el repo ni por el chat del equipo.
 
 ## Fechas que importan
 
