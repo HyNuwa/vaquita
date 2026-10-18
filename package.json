@@ -1,0 +1,33 @@
+{
+  "name": "vaquita",
+  "version": "0.1.0",
+  "description": "Agente de juntas, tandas y vacas en wFIAT (Ripio) sobre Celo mainnet",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "preflight": "tsx scripts/preflight.ts",
+    "pago:primero": "tsx scripts/send-first-wars.ts",
+    "identidad:registrar": "tsx scripts/register-agent.ts",
+    "ramp:link": "tsx scripts/ramp-link.ts",
+    "tx:verificar": "tsx scripts/verify-tx.ts"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@celo/attribution-tags": "0.5.0",
+    "dotenv": "^18.0.8",
+    "viem": "^2.57.7",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  },
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  }
+}

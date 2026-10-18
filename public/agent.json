@@ -1,0 +1,12 @@
+{
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "name": "NOMBRE DEL AGENTE",
+  "description": "Qué hace el agente, para quién y en qué moneda (2 líneas).",
+  "image": "https://TU-DOMINIO/logo.png",
+  "services": [
+    { "name": "web", "endpoint": "https://TU-DOMINIO" }
+  ],
+  "x402Support": false,
+  "active": true,
+  "supportedTrust": ["reputation"]
+}

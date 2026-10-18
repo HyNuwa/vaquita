@@ -1,4 +1,14 @@
+node_modules/
+dist/
+coverage/
+
+# Secretos: NUNCA al repo
 .env
 .env.*
 !.env.example
-node_modules/
+*.key
+*.pem
+
+# Estado local del agente (gasto diario, recibos)
+data/*
+!data/.gitkeep
