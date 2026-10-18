@@ -38,5 +38,14 @@ if [ -n "$direct" ]; then
   fail=1
 fi
 
+echo "== Skills live only in .agents/skills"
+# The other agents' folders are local links made by `npm install` (.agents/link-skills.mjs).
+copies=$(git ls-tree -r --name-only "$head" -- .claude/skills .devin/skills .windsurf/skills .cursor/skills)
+if [ -n "$copies" ]; then
+  echo "$copies" | sed 's/^/  /'
+  echo "  Put skills in .agents/skills; the other folders are links, not copies."
+  fail=1
+fi
+
 [ $fail -eq 0 ] && echo "All checks passed."
 exit $fail

@@ -12,3 +12,8 @@ coverage/
 # Estado local del agente (gasto diario, recibos)
 data/*
 !data/.gitkeep
+
+# Links a .agents/skills (los crea `npm install`, ver .agents/link-skills.mjs)
+.claude/skills
+.devin/skills
+.windsurf/skills
