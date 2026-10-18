@@ -1,0 +1,169 @@
+# Celo Network Information
+
+> Source: https://docs.celo.org/build-on-celo/network-overview
+
+## Celo Mainnet
+
+| Field | Value |
+|-------|-------|
+| Chain ID | `42220` |
+| Network Name | Celo Mainnet |
+| Currency Symbol | CELO |
+| Public RPC | `https://forno.celo.org` (rate-limited) |
+| Block Explorer (primary) | https://celoscan.io |
+| Block Explorer (alt) | https://celo.blockscout.com |
+| Block Time | ~1 second |
+| Average Gas Fee | ~$0.0005 |
+| Native Bridge | https://superbridge.app/celo |
+| L2 Stack | OP Stack (Optimism rollup) |
+| Data Availability | EigenDA v2 |
+| Fault Proofs | ZK via Succinct SP1 (Jello hardfork) |
+| L1 → L2 Migration | March 26, 2025 (block 31,056,500) |
+
+### Fee-Accepted Tokens (Gas Abstraction)
+
+Users can pay gas fees with these ERC-20 tokens instead of native CELO. The address below is what you pass in the `feeCurrency` transaction field — **for USDC/USDT this is the 6→18 decimal adapter, NOT the token address**. Passing the token address will cause the transaction to fail.
+
+| Token | `feeCurrency` address | Notes |
+|-------|-----------------------|-------|
+| USDm (cUSD) | `0x765DE816845861e75A25fCA122bb6898B8B1282a` | 18 decimals — token == adapter |
+| EURm (cEUR) | `0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73` | 18 decimals — token == adapter |
+| USDC | `0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B` | **adapter** — token is `0xcebA9300f2b948710d2653dD7B07f33A8B32118C` |
+| USD₮ | `0x0E2A3e05bc9A16F5292A6170456A710cb89C6f72` | **adapter** — token is `0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e` |
+| USA₮ | `0x0357EE22278c922e1D36cFe6b899269b161880C4` | **adapter** — token is `0xD2ab3C9A02DBBAB236BfEC45D1d755DF4267F771` |
+| WETH (Celo native bridge) | `0xD221812de1BD094f35587EE8E174B07B6167D9Af` | 18 decimals — token == adapter |
+| XAUt0 (Tether Gold) | `0x857BF24e29da0773687E804a743c2E421a394C16` | **adapter** — token is `0xaf37E8B6C9ED7f6318979f56Fc287d76c30847ff` |
+
+The full Mainnet allowlist also includes all 14 Mento local-currency stablecoins (AUDm, BRLm, CADm, CHFm, COPm, EURm, GBPm, GHSm, JPYm, KESm, NGNm, PHPm, XOFm, ZARm) — for these, `feeCurrency` == the token address (see `contracts.md`). Live, governable allowlist: `docs.celo.org/tooling/contracts/fee-currencies` (also queryable via `celocli network:whitelist`). Canonical table with full mechanics: `builder-guide.md` → _Allowed Fee Currencies (Mainnet)_ — **note**: as of this run, `builder-guide.md` documents only USDC/USDT/USDm/EURm and hasn't been updated for WETH/XAUt0/USAT/the full Mento set; it is out of this skill's tracked-file scope, so it isn't edited here — flagged for a follow-up.
+
+The `FeeCurrencyDirectory` contract at `0x15F344b9E6c3Cb6F0376A36A64928b13F62C6276` governs the allowlist.
+
+> **Bridged-token caveat:** the decimals and addresses above are for the **canonical** USDC/USDT on Celo. Bridged variants from other chains (via third-party bridges) may have different decimals or different contract addresses. Always verify against the token's contract on Celoscan before integrating.
+
+## Celo Sepolia Testnet
+
+| Field | Value |
+|-------|-------|
+| Chain ID | `11142220` |
+| Network Name | Celo Sepolia |
+| Currency Symbol | CELO |
+| Public RPC | `https://forno.celo-sepolia.celo-testnet.org` |
+| OP-Node RPC | `https://op.celo-sepolia.celo-testnet.org` |
+| Block Explorer | https://celo-sepolia.blockscout.com |
+| Bridge | https://testnets.superbridge.app |
+
+### Testnet Faucets
+
+- Google Cloud: https://cloud.google.com/application/web3/faucet/celo/sepolia
+- Celo Faucet: https://faucet.celo.org/celo-sepolia
+
+### ⚠️ Alfajores is sunset — Celo Sepolia replaces it
+
+**Alfajores (chain ID `44787`) was sunset in 2025, along with Baklava, and no longer exists.** Its RPC
+(`https://alfajores-forno.celo-testnet.org`) does not respond. There is exactly
+one Celo testnet now: **Celo Sepolia, chain ID `11142220`**.
+
+This is the single canonical statement of that fact in this skill — everything
+else defers here.
+
+Alfajores is still referenced widely in older tutorials, blog posts, starter
+repos, and third-party SDK docs, so it turns up constantly in code that
+builders paste in. **Treat any appearance as a bug to fix, not a preference:**
+
+| If you see | Replace with |
+|---|---|
+| Chain ID `44787` | `11142220` |
+| `celoAlfajores` (viem / wagmi / Reown / thirdweb chain export) | `celoSepolia` |
+| `https://alfajores-forno.celo-testnet.org` | `https://forno.celo-sepolia.celo-testnet.org` |
+| `https://alfajores.celoscan.io` / `alfajores-blockscout…` | `https://celo-sepolia.blockscout.com` |
+| `https://faucet.celo.org/alfajores` | `https://faucet.celo.org/celo-sepolia` |
+| `--network alfajores` (Hardhat / Foundry profile) | `--network celoSepolia` |
+
+Testnet **contract addresses do not carry over** — anything deployed to
+Alfajores must be redeployed to Celo Sepolia, and any hardcoded testnet address
+from an Alfajores-era guide is wrong. Mainnet addresses are unaffected.
+
+## RPC Providers
+
+| Provider | Notes |
+|----------|-------|
+| Forno (Celo-native) | `https://forno.celo.org` — free, rate-limited |
+| Alchemy | Enhanced APIs, webhooks, analytics |
+| QuickNode | Global edge network, Streams |
+| Infura (Consensys) | Standard Ethereum-style RPC |
+| Ankr | All-in-one Web3 hub |
+| Chainstack | Geo-load-balanced global nodes. Archive data and debug/trace APIs on paid plans. **Celo mainnet only** — its docs list network ID 42220 and no testnet |
+| Lava | Decentralized RPC network |
+| OnFinality | Multi-chain RPC |
+| Dwellir | Nordic-hosted nodes |
+
+Provider endpoints are per-account and issued from each dashboard, so there is no
+shared URL to publish for them. Chainstack endpoints are key- or password-protected
+(`https://USERNAME:PASSWORD@HOSTNAME` for the latter).
+
+**Reach for a provider when Forno's rate limit starts shaping your app.** Forno is free
+and fine for development and for most reads. The usual trigger for moving is an agent or
+backend making sustained calls, or needing archive state and `debug_*` / `trace_*`, which
+Forno does not serve.
+
+## Block Explorers
+
+| Explorer | URL | Notes |
+|----------|-----|-------|
+| Celoscan | https://celoscan.io | Primary, Etherscan-family |
+| Blockscout | https://celo.blockscout.com | Open-source, full-featured (explorer.celo.org redirects here) |
+
+### Celoscan vs Blockscout — which to use
+
+| Task | Recommended | Why |
+|------|-------------|-----|
+| Verifying a contract (UI) | Celoscan | Better Solidity compiler version matching, clearer error messages |
+| Reading ERC-20 token transfers / holders | Blockscout | More complete ERC-20 indexing, better token-specific UX |
+| Programmatic event log access | Blockscout | REST API (`/api?module=logs`) avoids `eth_getLogs` block-range limits |
+| General transaction inspection | Either | Feature parity for basic tx/block views |
+
+Both explorers are authoritative for chain state. Pick based on the specific task.
+
+## RPC Limits & Gotchas
+
+### `eth_getLogs` — 50,000 block range limit
+
+Celo's public RPC endpoints (and most managed providers) reject `eth_getLogs` requests spanning more than ~50,000 blocks with:
+
+```json
+{"code": -32011, "message": "block range is too large"}
+```
+
+At ~1s block time this is only ~14 hours of history per request. Any indexer, analytics page, or event-history feature must paginate.
+
+**TypeScript workaround (viem):**
+
+```ts
+import { createPublicClient, http, parseAbiItem } from "viem";
+import { celo } from "viem/chains";
+
+const client = createPublicClient({ chain: celo, transport: http() });
+const CHUNK = 45_000n; // under the 50k limit with headroom
+
+async function getLogsChunked(params: {
+  address: `0x${string}`;
+  event: ReturnType<typeof parseAbiItem>;
+  fromBlock: bigint;
+  toBlock: bigint;
+}) {
+  const all = [];
+  for (let from = params.fromBlock; from <= params.toBlock; from += CHUNK + 1n) {
+    const to = from + CHUNK > params.toBlock ? params.toBlock : from + CHUNK;
+    const logs = await client.getLogs({
+      address: params.address,
+      event: params.event,
+      fromBlock: from,
+      toBlock: to,
+    });
+    all.push(...logs);
+  }
+  return all;
+}
+```
+
+For very deep history, prefer a subgraph or Blockscout's `/api?module=logs` endpoint (see comparison above) over chunked `eth_getLogs`.

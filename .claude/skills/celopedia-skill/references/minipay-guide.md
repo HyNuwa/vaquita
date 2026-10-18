@@ -1,0 +1,723 @@
+# MiniPay Development Guide
+
+> **Single source of truth:** https://docs.minipay.xyz/ — all implementation details in this file are derived from and cross-checked against the official MiniPay developer docs.
+> - docs.celo.org mirror: https://docs.celo.org/build-on-celo/build-on-minipay/*
+>
+> For the full page-by-page index of `docs.minipay.xyz`, see `minipay-docs-map.md`.
+
+MiniPay is a non-custodial stablecoin wallet integrated into Opera Mini and available as a standalone app on Android and iOS. It's the fastest growing wallet in the Global South with ~18M total wallet activations, 470M+ transactions processed, 400M+ Mini App transactions to date, 50+ Mini Apps live, available in 66+ countries.
+
+> Stats sourced from the official MiniPay Q1 2026 report: https://forum.celo.org/t/minipay-update-q1-2026/13273
+
+> Wallet counts are updated by the MiniPay team via the MiniPay site and Celo blog. If a precise current number is needed, prefer fetching from those sources over the number above.
+
+- Android: https://play.google.com/store/apps/details?id=com.opera.minipay
+- iOS: https://apps.apple.com/de/app/minipay-easy-global-wallet/id6504087257
+
+### Live Mini Apps in discovery (for builders)
+
+To see **what is already shipping** in MiniPay (categories, publishers, deep links) and how **country targeting** works, use the skill reference **`minipay-live-apps.md`**. It is a **snapshot** from the discovery export, **not** a live API — and **not every app is available in every country**; the reference documents whitelist/blacklist hints from the export.
+
+---
+
+## Quickstart
+
+### Scaffold a Mini App
+
+```bash
+npx @celo/celo-composer@latest create -t minipay
+```
+
+> **Prefer a raw Next.js setup without Composer?** See `minipay-scaffold-from-scratch.md` for a minimal `create-next-app` + viem + ngrok path — useful for integrating MiniPay into an existing Next.js project or skipping Composer's monorepo/Hardhat scaffolding.
+
+### Requirements
+
+- TypeScript v5+
+- Viem v2+
+- Physical Android or iOS device (emulators do NOT work)
+- ngrok for local testing
+
+### Install Dependencies
+
+```bash
+npm install viem@2 @celo/abis @celo/identity
+```
+
+---
+
+## MiniPay Detection
+
+Check if your dApp is running inside MiniPay:
+
+```typescript
+function isMiniPay(): boolean {
+  return typeof window !== "undefined"
+    && window.ethereum !== undefined
+    && window.ethereum.isMiniPay === true;
+}
+```
+
+---
+
+## Wallet Connection
+
+### Without Any Library (simplest)
+
+```typescript
+import { createWalletClient, custom } from "viem";
+import { celo, celoSepolia } from "viem/chains";
+
+const client = createWalletClient({
+  chain: celo,
+  transport: custom(window.ethereum),
+});
+
+const [address] = await client.getAddresses();
+```
+
+### With Wagmi (React)
+
+```typescript
+import { useConnect } from "wagmi";
+import { injected } from "wagmi/connectors";
+
+// Auto-connect in MiniPay (no connect button needed)
+useEffect(() => {
+  if (window.ethereum?.isMiniPay) {
+    connect({ connector: injected({ target: "metaMask" }) });
+  }
+}, []);
+```
+
+### Conditional Connect Button
+
+```tsx
+const [hideConnectBtn, setHideConnectBtn] = useState(false);
+
+useEffect(() => {
+  if (window.ethereum?.isMiniPay) {
+    setHideConnectBtn(true);
+    connect({ connector: injected({ target: "metaMask" }) });
+  }
+}, []);
+
+// Only show connect button outside MiniPay
+{!hideConnectBtn && <ConnectButton />}
+```
+
+---
+
+## Supported Stablecoins
+
+| Token | Symbol | Token Address | Decimals | `feeCurrency` (for gas) |
+|-------|--------|---------------|----------|-------------------------|
+| Mento Dollar | USDm (cUSD) | `0x765DE816845861e75A25fCA122bb6898B8B1282a` | 18 | `0x765DE816845861e75A25fCA122bb6898B8B1282a` (same) |
+| USDC | USDC | `0xcebA9300f2b948710d2653dD7B07f33A8B32118C` | 6 | `0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B` (**adapter**) |
+| USDT | USDT | `0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e` | 6 | `0x0e2a3e05bc9a16f5292a6170456a710cb89c6f72` (**adapter**) |
+
+**Important — two separate things**:
+
+1. **Decimals**: USDm has 18 decimals; USDC/USDT have 6. Always check decimals before displaying amounts.
+2. **Fee abstraction**: For **balances, transfers, and approvals**, use the **Token Address** column. For the **`feeCurrency` transaction field** (paying gas in stablecoins), use the **`feeCurrency` adapter address** — USDC/USDT transactions will **fail** if you pass the token address instead of the adapter. Paying the fee in a stablecoin also costs **~2.5–3.5× the gas** of paying in CELO (measured: +40,700 for USDm, +71,700 for USDT, +114,712 for USDC) — set gas limits accordingly. Numbers and method: `builder-guide.md` → _Gas overhead of paying fees in a stablecoin_. See `builder-guide.md` → _Allowed Fee Currencies (Mainnet)_ for the canonical table and underlying mechanics (CIP-64, FeeCurrencyDirectory).
+
+> **Bridged-token caveat:** the decimals above are for the **canonical** USDC/USDT on Celo. Bridged variants from other chains may have different decimals or different contract addresses. Always verify against the token's contract on Celoscan before integrating.
+
+---
+
+## Check Token Balance
+
+```typescript
+import { createPublicClient, http, formatUnits } from "viem";
+import { celo } from "viem/chains";
+
+const USDM_ADDRESS = "0x765DE816845861e75A25fCA122bb6898B8B1282a";
+
+const ERC20_ABI = [
+  {
+    name: "balanceOf",
+    type: "function",
+    stateMutability: "view",
+    inputs: [{ name: "account", type: "address" }],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+] as const;
+
+const publicClient = createPublicClient({
+  chain: celo,
+  transport: http(),
+});
+
+const balance = await publicClient.readContract({
+  address: USDM_ADDRESS,
+  abi: ERC20_ABI,
+  functionName: "balanceOf",
+  args: [userAddress],
+});
+
+const formatted = formatUnits(balance, 18); // "12.50"
+```
+
+---
+
+## Send Stablecoin Payment
+
+```typescript
+import { createWalletClient, custom, encodeFunctionData, parseUnits } from "viem";
+import { celo } from "viem/chains";
+
+const USDM_ADDRESS = "0x765DE816845861e75A25fCA122bb6898B8B1282a";
+
+const ERC20_ABI = [
+  {
+    name: "transfer",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "to", type: "address" },
+      { name: "value", type: "uint256" },
+    ],
+    outputs: [{ name: "", type: "bool" }],
+  },
+] as const;
+
+const walletClient = createWalletClient({
+  chain: celo,
+  transport: custom(window.ethereum),
+});
+
+const [address] = await walletClient.getAddresses();
+
+const data = encodeFunctionData({
+  abi: ERC20_ABI,
+  functionName: "transfer",
+  args: [recipientAddress, parseUnits("1.00", 18)], // Send 1 USDm
+});
+
+const txHash = await walletClient.sendTransaction({
+  account: address,
+  to: USDM_ADDRESS,
+  data,
+  // Pay network fee with USDm (fee abstraction)
+  feeCurrency: USDM_ADDRESS,
+});
+```
+
+---
+
+## Network Fee Estimation with Fee Currency
+
+MiniPay users pay the network fee in stablecoins. Estimate the network fee in USDm:
+
+```typescript
+import { createPublicClient, http, rpcSchema, formatUnits } from "viem";
+import { celo } from "viem/chains";
+
+// Celo extends eth_gasPrice with a feeCurrency parameter. viem's default
+// public schema types it as taking none, so the request below will NOT
+// typecheck under `strict` unless you declare the schema.
+type CeloRpcSchema = [
+  {
+    Method: "eth_gasPrice";
+    Parameters: [feeCurrency: `0x${string}`];
+    ReturnType: `0x${string}`;
+  },
+];
+
+const publicClient = createPublicClient({
+  chain: celo,
+  transport: http(),
+  rpcSchema: rpcSchema<CeloRpcSchema>(),
+});
+
+// Estimate gas units (internal — UI copy should say "network fee")
+const gasEstimate = await publicClient.estimateGas({
+  account: address,
+  to: USDM_ADDRESS,
+  data,
+  feeCurrency: USDM_ADDRESS,
+});
+
+// Get gas price in USDm (per-unit fee rate)
+const gasPrice = await publicClient.request({
+  method: "eth_gasPrice",
+  params: [USDM_ADDRESS], // Pass fee currency address
+});
+
+// Calculate total fee
+const totalFee = gasEstimate * BigInt(gasPrice);
+const feeFormatted = formatUnits(totalFee, 18); // e.g., "0.0001"
+```
+
+### Pre-flight check: amount **+** network fee
+
+The single most common transaction bug in Mini Apps is checking only that the
+user can afford the **amount**. The fee is paid in the same stablecoin, so the
+real precondition is `balance >= amount + fee`:
+
+```typescript
+const fee = gasEstimate * BigInt(gasPrice);
+
+if (balance < amount + fee) {
+  // Do NOT throw a raw error at the user. Explain, then send them to top up.
+  return {
+    ok: false,
+    shortfall: amount + fee - balance,
+    // "You need a little more USDT to cover this payment and the network fee."
+    depositUrl: "https://link.minipay.xyz/add_cash?tokens=USDm,USDC,USDT",
+  };
+}
+```
+
+Full drop-in helper (preflight + status machine): `minipay-templates.md` §7.
+
+---
+
+## Transaction States
+
+Every on-chain action needs three explicit UI states. This is a listing
+requirement, not a nicety — see `minipay-requirements.md` §9.
+
+| State | What the user must see |
+|---|---|
+| **Pending** | A loading indicator the moment they sign, held through both submission and confirmation. Never a dead button. |
+| **Success** | UI updates on **on-chain confirmation** (`waitForTransactionReceipt`), not on submission. Optionally deep-link to `https://link.minipay.xyz/receipt?tx=<hash>`. |
+| **Failure** | A descriptive, user-friendly message. "Transaction failed" is not descriptive. |
+
+**Map errors from codes, not message text.** Provider and RPC message strings
+change between versions and locales; codes do not.
+
+```typescript
+// EIP-1193 / viem error codes — stable. Message strings — not.
+function messageFor(err: unknown): string {
+  const code = (err as { code?: number }).code;
+  if (code === 4001) return "You cancelled the payment.";
+  if (code === -32000) return "Not enough balance to cover the amount and network fee.";
+  if (err instanceof Error && err.name === "TransactionExecutionError") {
+    return "The payment could not be completed. Please try again.";
+  }
+  return "Something went wrong. Please try again in a moment.";
+}
+```
+
+---
+
+## Phone Number → Address Resolution
+
+Resolve **E.164** numbers (e.g. `+14155552671`) to wallet addresses using **ODIS (PnP)** + **FederatedAttestations**. MiniPay mappings are attested under issuer **`0x7888612486844Bb9BE598668081c59A9f7367FBc`** (pass this as a **trusted issuer**, not as the ODIS quota account).
+
+- **Quota**: Mainnet PnP queries need **non-zero `remainingQuota`**. A **USDm/cUSD balance alone is not enough** — you usually must **`payInCUSD`** on **OdisPayments** after **`increaseAllowance`** on the stable token. See **`odis-socialconnect.md`** for the full quota flow and contract addresses (`contracts.md`).
+
+**Pattern** (ContractKit + `@celo/identity`; typical for **backend** signers — use **DEK / wallet signing** appropriately in Mini Apps):
+
+```typescript
+import { newKit } from "@celo/contractkit";
+import { OdisUtils } from "@celo/identity";
+import type { AuthSigner } from "@celo/identity/lib/odis/query";
+
+const MINIPAY_ISSUER = "0x7888612486844Bb9BE598668081c59A9f7367FBc";
+
+const kit = newKit("https://forno.celo.org");
+kit.addAccount(walletPrivateKey); // 0x-prefixed hex
+const locals = kit.connection.getLocalAccounts();
+kit.defaultAccount = locals[0];
+const quotaAccount = locals[0];
+
+const serviceContext = OdisUtils.Query.getServiceContext(
+  OdisUtils.Query.OdisContextName.MAINNET,
+  OdisUtils.Query.OdisAPI.PNP,
+);
+
+const authSigner: AuthSigner = {
+  authenticationMethod: OdisUtils.Query.AuthenticationMethod.WALLET_KEY,
+  contractKit: kit,
+};
+
+const { obfuscatedIdentifier } =
+  await OdisUtils.Identifier.getObfuscatedIdentifier(
+    phoneE164,
+    OdisUtils.Identifier.IdentifierPrefix.PHONE_NUMBER,
+    quotaAccount,
+    authSigner,
+    serviceContext,
+  );
+
+const federated = await kit.contracts.getFederatedAttestations();
+const { accounts } = await federated.lookupAttestations(obfuscatedIdentifier, [
+  MINIPAY_ISSUER,
+]);
+// accounts[0] is the resolved address when an attestation exists
+```
+
+**Install**: `npm install @celo/contractkit @celo/identity`
+
+See **`references/odis-socialconnect.md`** for troubleshooting, **DEK (`ENCRYPTION_KEY`)** auth, viem alternatives, and doc links.
+
+### UI rule: never expose wallet addresses
+
+MiniPay requires that apps identify users by **phone number**, not `0x…` hex
+addresses — and the rule is **exposure**, not just primacy: do not display,
+copy, or share the address anywhere. No address text, no copy-to-clipboard
+button, no share sheet, no address QR code. **A truncated `0x123…abc` is not an
+exception** — it is still the address, and it still gets flagged in review.
+
+**Show a username.** When you need to show "who paid you" or "send to", the
+ladder is:
+
+1. **A username the user set** — prompt for one at onboarding if your app has
+   any social surface at all.
+2. **A generated display name** if they haven't set one — adjective + noun from
+   a word list (fruits, animals, colours, whatever fits), seeded
+   deterministically from the address so the same user always gets the same
+   name. Users read these as names; they read `0x7a3f…` as an error message.
+3. **The phone number** resolved via FederatedAttestations, where your product
+   genuinely needs to identify a real person.
+4. **"Unknown", or nothing at all.**
+
+**Nothing beats an address.** There is no case where a hex string is the right
+thing to put in front of a MiniPay user.
+
+Related: apps must also **not** offer withdrawals to arbitrary or external
+addresses (no free-text address field). Both rules are part of MiniPay's
+submission requirements — see `minipay-requirements.md` §1.
+
+---
+
+## Custom Methods (MiniPay-native RPC)
+
+> Canonical docs: https://docs.minipay.xyz/technical-references/custom-methods/custom-methods.html
+
+MiniPay exposes three custom JSON-RPC methods via `window.ethereum`. They require a Viem custom client built from a typed schema.
+
+### Setup — `useMiniPayClient` hook
+
+```typescript
+import { createWalletClient, custom } from "viem";
+import { celo } from "viem/chains";
+
+// Define the custom RPC schema once, import the hook wherever you need it
+export function useMiniPayClient() {
+  if (typeof window === "undefined" || !window.ethereum) return null;
+  return createWalletClient({
+    chain: celo,
+    transport: custom(window.ethereum),
+  });
+}
+```
+
+---
+
+### `minipay_getExchangeRate` — real-time FX rate
+
+> Docs: https://docs.minipay.xyz/technical-references/custom-methods/get-exchange-rate.html
+
+```typescript
+import { useState, useCallback } from "react";
+import { useMiniPayClient } from "./useMiniPayClient";
+
+export function useGetExchangeRate() {
+  const client = useMiniPayClient();
+  const [rate, setRate] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const getExchangeRate = useCallback(
+    async ({ from, to }: { from: string; to: string }) => {
+      if (!client) return;
+      setIsPending(true);
+      setError(null);
+      try {
+        const result = await client.request({
+          method: "minipay_getExchangeRate" as any,
+          params: [{ from, to }],
+        });
+        setRate(result as string);
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error(String(err)));
+      } finally {
+        setIsPending(false);
+      }
+    },
+    [client],
+  );
+
+  return { getExchangeRate, rate, isPending, error };
+}
+
+// Usage — get USDT → NGN rate:
+// const { getExchangeRate, rate } = useGetExchangeRate();
+// await getExchangeRate({ from: "USDT", to: "NGN" });
+```
+
+---
+
+### `minipay_scanQrCode` — native QR scanner
+
+> Docs: https://docs.minipay.xyz/technical-references/custom-methods/scan-qr-code.html
+
+```typescript
+import { useState, useCallback } from "react";
+import { useMiniPayClient } from "./useMiniPayClient";
+
+export function useScanQrCode() {
+  const client = useMiniPayClient();
+  const [scannedValue, setScannedValue] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const scanQrCode = useCallback(async () => {
+    if (!client) return;
+    setIsPending(true);
+    setError(null);
+    try {
+      const result = await client.request({
+        method: "minipay_scanQrCode" as any,
+        params: [],
+      });
+      setScannedValue(result as string);
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error(String(err)));
+    } finally {
+      setIsPending(false);
+    }
+  }, [client]);
+
+  return { scanQrCode, scannedValue, isPending, error };
+}
+
+// Usage:
+// const { scanQrCode, scannedValue } = useScanQrCode();
+// <button onClick={scanQrCode}>Scan QR</button>
+```
+
+---
+
+### `minipay_requestContact` — native contact picker
+
+> Docs: https://docs.minipay.xyz/technical-references/custom-methods/request-contact.html
+
+Returns `{ name: string; address: string }` — the contact's name and their MiniPay wallet address.
+
+```typescript
+import { useState, useCallback } from "react";
+import { useMiniPayClient } from "./useMiniPayClient";
+
+interface MiniPayContact {
+  name: string;
+  address: string;
+}
+
+export function useRequestContact() {
+  const client = useMiniPayClient();
+  const [contact, setContact] = useState<MiniPayContact | null>(null);
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const requestContact = useCallback(async () => {
+    if (!client) return;
+    setIsPending(true);
+    setError(null);
+    try {
+      const result = await client.request({
+        method: "minipay_requestContact" as any,
+        params: [],
+      });
+      setContact(result as MiniPayContact);
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error(String(err)));
+    } finally {
+      setIsPending(false);
+    }
+  }, [client]);
+
+  return { requestContact, contact, isPending, error };
+}
+
+// Usage — pick a contact and pre-fill the recipient address:
+// const { requestContact, contact } = useRequestContact();
+// contact?.address → pre-fill send form
+// contact?.name   → display "Send to João"
+```
+
+---
+
+## Deeplinks
+
+Host: `link.minipay.xyz`. Full table with all current deeplinks is in `minipay-docs-map.md` → _Deeplinks_.
+
+| Deeplink | URL | Purpose |
+|----------|-----|---------|
+| Add Cash | `https://link.minipay.xyz/add_cash` (optionally `?tokens=USDm,USDC,USDT`) | Redirect users with low balance to top up |
+| Open Mini App (Browse) | `https://link.minipay.xyz/browse?url=<url-encoded target>` | Open an external link **inside** MiniPay's in-app browser (the target short link is provisioned by MiniPay — request it) |
+| MiniApps tab | `https://link.minipay.xyz/discover` | Jump to the discovery tab |
+| Transaction receipt | `https://link.minipay.xyz/receipt?tx=xxx[&celebrate]` | Show a receipt screen for a tx hash |
+
+> **Canonical list:** https://docs.minipay.xyz/technical-references/deeplinks.html — fetch before shipping; MiniPay publishes new deeplinks periodically.
+>
+> **UI copy:** label this action **Deposit** in buttons/messages — not "Add Cash", "Onramp", or "Buy". See `minipay-requirements.md` §3.
+>
+> **Opening your Mini App from an external link.** Use the **Browse** deeplink
+> `https://link.minipay.xyz/browse?url=<url-encoded target>` to open a URL
+> _inside_ MiniPay. The target is a **MiniPay/Opera short link** for your listed
+> app (e.g. `https://opr.as/xxxx`) — **request it from the MiniPay team**, it's
+> not self-serve.
+>
+> **MiniPay does NOT do referrals, dynamic links, or campaign/attribution
+> params** — it won't carry arbitrary query params through for you. Any referral
+> logic (e.g. `?ref=<wallet>`) is **yours** — bake it into the `url=` target you
+> pass and read it in your app. A plain shared link (not wrapped in Browse) opens
+> in a normal browser, not MiniPay.
+
+---
+
+## Sharing out of a Mini App (Web Share)
+
+MiniPay runs your app in a webview, so `navigator.share()` opens the phone's
+native share sheet — the only way to reach Instagram / Stories (no web-share URL
+exists for those). Gotchas from production:
+
+- **You can't force a target first.** The OS picker owns the order; you can't
+  make X (or any app) the first option. If X-first matters, add an explicit
+  `https://x.com/intent/tweet?text=…&url=…` button instead of relying on the sheet.
+- **Telegram (and some targets) drop the `text`** when a Web Share payload has
+  both `text` and `url` — only the link survives. Fold the link INTO the text and
+  share one string: `navigator.share({ text: \`${msg}\n\n${url}\` })`.
+- **`window.open(intentUrl, '_blank')` works** inside the webview for X /
+  WhatsApp / Telegram, as long as it's inside a user-gesture (click) handler.
+  Use `https://api.whatsapp.com/send?text=…` — `wa.me/?text=…` without a phone
+  number shows an "invalid number" page. Telegram: `https://t.me/share/url?url=…&text=…`.
+- A plain shared link opens in a normal browser; wrap it in the **Browse
+  deeplink** (Deeplinks above) to open inside MiniPay. Either way, keep referral
+  attribution in **your own** URL params — MiniPay doesn't do referrals.
+
+---
+
+## Client-Side State & One-Time Onboarding
+
+The MiniPay WebView supports `localStorage` / `sessionStorage` like any browser.
+For "show this once" UX — an intro walkthrough, a tips banner, a what's-new card
+— gate it on a `localStorage` flag. Learnings from a production Mini App:
+
+- **Use `localStorage`, not `sessionStorage`, for "once ever."** `sessionStorage`
+  is cleared every time the Mini App is reopened, so a walkthrough gated on it
+  reappears on every launch. `localStorage` persists across sessions.
+- **This state is per-device, not per-wallet.** It lives in the WebView, tied to
+  the device — not to the connected address. It does **not** sync across devices,
+  and it's wiped if the user clears MiniPay/app data or the WebView evicts
+  storage. Treat it as a UX hint, never as authoritative or security state.
+- **Don't key onboarding on the wallet address.** The account often isn't
+  connected on first paint, so an address-keyed check causes a flash of the wrong
+  UI while the connection resolves — and you don't need it. A single static key
+  is enough.
+- **Read the flag in a client effect, not during render/SSR.** `localStorage` is
+  `undefined` on the server; touching it during render causes hydration
+  mismatches. Read it inside `useEffect` (or after a mounted check).
+- **Measure completion with an analytics event, not storage.** Storage is
+  invisible to you; you can't count who finished onboarding by inspecting it.
+  Emit an event on completion instead.
+
+```tsx
+// Show a one-time intro on first open; expose a "replay" entry point elsewhere.
+useEffect(() => {
+  if (!localStorage.getItem('intro-seen')) setShowIntro(true)
+}, [])
+
+function dismissIntro() {
+  localStorage.setItem('intro-seen', '1')
+  setShowIntro(false)
+  // analytics.capture('intro_completed')  // count completion via events, not storage
+}
+```
+
+Because "seen" is per-device, always give users a way to **replay** the intro
+(a Help / "how to win" entry point), so anyone on a fresh device or after a data
+clear can find it again.
+
+---
+
+## Testing with ngrok
+
+MiniPay cannot access localhost. Use ngrok to expose your dev server:
+
+```bash
+# Start your dev server
+npm run dev  # e.g., port 3000
+
+# In another terminal
+ngrok http 3000
+```
+
+### Configure dev server for ngrok
+
+**Vite** (`vite.config.ts`):
+```typescript
+export default defineConfig({
+  server: {
+    allowedHosts: [".ngrok.io", ".ngrok-free.app"],
+  },
+});
+```
+
+**Next.js** — no special config needed, but add CORS headers if needed.
+
+### Load in MiniPay
+
+1. Open MiniPay on your device
+2. Go to Settings > About > tap Version 7+ times to enable Developer Settings
+3. Enable Developer Mode + Use Testnet
+4. Enter your ngrok HTTPS URL in "Load Test Page"
+
+### Remote Debugging
+
+Connect your Android device via USB and visit `chrome://inspect` in desktop Chrome to debug the MiniPay WebView.
+
+The ngrok dashboard at `http://localhost:4040` shows all requests for debugging.
+
+---
+
+## Important Constraints
+
+1. **No emulators** — MiniPay requires a physical device
+2. **Legacy transactions only** — MiniPay ignores EIP-1559 fields. Do not set `maxFeePerGas` / `maxPriorityFeePerGas`
+3. **Fee abstraction** — MiniPay pays the network fee with USDm by default. Use the `feeCurrency` parameter
+4. **No message signing** — `personal_sign` and `eth_signTypedData` are not supported
+5. **Small screens** — Design for mobile-first, low-bandwidth environments
+6. **2MB footprint** — Keep Mini App bundle size small
+7. **No CELO in UI** — MiniPay hides CELO from users. Your app must only display and accept USDT / USDC / USDm; fee abstraction handles the network fee in stablecoins automatically
+8. **Submission checklist** — before listing, review `minipay-requirements.md` for the 11-section official checklist (copy rules, 360×640, PageSpeed, ToS / Privacy / About / How to Use, 24h SLA, whitelisting integrity, dependency security)
+9. **No geolocation on iOS** — MiniPay iOS does not bridge `navigator.geolocation` to the OS. `getCurrentPosition` and `watchPosition` hang silently, no callback ever fires, even with location permission granted to MiniPay at the OS level. Same code works fine in MetaMask in-app browser (iOS and Android) and Safari with extension wallets, which points at MiniPay's WKWebView delegate not implementing the geolocation permission handlers. Android behavior untested. Tracked at https://github.com/celo-org/minipay/issues/44. Workaround: detect `isIOS && window.ethereum.isMiniPay` and offer a deep link out to MetaMask (`https://metamask.app.link/dapp/<host>`)
+10. **No address exposure** — do **not display, copy, or share the user's wallet address** anywhere in the app. No address text, no copy button, no share sheet, no address QR — and a truncated `0x1234…abcd` form does not count as an exception. Use the phone number (ODIS) or an app-specific alias as the user-visible identity
+11. **No arbitrary withdrawals** — apps must **not** let users withdraw to an arbitrary or external wallet address. No free-text address field, no paste-an-address flow. Payouts go to a destination the app controls or that MiniPay resolves
+12. **USDT is mandatory** — every Mini App must support USDT natively, and must **not** add support for tokens MiniPay does not natively support
+13. **Pre-flight balance check** — before triggering any transaction, verify the user's balance covers **the amount plus the estimated network fee**. Checking the amount alone is the common bug: the transfer is affordable, the fee is not, and the transaction reverts. On a shortfall, explain and redirect to `https://link.minipay.xyz/add_cash` rather than surfacing a raw error
+14. **Whitelisting is frozen** — after listing, the contract addresses, method signatures, parameters, and URLs you submitted are enforced by an allowlist. Adding a parameter to a whitelisted method, redeploying to a new address, or moving to a new URL/subdomain will make calls fail in production while the same build works fine outside MiniPay. Re-whitelist before shipping such a change. See `minipay-requirements.md` §10
+
+---
+
+## UX Best Practices for Emerging Markets
+
+- Display amounts in local currency when possible (use Mento local stablecoins)
+- Minimize data usage — lazy load images, compress assets
+- Design for small screens (most users are on budget Android phones)
+- **Test at 360 × 640** — the minimum MiniPay WebView resolution. Use Chrome DevTools device mode to validate before submission
+- **Use SVG or WebP for images** — avoid PNG/JPG for anything larger than a few KB
+- Show clear transaction confirmations with USD equivalents
+- Handle network errors gracefully (intermittent connectivity is common)
+- Keep flows short — minimize steps to complete an action
+- Support offline-capable patterns where possible
+- **Show your app identity** — display your name and logo so users understand the service is operated by you, not by MiniPay
+- **In-app support link** — Telegram, WhatsApp, email, or web portal, reachable from any screen
+- **Link to ToS + Privacy Policy** from inside the app (footer or settings) — required for listing
+- **Add "About" and "How to Use" screens** — reachable from the footer or menu, alongside ToS, Privacy, and support. Many MiniPay users are first-time app users; a short how-to cuts support volume you'd otherwise have to answer inside the 24h SLA
+- **State who operates the app** — an explicit line such as "Operated by <Your Company>. Not affiliated with Opera or MiniPay." A logo alone is not enough
+- **Ship a narrow first version** — core flow only. Extra steps are where slow connections and review failures both bite
+
+See `minipay-requirements.md` for the full submission checklist.
+
+---
+
+## Funding for MiniPay Builders
+
+- **Celo Builder Fund** (Verda Ventures): $25K investment for MiniPay builders
+  - Contact: team@verda.ventures
+- **Celo Devs newsletter**: hackathons and new builder programs are announced here
+  - Subscribe: https://celo-devs.beehiiv.com/subscribe
