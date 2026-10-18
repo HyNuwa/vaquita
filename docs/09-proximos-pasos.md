@@ -15,7 +15,7 @@ Límite: **lunes 9/11/2026, 06:00 (hora ARG)**.
 - [ ] Decidir: fórmula de junta justa, mecanismo de mora, custodia (wallet del agente o escrow), ciclo corto para la demo (doc 13 §5)
 - [ ] Conseguir 3–5 grupos reales para arrancar el primer ciclo antes del 1/11
 - [ ] Probar el off-ramp de Ripio con wARS en Celo
-- [ ] Crear el repo `vaquita` en GitHub (público: lo exige el hackathon)
+- [x] Crear el repo público `vaquita`: https://github.com/HyNuwa/vaquita
 - [ ] Completar el prompt base ([07-prompt-base.md](07-prompt-base.md)) y arrancar el coding agent
 
 ## Mainnet (con el scaffold, ver [10-scaffold-stable-agent.md](10-scaffold-stable-agent.md))
