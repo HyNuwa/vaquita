@@ -61,4 +61,6 @@ npm run identidad:registrar                                      # ERC-8004
 
 ## Skills for coding agents
 
-`.claude/skills/` includes Celopedia (`npx skills add celo-org/celopedia-skills`), plus `commit-docs` (log before every commit) and `review` (security review before a PR).
+`.agents/skills/` is the only copy, shared by every agent. It includes Celopedia (`npx skills add celo-org/celopedia-skills`), plus `commit-docs` (log before every commit) and `review` (security review before a PR).
+
+Codex, Cursor, Gemini CLI and Copilot read `.agents/skills/` directly. For Claude Code, Devin and Windsurf, `npm install` links `.claude/skills`, `.devin/skills` and `.windsurf/skills` to it (a junction on Windows, no admin needed). Those links are not committed; never put files in them.

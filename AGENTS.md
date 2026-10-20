@@ -15,9 +15,11 @@ One repo, npm workspaces. Code, docs and rules change together in one commit and
 | `apps/web/` | `@vaquita/web` | Public status page per vaquita (read-only) |
 | `docs/` | — | Team second brain, in Spanish |
 | `.githooks/`, `.github/` | — | Git hooks, CI and PR template |
+| `.agents/skills/` | — | Agent skills, one copy for every tool |
 
 - Apps import from the core by subpath: `import { pay } from "@vaquita/core/payments/pay"`. Apps never import `viem` wallet clients or build transactions themselves.
 - `.env` and `data/` (the spend ledger) live **only at the repo root** and are shared by every app and script (`packages/core/src/config/paths.ts`). Never create a second ledger: the daily budget would be spendable twice.
+- **Skills** live only in `.agents/skills/`. `.claude/skills`, `.devin/skills` and `.windsurf/skills` are local links that `npm install` creates (`.agents/link-skills.mjs`); they are gitignored and CI fails if files are committed there. Add or edit skills in `.agents/skills/`.
 - **Stack:** [`docs/proyecto/stack.md`](docs/proyecto/stack.md). Don't add a dependency outside it without recording the decision in `docs/proyecto/decisiones.md`. Package manager: **npm** only. Add a dependency to the workspace that uses it (`npm install <pkg> -w @vaquita/bot`), shared dev tools to the root.
 
 ## 1. Language
@@ -87,7 +89,7 @@ Run `git pull` first if the user wants the latest status.
 ## 7. Setup (once per computer)
 
 ```sh
-npm install                          # also turns on the team hooks (core.hooksPath = .githooks)
+npm install                          # turns on the team hooks and links the skills folders
 git config vaquita.member <slug>     # daniel, esteban, santos or maximiliano
 cp .env.example .env                 # only whoever runs the agent wallet needs real values
 ```
