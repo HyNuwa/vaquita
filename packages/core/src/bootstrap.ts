@@ -1,7 +1,7 @@
-import "dotenv/config";
-import { join } from "node:path";
+import "./config/load-env.js";
 import { privateKeyToAccount } from "viem/accounts";
 import { loadConfig, repoCodeWarning } from "./config/env.js";
+import { LEDGER_FILE } from "./config/paths.js";
 import { POLICY } from "./config/policy.js";
 import { viemReader } from "./chain/reader.js";
 import { JsonLedger } from "./policy/ledger.js";
@@ -23,7 +23,7 @@ export function bootstrap(): PayDeps {
     config,
     reader: viemReader(config.rpcUrl),
     account: privateKeyToAccount(config.privateKey),
-    ledger: new JsonLedger(join(process.cwd(), "data", "ledger.json"), POLICY.timeZone),
+    ledger: new JsonLedger(LEDGER_FILE, POLICY.timeZone),
     policy: POLICY,
     gasToLocal: coingeckoGasToLocal(),
   };

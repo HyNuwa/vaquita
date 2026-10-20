@@ -1,0 +1,10 @@
+{
+  "name": "@vaquita/bot",
+  "version": "0.1.0",
+  "description": "Bot de Telegram y loop del LLM con tool use. Usa @vaquita/core; nunca habla con la red directamente.",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@vaquita/core": "*"
+  }
+}

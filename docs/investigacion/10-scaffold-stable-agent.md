@@ -1,5 +1,7 @@
 # 10 · Scaffold existente: `stable-agent`
 
+> **Nota (18/10):** el scaffold ahora vive en `packages/core/` (monorepo). Las rutas de este doc son relativas a esa carpeta; los scripts se siguen corriendo desde la raíz con `npm run`.
+
 El proyecto base (TypeScript + viem) está copiado en la raíz de este repo (`src/`, `scripts/`, `test/`); el original vino de `stable-agent-latam/stable-agent`. Implementa las reglas del hackathon y el primer hito (mover 1 wARS con tag). **Todavía no tiene idea de producto:** el README tiene la línea "Idea" sin completar, y el agente solo sabe pagar wARS a contactos de una lista.
 
 Sirve como base técnica para cualquier idea que salga del brainstorming: la idea define qué herramientas ve el LLM y qué flujos hay, y la tubería de transacciones se reutiliza tal cual.

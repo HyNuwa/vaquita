@@ -1,0 +1,3 @@
+# Bitácora · Santos
+
+Una entrada por commit, la más nueva arriba.

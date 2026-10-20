@@ -1,43 +1,64 @@
 # La Vaquita
 
-Agente que organiza la junta, la tanda o la vaca de tu grupo en pesos digitales (wARS de Ripio) sobre Celo: cobra a cada uno, paga el pozo a quien le toca y reparte la inflación de forma justa, con reglas que nadie, ni el agente, puede romper.
+An AI agent that runs your group's savings circle (junta, tanda or vaca) in digital pesos (wARS by Ripio) on Celo: it collects from everyone, pays the pot to whoever's turn it is and shares inflation fairly, with rules that nobody, not even the agent, can break.
 
-Proyecto para el hackathon **Agents on Open Rails** (Celo × Ripio), Track 1: Stable Agents LatAm.
+Built for the **Agents on Open Rails** hackathon (Celo × Ripio), Track 1: Stable Agents LatAm.
 
-## Estado
+> Pitch (Spanish): *"Crédito entre conocidos a la mitad del costo del banco, sin que nadie pierda contra la inflación."* Full context: [`docs/proyecto/contexto.md`](docs/proyecto/contexto.md).
 
-El código parte de un scaffold de pagos en wARS que ya cumple las reglas del hackathon (ver [docs/10](docs/10-scaffold-stable-agent.md)):
+## Repository layout
 
-- Solo Celo mainnet (chainId 42220).
-- Tag de atribución ERC-8021 en cada transacción; sin tag no se transmite.
-- Gas pagado en USDC (fee abstraction, tx CIP-64).
-- Límites determinísticos que el LLM no puede cambiar.
-- Modo ensayo por defecto; pagos reales solo con `LIVE_PAYMENTS=si-muevo-plata-real`.
-- Registro de identidad ERC-8004 desde la wallet del agente.
+npm workspaces monorepo:
 
-La lógica propia de La Vaquita (grupos, turnos, junta justa, mora, bot de Telegram) está por construirse.
+| Path | What |
+|---|---|
+| [`packages/core`](packages/core) | Tx pipeline (ERC-8021 tag, CIP-64 gas in USDC), policy, payments, ERC-8004 identity, Ripio ramp, vaquita engine. The only package that talks to Celo. |
+| [`apps/bot`](apps/bot) | Telegram bot + LLM loop with tool use |
+| [`apps/web`](apps/web) | Public status page per vaquita |
+| [`docs/`](docs/README.md) | Team docs (Spanish) |
 
-## Uso
+## Guarantees already in the core
 
-```bash
-npm install
-cp .env.example .env        # completar AGENT_PRIVATE_KEY, ATTRIBUTION_CODE, ALLOWED_RECIPIENTS
-npm test                    # sin red; todo verde antes de tocar mainnet
-npm run preflight           # solo lectura: red, tokens, saldos
-npm run pago:primero -- prueba                                   # ensayo: 1 wARS
-LIVE_PAYMENTS=si-muevo-plata-real npm run pago:primero -- prueba # real
-npm run tx:verificar -- 0x<hash>                                 # confirmar el tag
+- Celo mainnet only (chainId 42220).
+- ERC-8021 attribution tag on every transaction; untagged transactions are never broadcast.
+- Gas paid in USDC (fee abstraction, CIP-64).
+- Deterministic limits the LLM cannot change.
+- Dry-run by default; real payments only with `LIVE_PAYMENTS=si-muevo-plata-real`.
+- ERC-8004 identity registration from the agent wallet.
+
+## Onboarding (every team member, once per computer)
+
+```sh
+git clone https://github.com/HyNuwa/vaquita.git
+cd vaquita
+npm install                          # installs every workspace and turns on the team's git hooks
+git config vaquita.member <slug>     # daniel, esteban, santos or maximiliano
+npm run check                        # typecheck + tests, no network
 ```
 
-## Documentación
+Then read [`AGENTS.md`](AGENTS.md) and [`docs/README.md`](docs/README.md). If you use an AI coding agent, it reads `AGENTS.md` and follows these rules on its own.
 
-Todo el contexto está en [`docs/`](docs/README.md):
+## Running the agent wallet scripts
 
-- Hackathon, requisitos y stack: docs 01–07
-- Scaffold técnico: doc 10
-- Ideas evaluadas: docs 11–12
-- La Vaquita (benchmark, modelo de negocio, junta justa): docs 13–15
+Only whoever operates the agent wallet needs a real `.env` (at the repo root):
 
-## Skills para el coding agent
+```bash
+cp .env.example .env        # AGENT_PRIVATE_KEY, ATTRIBUTION_CODE, ALLOWED_RECIPIENTS
+npm run preflight           # read-only: network, tokens, balances
+npm run pago:primero -- prueba                                   # dry-run: 1 wARS
+LIVE_PAYMENTS=si-muevo-plata-real npm run pago:primero -- prueba # real
+npm run tx:verificar -- 0x<hash>                                 # check the tag on-chain
+npm run identidad:registrar                                      # ERC-8004
+```
 
-`.claude/skills/` incluye Celopedia (`npx skills add celo-org/celopedia-skills`).
+## Rules in short
+
+- **Commits, branches and PRs in English** ([Conventional Commits](https://www.conventionalcommits.org/), e.g. `feat(core): add fair-pot schedule`). `docs/` and every user-facing text in Rioplatense Spanish.
+- **Every commit that touches code also updates your docs:** `docs/miembros/<you>/bitacora.md` and `estado.md`, in the same commit.
+- **Work on a branch from `staging`** and merge through a PR with 1 approval and green CI.
+- **Keys only in `.env`.** Hooks and CI scan every diff for keys and tokens. **Never use `--no-verify`.**
+- **Every transaction goes through `packages/core/src/chain/tagged-sender.ts`.**
+
+## Skills for coding agents
+
+`.claude/skills/` includes Celopedia (`npx skills add celo-org/celopedia-skills`), plus `commit-docs` (log before every commit) and `review` (security review before a PR).
