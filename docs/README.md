@@ -20,6 +20,9 @@ Se puede abrir como bóveda de Obsidian (abrir la carpeta `docs/` como vault). L
 | Archivo | Qué tiene |
 |---|---|
 | [proyecto/contexto.md](proyecto/contexto.md) | **Fuente de verdad:** qué es, reglas duras, direcciones, estado, junta justa, mora, restricciones |
+| [proyecto/plan-del-equipo.md](proyecto/plan-del-equipo.md) | **Plan v2 (21/10):** fechas y puertas G1–G7, qué es real y qué es simulado, roles, etapas, recortes, registro de decisiones A1–A7 y D2–D10, pitch y entrega |
+| [proyecto/plan-tecnico.md](proyecto/plan-tecnico.md) | **Plan técnico v2:** alcance del MVP, modos (`LIVE_PAYMENTS`, `JUNTA_MODE`), estados, motor de reglas, exposición, escenarios de déficit, criterios de x402 y Ripio, definición de terminado |
+| [proyecto/repositorio-y-entrega.md](proyecto/repositorio-y-entrega.md) | Carpetas y dueños, variables de entorno, evidencias para la entrega y el paso a paso del envío |
 | [proyecto/stack.md](proyecto/stack.md) | Stack por workspace, con versiones y lo pendiente de decidir |
 | [proyecto/decisiones.md](proyecto/decisiones.md) | Registro de decisiones del equipo |
 | [equipo.md](equipo.md) | Integrantes, alias, roles y carpeta de cada uno |
