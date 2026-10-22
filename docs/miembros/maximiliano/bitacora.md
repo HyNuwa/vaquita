@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-10-22 · feat(core): add junta obligations engine
+- **Qué hice:** motor de obligaciones de la junta clásica, independiente de D7. Valida las reglas (N sin máximo), genera una obligación por miembro y ronda, aplica pagos idempotentes por hash e índice de log, guarda el atraso de los pagos tardíos sin crear deudas nuevas, separa ronda cerrada por fecha de ronda saldada, manda a revisión todo pago que no coincide exacto y anula las rondas futuras si el grupo suspende la junta. Además, la tabla de qué compromete cada turno. 29 tests nuevos.
+- **Archivos clave:** `packages/core/src/junta/rules.ts`, `obligations.ts`, `commitments.ts`, `packages/core/test/junta.test.ts`, `docs/tareas/maximiliano.md`.
+- **Próximo paso:** buscador de órdenes de turno según cuánto puede adelantar cada miembro.
+
 ## 2026-10-18 · chore(repo): share agent skills from a single .agents folder
 - **Qué hice:** moví las skills de `.claude/skills` a `.agents/skills`, la única copia para todos los agentes. `npm install` crea los links de `.claude/skills`, `.devin/skills` y `.windsurf/skills` (junction en Windows), que no se commitean porque en Windows los symlinks de Git se rompen. La CI falla si alguien commitea archivos en esas carpetas. También creé la rama `staging` en GitHub.
 - **Archivos clave:** `.agents/skills/`, `.agents/link-skills.mjs`, `package.json`, `.gitignore`, `.github/scripts/check-pr.sh`, `AGENTS.md`.

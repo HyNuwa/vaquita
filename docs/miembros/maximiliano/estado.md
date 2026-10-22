@@ -1,14 +1,15 @@
 # Estado · Maximiliano
 
-**Última actualización:** 2026-10-18
+**Última actualización:** 2026-10-22
 
 ## En qué estoy
-Armé la base del repo: monorepo con `packages/core` (el scaffold), `apps/bot` y `apps/web`, reglas del equipo, hooks y CI. Las skills de los agentes quedaron en una sola carpeta, `.agents/skills`.
+Motor de la junta en `packages/core/src/junta/`: reglas de la junta clásica, obligaciones por miembro y ronda, pagos tardíos sin doble conteo, estado de ronda (cerrada por fecha y saldada) y la tabla de qué compromete cada turno. No depende de D7: el contrato y `DIRECT_P2P` le pasan los pagos como eventos.
 
 ## Próximo paso
-- Confirmar con el equipo las decisiones del 18/10 (monorepo, flujo de trabajo, idioma).
-- Repartir las 4 áreas de `docs/tareas/README.md`.
-- Activar la protección de `main` y `staging` (1 aprobación + CI en verde). `staging` ya existe.
+- Buscador de órdenes de turno que respeten cuánto puede adelantar cada miembro (sección 3 del plan del contrato).
+- Revisar el contrato de Esteban cuando esté.
+- Decidir con el equipo, el 25/10: D7 (contrato de reglas o `DIRECT_P2P`), D2, D10 y el `.env` único en la raíz.
+- Conseguir la aprobación del PR #3 (planes v2 y plan del contrato v3).
 
 ## Bloqueos
-- La protección de ramas la tiene que activar el dueño del repo en GitHub.
+- Ninguno para el motor. Todo lo que mueve plata espera la decisión del 25/10.
