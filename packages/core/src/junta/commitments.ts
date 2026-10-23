@@ -17,15 +17,20 @@ export interface TurnCommitment {
 
 export function turnCommitments(rules: JuntaRules): TurnCommitment[] {
   validateRules(rules);
-  const n = BigInt(rules.members.length);
-  return rules.members.map((member, i) => {
+  return commitmentsFor(rules.members, rules.amount);
+}
+
+/** Lo mismo para un orden candidato, antes de que exista la junta. */
+export function commitmentsFor(order: readonly MemberId[], amount: bigint): TurnCommitment[] {
+  const n = BigInt(order.length);
+  return order.map((member, i) => {
     const k = BigInt(i + 1);
     return {
       turn: i + 1,
       member,
-      receives: (n - 1n) * rules.amount,
-      advancedBeforeCollecting: (k - 1n) * rules.amount,
-      owedAfterCollecting: (n - k) * rules.amount,
+      receives: (n - 1n) * amount,
+      advancedBeforeCollecting: (k - 1n) * amount,
+      owedAfterCollecting: (n - k) * amount,
     };
   });
 }
