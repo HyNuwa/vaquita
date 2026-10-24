@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-10-24 · feat(core): add default scenarios and member positions
+- **Qué hice:** escenarios de incumplimiento de D2 en el motor, sin garantías. `stopPayingScenario` dice qué pasa si un miembro deja de pagar desde una ronda: cuánto queda impago, a quién le falta cada aporte y cuánto se lleva neto (o cuánto le debe el grupo, si todavía no cobró). `afterCollectingScenarios` arma la tabla para mostrar antes de entrar. `juntaPosition` da la posición real de cada miembro (recibido, pagado, vencido, lo que le deben) y separa lo vencido de quienes ya cobraron, que es el riesgo que nadie cubre. 11 tests nuevos.
+- **Archivos clave:** `packages/core/src/junta/defaults.ts`, `packages/core/test/defaults.test.ts`.
+- **Próximo paso:** conciliación desde eventos (contrato o `DIRECT_P2P`) y persistencia del motor (29–30/10); mientras tanto, tareas de entrega que eran de Santos.
+
 ## 2026-10-24 · docs(docs): align context, rules and plans with 24/10 decisions
 - **Qué hice:** reescribí `contexto.md` con la arquitectura aprobada (contrato de reglas sin custodia, junta clásica con cuota fija, obligaciones, mora sin garantías, solo juntas) y el estado real del motor. En los tres planes y el del contrato marqué los nuevos estados de D2, D5, D6, D7 y D10 y corregí estructura (cadena y pagos en el core, `apps/api` fina), `.env` único, hosting, ramas desde `staging` y el equipo de tres. `AGENTS.md` y el README ya no hablan de vacas ni de que el agente cobra y paga el pozo.
 - **Archivos clave:** `docs/proyecto/contexto.md`, `plan-tecnico.md`, `plan-del-equipo.md`, `plan-junta-contrato.md`, `repositorio-y-entrega.md`, `AGENTS.md`, `README.md`.

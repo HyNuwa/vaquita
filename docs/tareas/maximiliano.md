@@ -18,7 +18,7 @@ Fuente: `docs/proyecto/plan-del-equipo.md` (sección 6) y `docs/proyecto/plan-ju
 | 21–23/10 | Modelo de obligaciones: reglas, obligaciones por ronda, pagos tardíos, estado de ronda, compromisos por turno | Hecho (22/10) |
 | 21–23/10 | Orden de turnos según cuánto puede adelantar cada miembro | Hecho (22/10) |
 | 25/10 | Decisiones de diseño: D7, D2, D10, D5, D6, `.env` único, alcance y estructura | Hecho (24/10, PR #6) |
-| 26–28/10 | Escenarios de incumplimiento y propuesta escrita de D2 | Pendiente |
+| 26–28/10 | Escenarios de incumplimiento y propuesta escrita de D2 | Hecho (24/10; D2 decidida el 24/10) |
 | 29–30/10 | Conciliación desde eventos del contrato o de `DIRECT_P2P`; persistencia del motor (G4) | Pendiente |
 | 31/10–3/11 | Web conectada al motor | Pendiente |
 | 4–6/11 | Casos límite del motor | Pendiente |
