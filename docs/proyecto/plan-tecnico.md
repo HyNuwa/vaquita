@@ -2,10 +2,13 @@
 title: Plan técnico
 subtitle: Qué construimos, qué es real y qué es simulado, y qué decide el código en lugar del LLM
 kicker: La Vaquita · versión 2
-team: Maxi · Esteban · Daniel · Santos
+team: Maxi · Esteban · Daniel
 date: 21 de octubre de 2026
 footer: La Vaquita · Plan técnico v2
 ---
+
+
+> **Actualización 24/10:** el equipo decidió D2, D5, D6, D7 y D10, el `.env` único, el alcance y la estructura ([decisiones.md](decisiones.md)), y Santos dejó el equipo. La tabla de la sección 1 ya tiene los estados nuevos. Donde este plan habla de garantías, déficit o custodia, manda la arquitectura de [plan-junta-contrato.md](plan-junta-contrato.md): el contrato nunca guarda plata y los aportes van de miembro a miembro. El lector de cadena y los pagos viven en `packages/core`, no en `apps/api`.
 
 # 0. Cambios en esta versión
 
@@ -31,11 +34,11 @@ El registro completo está en el plan del equipo (sección 8). Las que condicion
 |---|---|---|---|
 | A6 | Piloto de 4 a 8; tamaño configurable | Aprobada | `N` es un parámetro; ningún límite fijo en el código |
 | A7 | Solo junta rotativa | Aprobada | Sin vaca de objetivo ni gastos compartidos |
-| D2 | Mora después de cobrar y cobertura | Bloqueada por diseño | Garantías y déficit solo en simulación; el motor calcula la exposición, no decide la cobertura |
-| D7 | Custodia | Bloqueada por diseño o revisión legal | `JUNTA_MODE=real` no se habilita; no se reciben fondos de participantes |
+| D2 | Mora después de cobrar: sin garantías ni compensación automática en el MVP | Aprobada (24/10) | El motor registra obligaciones y pagos y explica los escenarios de incumplimiento; la compensación queda como prototipo en simulación |
+| D7 | Contrato de reglas sin custodia, aportes P2P | Aprobada (24/10), condicionada al spike | Si el spike no pasa, `DIRECT_P2P` con id de obligación. Aportes reales de personas ajenas al equipo solo después de resolver lo financiero, la seguridad y lo legal; hasta entonces, la junta exprés del equipo |
 | D8 | x402 | Pendiente de prueba | Módulo experimental, detrás de una bandera |
 | D9 | Ripio | Pendiente de prueba | Módulo experimental, detrás de una bandera |
-| D10 | Precio de turnos y licitaciones | Bloqueada por revisión legal | La tabla de la junta justa y la comisión existen solo en simulación; ninguna subasta |
+| D10 | Junta clásica con cuota fija | Aprobada (24/10) | Sin precio por turno, comisión ni subastas; vuelven a la hoja de ruta después de la revisión legal |
 
 # 2. Resumen
 
@@ -220,7 +223,7 @@ Una transferencia aislada exitosa no valida la conciliación financiera de una j
 
 # 11. Backend
 
-**Módulos de `apps/api`:** `juntas` · `miembros` · `rondas` · `aportes` (conciliación e idempotencia) · `ordenes` · `simulacion` (saldos, garantías y déficit simulados) · `chain` (lector de eventos) · `jobs` · `publico` · `payments/x402` (experimental) · `payments/ripio` (experimental) · `buy`.
+**Módulos de `apps/api`:** `juntas` · `miembros` · `rondas` · `aportes` (conciliación e idempotencia) · `ordenes` · `simulacion` (saldos, garantías y déficit simulados) · `jobs` · `publico` · `buy`. El lector de eventos y los pagos (`chain`, `payments/x402`, `payments/ripio`) viven en `packages/core` y la API los importa (decisión del 24/10).
 
 | Endpoint | Quién | Para qué | Modo |
 |---|---|---|---|

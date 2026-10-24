@@ -2,7 +2,7 @@
 
 21/10/2026 · Maxi · Copia del [documento en Claude Docs](https://claude.ai/artifact/1DoNkMgrdAxe7DaV3VaLgb), que tiene los diagramas. Actualizada el 22/10/2026.
 
-**Propuesta:** un contrato de reglas en Celo que nunca guarda plata. Cada aporte pasa por el contrato y llega en la misma transacción al que cobra; el contrato solo verifica monto, turno y destinatario, y deja el registro. La parte financiera (cuánto arriesga cada uno, el orden de turnos y la mora) la calcula un motor determinístico fuera de la cadena, y el agente la explica. Se decide con el equipo el 25/10/2026. **No está aprobada.**
+**Propuesta:** un contrato de reglas en Celo que nunca guarda plata. Cada aporte pasa por el contrato y llega en la misma transacción al que cobra; el contrato solo verifica monto, turno y destinatario, y deja el registro. La parte financiera (cuánto arriesga cada uno, el orden de turnos y la mora) la calcula un motor determinístico fuera de la cadena, y el agente la explica. **Aprobada el 24/10/2026**, con D7 condicionada al spike ([decisiones.md](decisiones.md)). El diseño queda congelado.
 
 **Promesa del MVP:** tu grupo acuerda las reglas, cada aporte queda identificado y todos pueden comprobar qué se pagó y qué sigue pendiente. Antes de participar, conocés tus obligaciones y los riesgos del turno elegido.
 
@@ -200,3 +200,5 @@ Si el contrato no pasa el spike o no está en mainnet el 30/10, las juntas nueva
 | Nombre y segmento | Decidirlos en G2 | Seguir con "La Vaquita" |
 
 La aprobación que tenemos hoy cubre los documentos y el prototipo, no la operación con fondos de terceros: eso es lo que se decide acá. Si se aprueba, actualizo los tres planes, `contexto.md` y `AGENTS.md` en un solo cambio.
+
+**Resultado (24/10):** se aprobó la columna "Propuesta" en todas las filas. D7 queda condicionada a que el spike pase; si no pasa, rige la alternativa (`DIRECT_P2P`). El nombre sigue siendo La Vaquita. Ver [decisiones.md](decisiones.md).

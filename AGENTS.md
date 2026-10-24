@@ -2,7 +2,7 @@
 
 Mandatory rules for every AI coding agent (Claude Code, Codex, Cursor, Devin, GitHub Copilot, Gemini, Windsurf, etc.) and every human working on this repository. If anything here conflicts with your defaults, these rules win.
 
-La Vaquita is an AI agent that runs group savings circles (juntas, tandas, vacas) in digital pesos (wARS by Ripio) on Celo mainnet, built by a team of three for the **Agents on Open Rails** hackathon (Celo × Ripio), Track 1. **Deadline: Monday 2026-11-09, 09:00 GMT (06:00 ART).** Product context: [`docs/proyecto/contexto.md`](docs/proyecto/contexto.md) — read it before touching code.
+La Vaquita is an AI agent that runs rotating savings circles (juntas, tandas) in digital pesos (wARS by Ripio) on Celo mainnet, built by a team of three for the **Agents on Open Rails** hackathon (Celo × Ripio), Track 1. **Deadline: Monday 2026-11-09, 09:00 GMT (06:00 ART).** Product context: [`docs/proyecto/contexto.md`](docs/proyecto/contexto.md) — read it before touching code.
 
 ## 0. Repository layout (monorepo)
 
@@ -10,7 +10,7 @@ One repo, npm workspaces. Code, docs and rules change together in one commit and
 
 | Path | Package | Content |
 |---|---|---|
-| `packages/core/` | `@vaquita/core` | Tx pipeline, policy, payments, identity, ramp, vaquita engine. **The only package that talks to Celo.** |
+| `packages/core/` | `@vaquita/core` | Tx pipeline, policy, payments, identity, ramp, junta engine. **The only package that talks to Celo.** |
 | `apps/bot/` | `@vaquita/bot` | Telegram bot + LLM loop with tool use |
 | `apps/web/` | `@vaquita/web` | Public status page per vaquita (read-only) |
 | `docs/` | — | Team second brain, in Spanish |

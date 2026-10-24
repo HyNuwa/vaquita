@@ -6,10 +6,9 @@
 Coordino las tareas del equipo, que desde el 24/10 somos tres (Santos se fue y sus tareas de producto y entrega son mías). El motor de la junta tiene reglas, obligaciones, pagos tardíos, estado de ronda, compromisos por turno y el buscador de órdenes de turno. Las decisiones de diseño (D2, D5, D6, D7, D10, `.env`, alcance y estructura) están en el PR #6.
 
 ## Próximo paso
-- Actualizar `contexto.md`, `AGENTS.md` y los planes a las decisiones del 24/10.
 - Escenarios de incumplimiento de D2 en el motor.
 - Inscripción en Loops House y campos del formulario de entrega (eran de Santos).
-- Conseguir aprobación de los PRs #4, #6 y el de este cambio.
+- Conseguir aprobación de los PRs #4, #6, #7 y el de los docs alineados.
 
 ## Bloqueos
 - D7 en la práctica: no hay registrado ningún resultado del spike del 23/10. Preguntarle a Esteban.

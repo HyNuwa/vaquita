@@ -3,20 +3,21 @@
 > Leé esto antes de tocar código o responder sobre el proyecto. Es la fuente de verdad resumida.
 > El detalle está en [`docs/investigacion/`](../investigacion/README.md). Si algo acá contradice a otro documento, gana este.
 > Las reglas de trabajo del equipo están en [`AGENTS.md`](../../AGENTS.md).
-> Estado al 17/10/2026. Rutas de código relativas a `packages/core/src/` salvo que se diga otra cosa.
+> Estado al 24/10/2026. Rutas de código relativas a `packages/core/src/` salvo que se diga otra cosa.
 
 ## 1. Qué es
-**La Vaquita** es un agente de IA que organiza juntas, tandas y vacas de grupo en **pesos
-digitales (wARS de Ripio) sobre Celo mainnet**. Vive en el chat del grupo (Telegram). Su trabajo:
-- cobra los aportes;
-- concilia los pagos;
-- paga el pozo a quien le toca;
-- aplica reglas fijas de mora y de reparto justo frente a la inflación.
+**La Vaquita** es un agente de IA que organiza juntas (tandas, ruedas) en **pesos digitales
+(wARS de Ripio) sobre Celo mainnet**. Vive en el chat del grupo (Telegram) y tiene una web por junta.
+- Ayuda al grupo a acordar las reglas y el orden de turnos, y explica qué compromete cada turno.
+- Cada miembro le paga directo al que cobra esa ronda, a través de un contrato de reglas que **nunca guarda plata**.
+- Registra cada obligación y cada pago, avisa los atrasos y muestra qué se pagó y qué sigue pendiente.
 
-Pitch: *"Crédito entre conocidos a la mitad del costo del banco, sin que nadie pierda contra la inflación."*
+Promesa: *"Reglas claras, turnos justos y riesgos transparentes"* (provisional). No prometemos que nadie pierda: una junta es un crédito entre conocidos y tiene riesgo.
 
 Hackathon: **Agents on Open Rails** (Celo × Ripio), Track 1 **Stable Agents LatAm**.
 **Entrega: lunes 9/11/2026, 09:00 GMT (06:00 ART).** Ganadores: 13/11.
+
+Diseño completo: [plan-junta-contrato.md](plan-junta-contrato.md). Decisiones del 24/10: [decisiones.md](decisiones.md).
 
 ## 2. Reglas duras (nunca romper)
 1. **Solo Celo mainnet** (chainId 42220, RPC `https://forno.celo.org`). Testnet solo en pruebas locales.
@@ -43,8 +44,8 @@ Hackathon: **Agents on Open Rails** (Celo × Ripio), Track 1 **Stable Agents Lat
 En el código, las direcciones se leen **siempre** de `tokens.ts` y `network.ts`; esta tabla es para leer, no para copiar.
 
 ## 4. Estado del repo
-Monorepo con npm workspaces: `packages/core` (el scaffold `stable-agent-latam`), `apps/bot` y `apps/web` (vacías).
-TypeScript + viem 2.57 + `@celo/attribution-tags@0.5.0` + zod + vitest. **87 tests en verde, sin red.**
+Monorepo con npm workspaces: `packages/core` (el scaffold `stable-agent-latam` más el motor de la junta), `apps/bot` y `apps/web` (vacías). `apps/api` se suma como capa fina (HTTP, base y jobs) que importa del core.
+TypeScript + viem 2.57 + `@celo/attribution-tags@0.5.0` + zod + vitest. **131 tests en verde, sin red.**
 
 **Ya hecho** (en `packages/core/src/`):
 - `chain/tagged-sender.ts`: el único camino a la red.
@@ -61,64 +62,59 @@ TypeScript + viem 2.57 + `@celo/attribution-tags@0.5.0` + zod + vitest. **87 tes
 - `config/paths.ts`: `.env` y ledger únicos en la raíz del repo, para todas las apps y scripts.
 - `agent/tools.ts`: herramienta `pagar` para el LLM, con destinatario como enum de alias y zod `.strict()`.
 - `identity/erc8004.ts` + `packages/core/scripts/register-agent.ts`. `ramp/ripio.ts` arma links de `ramp.ripio.com`.
+- `junta/`: el motor. Reglas de la junta clásica, una obligación por miembro y ronda, pagos idempotentes por hash + índice de log, pagos tardíos, estado de ronda (cerrada por fecha y saldada), suspensión, compromisos por turno y buscador de órdenes de turno.
 - Scripts (se corren desde la raíz): `preflight`, `pago:primero` (1 wARS), `identidad:registrar`, `ramp:link`, `tx:verificar`.
 
 **Falta (en orden):**
-1. Primer pago real de 1 wARS + `verifyTx` OK. Lo hace el humano con su `.env`.
-2. Registro ERC-8004.
-3. **Recepción y conciliación de aportes.** Leer eventos `Transfer` de wARS hacia la wallet del agente y asignarlos a miembro y ronda.
-4. **Motor de vaquita**: modelo de datos (vaquita, miembros, rondas, aportes, pagos), la fórmula de la junta justa (sección 5) y las reglas de mora.
-5. Bot de Telegram + loop del LLM con tool use (`estado`, `cobrar`, `pagar_pozo`, `link_para_cargar`).
-6. Página web pública de estado por vaquita.
+1. Primer pago real de 1 wARS + `verifyTx` OK, y registro ERC-8004.
+2. **Spike del contrato de reglas** (condición de D7): pagos en wARS, autorización por aporte, `transferFrom`, tag desde el móvil y conciliación. Si falla, `DIRECT_P2P`.
+3. Contrato `JuntaReglas` (o `DIRECT_P2P`) y **lector de eventos** que le pasa cada pago al motor.
+4. Escenarios de incumplimiento y persistencia del motor.
+5. Bot de Telegram + loop del LLM con tool use (`estado`, `explicar_reglas`, `proponer_junta`, `negociar_turnos`, `alertar_atraso`).
+6. Web de la junta (`/j/:slug`): turnos, obligaciones y estado de cada ronda.
 7. Calificación del agente en la Reputation Registry de ERC-8004 al cerrar el ciclo.
 
 Quién hace qué: [`docs/tareas/`](../tareas/README.md).
 
 ## 5. Reglas de negocio (implementar en código, con tests)
 
-### Junta justa (decidido)
-Grupo de N miembros, aporte A por ronda, tasa r congelada al crear la vaquita (por defecto, la
-última inflación mensual del INDEC, que fue 1,9 % en septiembre de 2026).
+### Junta clásica con cuota fija (D10, decidido)
+Grupo de N miembros (sin máximo en el código; el piloto usa de 4 a 8), aporte A por ronda. En la ronda k cobra el miembro del turno k y le paga cada uno de los otros: **pozo = (N − 1) · A**. Montos en `bigint` (unidades de 18 decimales).
 
-```
-w_k = (1+r)^(k-1),  k = 1..N
-c   = N·A / Σ w_k
-pozo_k = c · w_k
-```
+- El turno k adelanta (k − 1)·A antes de cobrar y sigue debiendo (N − k)·A después. Son compromisos nominales, no predicciones de pérdida.
+- **Orden de turnos:** cada miembro dice cuánto puede adelantar; el motor lista los órdenes que respetan esos límites y el grupo aprueba uno. Si ninguno sirve, propone el mayor aporte viable.
+- Precio por turno, comisión y licitaciones: **fuera del MVP**, después de la revisión legal (RG IGJ 8/2015). La fórmula de la "junta justa" queda en [investigación 15](../investigacion/15-que-cambia-con-la-vaquita.md) como antecedente.
 
-- Calcular en `bigint` (unidades de 18 decimales). El residuo de redondeo va al último turno.
-- **Invariante:** Σ pozo_k = N·A.
-- **Fee de La Vaquita:** 1 % del pozo **solo** a los turnos k ≤ floor(N/2). Los demás no pagan.
-- Ejemplo (N=10, A=$20.000, r=1,9 %): turno 1 cobra $183.490; turno 10 cobra $217.360. El costo implícito del turno 1 es ≈ 26 % anual, contra un CFT bancario de 58,9 % a 320 %.
+### Obligaciones y pagos
+- El motor registra deudas, no solo pagos: un pago cumple una obligación (junta, ronda, deudor). Así una deuda vencida nunca se confunde con un pago.
+- Un pago tardío cumple la obligación original y guarda los días de atraso. Las rondas se pueden superponer.
+- Todo pago que no coincide exacto con una obligación va a revisión; nada se reparte ni se adivina.
 
-### Mora (propuesta, falta confirmar)
-- **A. Pozo completo o devolución.** El pozo se paga solo con todos los aportes; si vence el plazo, se devuelve a los que pagaron.
-- **B. Fondo de garantía.** Depósito de un aporte al entrar. Cubre faltas; se devuelve al cerrar a quien cumplió. Quien ya cobró y deja de pagar pierde su depósito.
-- MVP recomendado: **A + B**.
-
-### Política del agente por vaquita
-- Allowlist = miembros de esa vaquita.
-- El agente solo puede pagar `pozo_k` al miembro del turno k, en la fecha de la ronda.
-- También puede hacer devoluciones (regla A) y devolver garantías al cierre.
-- Cualquier otro pago se rechaza.
+### Mora (D2, decidido)
+- **Sin garantías ni compensación automática en el MVP.** Obligaciones registradas, pagos verificables y escenarios de incumplimiento explicados antes de entrar.
+- Continuar, suspender o terminar con deudas pendientes lo decide el grupo con la política que aceptó al crear la junta. Si se suspende, se anulan las rondas futuras.
+- La compensación queda como prototipo en simulación.
 
 ## 6. Decisiones de producto tomadas
-- **Canal: Telegram + web pública.** WhatsApp limita a los asistentes de IA externos desde 01/2026; Zapia tuvo que salir de AR, CO y MX.
+- **Canal: Telegram + web por junta.** WhatsApp limita a los asistentes de IA externos desde 01/2026; Zapia tuvo que salir de AR, CO y MX.
 - **Moneda inicial: wARS.** wBRL, wCOP y wMXN después.
-- **Modos:** junta rotativa + vaca de objetivo en el MVP. Gastos compartidos después.
-- **Custodia:** wallet del agente con topes bajos en el MVP. v2: escrow en contrato con el agente como operador.
+- **Alcance: solo juntas.** La vaca de objetivo y los gastos compartidos van a la hoja de ruta.
+- **Sin custodia (D7):** contrato de reglas que nunca guarda plata; cada aporte va del miembro al que cobra en la misma tx. La wallet del agente solo firma pagos técnicos y el registro ERC-8004. Plan B: `DIRECT_P2P`.
+- **Aportes de personas ajenas al equipo:** solo después de resolver lo financiero, la seguridad y lo legal pendiente; hasta entonces, la junta exprés del equipo.
+- **Nombre:** La Vaquita (D6), aclarando en el pitch la diferencia con vaquita.fi y VaquitaAI.
 - **Onboarding:** link de `ramp.ripio.com` con `country=AR&chain=42220&token=WARS&amount=…&address=…`.
 
 Las decisiones nuevas van en [`decisiones.md`](decisiones.md).
 
-## 7. Modelo de negocio (resumen)
-- **Usuarios comunes:** usar La Vaquita es gratis. Paga solo quien cobra en la primera mitad (1 % de su pozo), porque obtiene liquidez antes y más barata que un crédito. El organizador no paga.
-- **Organizaciones** (cooperativas, mutuales, clubes, empleadores): abono por miembro activo (supuesto: $1.500 por mes). Es el ingreso que sostiene el negocio.
+## 7. Modelo de negocio (hipótesis)
+- **Usuarios comunes:** gratis.
+- **Organizaciones** (cooperativas, mutuales, clubes, empleadores): abono por miembro activo (supuesto: $1.500 por mes).
+- **Precio por turno temprano:** bloqueado por revisión legal (D10); no está en el MVP.
 - **Socios:** Ripio (volumen de ramps), marca blanca. Sin ingresos asumidos todavía.
 
 ## 8. Restricciones externas
-- **Leaderboard:** cuentan **firmantes independientes**, es decir, wallets ajenas, no fondeadas por nosotros y con actividad previa en Celo. Diseñar para que los miembros **firmen** sus aportes.
-- **Regulación AR:** custodiar o transferir activos virtuales de terceros cae en la categoría PSAV (RG CNV 1058/2025). Hay una exención de hasta 35.000 UVA por mes (≈ US$44K). Con pozos de $200.000 se alcanza con ~310 grupos. Antes de escalar: escrow no custodial o socio regulado, más asesoramiento legal.
+- **Leaderboard:** cuentan **firmantes independientes**, es decir, wallets ajenas, no fondeadas por nosotros y con actividad previa en Celo. Por eso cada miembro **firma** su propio aporte.
+- **Regulación AR:** custodiar o transferir activos virtuales de terceros cae en la categoría PSAV (RG CNV 1058/2025). Hay una exención de hasta 35.000 UVA por mes (≈ US$44K). Con pozos de $200.000 se alcanza con ~310 grupos. El contrato de reglas no custodia, pero antes de escalar hace falta asesoramiento legal.
 - **MiniPay no soporta wFIAT.** MetaMask ignora `feeCurrency`. Valora elige la moneda del gas por su cuenta.
 - **x402:** el facilitador de Celo acepta wARS, wBRL y wCOP vía Permit2. Esas tx no llevan tag; se informa la wallet PayTo.
 
@@ -139,4 +135,4 @@ En [`docs/investigacion/`](../investigacion/README.md):
 [13 benchmark](../investigacion/13-vaquita-benchmark-y-mejoras.md) · [14 modelo de negocio](../investigacion/14-vaquita-modelo-de-negocio.md) ·
 [15 qué cambia + junta justa](../investigacion/15-que-cambia-con-la-vaquita.md).
 
-En [`docs/proyecto/`](.): este resumen, [stack](stack.md) y [decisiones](decisiones.md).
+En [`docs/proyecto/`](.): este resumen, [stack](stack.md), [decisiones](decisiones.md), [plan del equipo](plan-del-equipo.md), [plan técnico](plan-tecnico.md), [repositorio y entrega](repositorio-y-entrega.md) y [plan de la junta con contrato de reglas](plan-junta-contrato.md).

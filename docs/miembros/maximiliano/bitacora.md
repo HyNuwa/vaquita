@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-10-24 · docs(docs): align context, rules and plans with 24/10 decisions
+- **Qué hice:** reescribí `contexto.md` con la arquitectura aprobada (contrato de reglas sin custodia, junta clásica con cuota fija, obligaciones, mora sin garantías, solo juntas) y el estado real del motor. En los tres planes y el del contrato marqué los nuevos estados de D2, D5, D6, D7 y D10 y corregí estructura (cadena y pagos en el core, `apps/api` fina), `.env` único, hosting, ramas desde `staging` y el equipo de tres. `AGENTS.md` y el README ya no hablan de vacas ni de que el agente cobra y paga el pozo.
+- **Archivos clave:** `docs/proyecto/contexto.md`, `plan-tecnico.md`, `plan-del-equipo.md`, `plan-junta-contrato.md`, `repositorio-y-entrega.md`, `AGENTS.md`, `README.md`.
+- **Próximo paso:** escenarios de incumplimiento de D2 en el motor.
+
 ## 2026-10-24 · chore(repo): remove Santos and let the tech lead take any task
 - **Qué hice:** saqué a Santos del equipo (dejó el proyecto): borré su carpeta y su archivo de tareas, y sus tareas de producto, usuarios, legal y entrega pasaron a mi plan. Completé los planes de Esteban y Daniel con el plan v2 y dejé escrito que yo coordino y puedo tomar cualquier tarea, marcándola y avisando en el PR. El hook deja borrar la carpeta de quien ya no está en `docs/equipo.md`.
 - **Archivos clave:** `docs/equipo.md`, `docs/tareas/`, `.githooks/pre-commit`, `AGENTS.md`, `docs/proyecto/decisiones.md`.
