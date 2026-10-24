@@ -2,7 +2,7 @@
 
 Mandatory rules for every AI coding agent (Claude Code, Codex, Cursor, Devin, GitHub Copilot, Gemini, Windsurf, etc.) and every human working on this repository. If anything here conflicts with your defaults, these rules win.
 
-La Vaquita is an AI agent that runs group savings circles (juntas, tandas, vacas) in digital pesos (wARS by Ripio) on Celo mainnet, built by a team of four for the **Agents on Open Rails** hackathon (Celo × Ripio), Track 1. **Deadline: Monday 2026-11-09, 09:00 GMT (06:00 ART).** Product context: [`docs/proyecto/contexto.md`](docs/proyecto/contexto.md) — read it before touching code.
+La Vaquita is an AI agent that runs group savings circles (juntas, tandas, vacas) in digital pesos (wARS by Ripio) on Celo mainnet, built by a team of three for the **Agents on Open Rails** hackathon (Celo × Ripio), Track 1. **Deadline: Monday 2026-11-09, 09:00 GMT (06:00 ART).** Product context: [`docs/proyecto/contexto.md`](docs/proyecto/contexto.md) — read it before touching code.
 
 ## 0. Repository layout (monorepo)
 
@@ -31,7 +31,7 @@ One repo, npm workspaces. Code, docs and rules change together in one commit and
 
 ## 2. Identify who is working
 
-1. Run `git config vaquita.member`. It returns the member's slug: `daniel`, `esteban`, `santos` or `maximiliano`.
+1. Run `git config vaquita.member`. It returns the member's slug: `daniel`, `esteban` or `maximiliano`.
 2. If it is empty, ask the user who they are and tell them to run `git config vaquita.member <slug>`. Never guess.
 3. Names, aliases (e.g. "Maxi") and roles: [`docs/equipo.md`](docs/equipo.md).
 
@@ -40,7 +40,7 @@ One repo, npm workspaces. Code, docs and rules change together in one commit and
 Read, in this order:
 1. [`docs/README.md`](docs/README.md)
 2. [`docs/proyecto/contexto.md`](docs/proyecto/contexto.md), [`stack.md`](docs/proyecto/stack.md) and [`decisiones.md`](docs/proyecto/decisiones.md); `docs/investigacion/` when the task needs background
-3. `docs/tareas/<slug>.md`: the member's work plan and the paths they own. Don't touch paths owned by other members without asking them.
+3. `docs/tareas/<slug>.md`: the member's work plan and the paths they own. Don't touch paths owned by other members without asking them. Exception: `maximiliano` (tech lead) coordinates everyone's tasks and may take any of them; mark it in the owner's task file and say so in the PR (`docs/tareas/README.md`).
 4. The current member's `docs/miembros/<slug>/estado.md`
 
 ## 4. Documentation on every commit (mandatory)
@@ -90,7 +90,7 @@ Run `git pull` first if the user wants the latest status.
 
 ```sh
 npm install                          # turns on the team hooks and links the skills folders
-git config vaquita.member <slug>     # daniel, esteban, santos or maximiliano
+git config vaquita.member <slug>     # daniel, esteban or maximiliano
 cp .env.example .env                 # only whoever runs the agent wallet needs real values
 ```
 

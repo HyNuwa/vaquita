@@ -4,6 +4,12 @@ Una entrada por decisión, la más nueva arriba. Formato: fecha · decisión · 
 
 Las decisiones de producto previas al repo (canal Telegram, wARS, junta justa, custodia, onboarding) están en [contexto.md](contexto.md#6-decisiones-de-producto-tomadas).
 
+## 2026-10-24 · Santos deja el equipo; Maxi coordina las tareas · Maximiliano (líder técnico)
+- El equipo queda en tres: Maxi, Esteban y Daniel. Las tareas de Santos (producto, usuarios, legal y D10, landing, deck, video y formulario de entrega) pasan a Maxi.
+- Maxi coordina las tareas de todos: puede reasignarlas y tomar cualquiera para llegar a la entrega, marcándolo en el archivo del responsable y avisando en el PR.
+- Se mantiene la revisión entre dos: cada PR necesita la aprobación de otro integrante.
+- El hook `pre-commit` deja borrar la carpeta de `docs/miembros/` de quien ya no figura en `docs/equipo.md`.
+
 ## 2026-10-18 · Skills en una sola carpeta: `.agents/skills` · Maximiliano (falta confirmar con el equipo)
 - Las skills de los agentes existen una sola vez, en `.agents/skills/`. Codex, Cursor, Gemini CLI y Copilot la leen directo.
 - Claude Code, Devin y Windsurf usan su propia carpeta: `npm install` crea `.claude/skills`, `.devin/skills` y `.windsurf/skills` como links a `.agents/skills` (`.agents/link-skills.mjs`). En Windows es una *junction*, que no pide permisos de admin.

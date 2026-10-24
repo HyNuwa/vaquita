@@ -1,15 +1,15 @@
 # Estado · Maximiliano
 
-**Última actualización:** 2026-10-22
+**Última actualización:** 2026-10-24
 
 ## En qué estoy
-Motor de la junta en `packages/core/src/junta/`: reglas de la junta clásica, obligaciones por miembro y ronda, pagos tardíos sin doble conteo, estado de ronda (cerrada por fecha y saldada) y la tabla de qué compromete cada turno. También el buscador de órdenes de turno según cuánto puede adelantar cada miembro, que propone un aporte menor si ningún orden sirve. No depende de D7: el contrato y `DIRECT_P2P` le pasan los pagos como eventos.
+Coordino las tareas del equipo, que desde el 24/10 somos tres (Santos se fue y sus tareas de producto y entrega son mías). El motor de la junta tiene reglas, obligaciones, pagos tardíos, estado de ronda, compromisos por turno y el buscador de órdenes de turno. Las decisiones de diseño (D2, D5, D6, D7, D10, `.env`, alcance y estructura) están en el PR #6.
 
 ## Próximo paso
-- Conseguir la aprobación de los PRs #4 (obligaciones) y del buscador de turnos.
-- Revisar el contrato de Esteban cuando esté.
-- Decidir con el equipo, el 25/10: D7 (contrato de reglas o `DIRECT_P2P`), D2, D10 y el `.env` único en la raíz.
-- Conseguir la aprobación del PR #3 (planes v2 y plan del contrato v3).
+- Actualizar `contexto.md`, `AGENTS.md` y los planes a las decisiones del 24/10.
+- Escenarios de incumplimiento de D2 en el motor.
+- Inscripción en Loops House y campos del formulario de entrega (eran de Santos).
+- Conseguir aprobación de los PRs #4, #6 y el de este cambio.
 
 ## Bloqueos
-- Ninguno para el motor. Todo lo que mueve plata espera la decisión del 25/10.
+- D7 en la práctica: no hay registrado ningún resultado del spike del 23/10. Preguntarle a Esteban.

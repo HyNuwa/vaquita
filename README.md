@@ -32,7 +32,7 @@ npm workspaces monorepo:
 git clone https://github.com/HyNuwa/vaquita.git
 cd vaquita
 npm install                          # installs every workspace and turns on the team's git hooks
-git config vaquita.member <slug>     # daniel, esteban, santos or maximiliano
+git config vaquita.member <slug>     # daniel, esteban or maximiliano
 npm run check                        # typecheck + tests, no network
 ```
 

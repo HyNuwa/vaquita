@@ -36,7 +36,7 @@ Se puede abrir como bóveda de Obsidian (abrir la carpeta `docs/` como vault). L
 git clone https://github.com/HyNuwa/vaquita.git
 cd vaquita
 npm install                          # instala todo y activa los hooks del equipo
-git config vaquita.member <tu-slug>  # daniel, esteban, santos o maximiliano
+git config vaquita.member <tu-slug>  # daniel, esteban o maximiliano
 npm run check                        # typecheck + tests, sin red
 ```
 

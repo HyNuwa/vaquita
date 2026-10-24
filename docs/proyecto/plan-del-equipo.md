@@ -7,6 +7,9 @@ date: 21 de octubre de 2026
 footer: La Vaquita · Plan del equipo v2
 ---
 
+
+> **Actualización 24/10:** Santos dejó el equipo. Sus tareas en este plan pasaron a Maxi, que además coordina las tareas de todos. Ver [equipo.md](../equipo.md) y [tareas/](../tareas/README.md).
+
 # 0. Cambios en esta versión
 
 Esta versión reemplaza a la del 18/10. La fuente es el estado de decisiones aprobado el 21/10.

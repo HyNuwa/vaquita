@@ -14,7 +14,7 @@ git diff --cached -U0 --no-color --diff-filter=ACMR | sh .githooks/lib/scan-secr
 
 member=$(git config vaquita.member)
 if [ -z "$member" ]; then
-  echo "Vaquita: who are you? Run: git config vaquita.member <daniel|esteban|santos|maximiliano>" >&2
+  echo "Vaquita: who are you? Run: git config vaquita.member <daniel|esteban|maximiliano>" >&2
   exit 1
 fi
 mine="docs/miembros/$member"
@@ -28,6 +28,15 @@ staged=$(git diff --cached --name-only --diff-filter=ACMRD)
 
 # Modified or deleted only: creating a new member's empty folder is fine.
 others=$(git diff --cached --name-only --diff-filter=MD | grep '^docs/miembros/' | grep -v "^$mine/")
+# Deleting the folder of someone who left the team (no longer in the staged docs/equipo.md) is fine.
+team=$(git show :docs/equipo.md 2>/dev/null)
+deleted=$(git diff --cached --name-only --diff-filter=D)
+others=$(echo "$others" | while read -r f; do
+  [ -z "$f" ] && continue
+  slug=$(echo "$f" | cut -d/ -f3)
+  if echo "$deleted" | grep -qx "$f" && ! echo "$team" | grep -q "| \`$slug\` |"; then continue; fi
+  echo "$f"
+done)
 if [ -n "$others" ]; then
   echo "Vaquita: you can only edit your own folder ($mine/). Unstage:" >&2
   echo "$others" | sed 's/^/  /' >&2
