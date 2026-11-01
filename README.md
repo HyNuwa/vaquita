@@ -1,10 +1,12 @@
 # La Vaquita
 
-An AI agent that runs your group's rotating savings circle (junta or tanda) in digital pesos (wARS by Ripio) on Celo. The group agrees on the rules and the turn order, each member pays whoever collects that round through a rules contract that never holds the money, and everyone can check what was paid and what is still owed.
+An AI agent for intent-based collective buying in digital pesos (wARS by Ripio) on Celo. Developer communities in Jujuy describe what they need, the agent prepares and compares supplier quotes, and the community votes on an offer for digital goods or services. Each buyer signs an on-chain commitment and authorizes the exact amount. Funds stay in their wallets until an atomic purchase pays the supplier directly; if the minimum is not met, the entire transaction reverts. This is the MVP design under D11, pending the spike, implementation and review.
+
+La Vaquita is the working name, with a commercial naming decision due October 27. The existing rotating savings circle (junta) engine and its tests remain in the repo, paused under D11.7 and outside the main demo; `@vaquita/*` identifiers stay unchanged before November 9.
 
 Built for the **Agents on Open Rails** hackathon (Celo × Ripio), Track 1: Stable Agents LatAm.
 
-> Pitch (Spanish): *"Crédito entre conocidos a la mitad del costo del banco, sin que nadie pierda contra la inflación."* Full context: [`docs/proyecto/contexto.md`](docs/proyecto/contexto.md).
+> Pitch: *"An agent that aggregates demand from LatAm tech communities, gets suppliers to compete, and executes purchases in wARS without holding buyers' funds."* Commitments do not reserve funds; payment does not guarantee delivery. Ripio can pause, block and upgrade wARS. Full context: [`docs/proyecto/contexto.md`](docs/proyecto/contexto.md). Design: [`docs/proyecto/plan-compra-colectiva.md`](docs/proyecto/plan-compra-colectiva.md).
 
 ## Repository layout
 
@@ -55,7 +57,7 @@ npm run identidad:registrar                                      # ERC-8004
 
 - **Commits, branches and PRs in English** ([Conventional Commits](https://www.conventionalcommits.org/), e.g. `feat(core): add fair-pot schedule`). `docs/` and every user-facing text in Rioplatense Spanish.
 - **Every commit that touches code also updates your docs:** `docs/miembros/<you>/bitacora.md` and `estado.md`, in the same commit.
-- **Work on a branch from `staging`** and merge through a PR with 1 approval and green CI.
+- **Work on a branch from `staging`** and merge through a PR with green CI (no approval required).
 - **Keys only in `.env`.** Hooks and CI scan every diff for keys and tokens. **Never use `--no-verify`.**
 - **Every transaction goes through `packages/core/src/chain/tagged-sender.ts`.**
 

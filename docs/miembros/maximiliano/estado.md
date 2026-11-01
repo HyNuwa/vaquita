@@ -1,14 +1,17 @@
 # Estado · Maximiliano
 
-**Última actualización:** 2026-10-24
+**Última actualización:** 2026-11-01
 
 ## En qué estoy
-Coordino las tareas del equipo, que desde el 24/10 somos tres (Santos se fue y sus tareas de producto y entrega son mías). El motor de la junta tiene reglas, obligaciones, pagos tardíos, estado de ronda, compromisos por turno, el buscador de órdenes de turno y los escenarios de incumplimiento de D2 con la posición de cada miembro. Las decisiones de diseño (D2, D5, D6, D7, D10, `.env`, alcance y estructura) están en el PR #6.
+Tomé todas las tareas de la entrega ([D12](../../proyecto/decisiones.md)). Esteban y Daniel quedan como colaboradores opcionales, y los PR ya no necesitan aprobación. El control está en [`docs/tareas/control-entrega.md`](../../tareas/control-entrega.md). D11 sigue siendo el plan escrito, pero el producto final no está cerrado: Vaquita Club quedó a mitad de intake en `docs/investigacion/vaquita-club/`.
 
 ## Próximo paso
-- Conciliación desde eventos y persistencia del motor (29–30/10).
-- Inscripción en Loops House y campos del formulario de entrega (eran de Santos).
-- Conseguir aprobación de los PRs #4, #6, #7 y el de los docs alineados.
+Puerta P0, lunes 2/11 a las 12:00:
+- Elegir el producto: D11 o Vaquita Club.
+- Confirmar inscripción, código `celo_...` y wallet del agente; crear `.env` en esta computadora.
 
 ## Bloqueos
-- D7 en la práctica: no hay registrado ningún resultado del spike del 23/10. Preguntarle a Esteban.
+- No hay evidencia de inscripción, ERC-8004, primer pago ni spike. Los hitos del 27 y el 29/10 vencieron sin registro.
+- Falta definir cómo firma el comprador desde la web sin romper la regla 9 ni la guarda de la CI.
+- Falta un contacto con una comunidad y con proveedores para E1.
+- Lo que toque plata ya no tiene un segundo revisor humano; lo reemplaza la revisión con agentes, que no es una auditoría.

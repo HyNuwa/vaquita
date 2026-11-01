@@ -7,6 +7,11 @@ date: 21 de octubre de 2026
 footer: La Vaquita · Repositorio y entrega v2
 ---
 
+> **1/11 · D12:** todas las tareas son de Maxi y los PR no requieren aprobación; donde esta guía nombra otro responsable o una revisión por otra persona, rige [D12](decisiones.md). Fechas: [control-entrega.md](../tareas/control-entrega.md).
+
+> **25/10 · D11:** siguen vigentes la estructura del monorepo, `.env` y ledger únicos, el pipeline de envío, las reglas, D5 y el procedimiento y fecha de entrega. `JuntaReglas`, las rutas `/j/:slug`, el cronograma y las evidencias de juntas quedan en pausa o reemplazados por el [plan de compra colectiva](plan-compra-colectiva.md). Se suman `compra/`, `contracts/` condicionado al spike y `/c/:slug`; los responsables actuales están en [tareas/](../tareas/README.md). El pitch, las evidencias y la plantilla de README de este cuerpo describen el producto anterior: no se copian como estado vigente.
+
+
 
 > **Actualización 24/10:** el equipo decidió D2, D5, D6, D7 y D10, el `.env` único, el alcance y la estructura ([decisiones.md](decisiones.md)), y Santos dejó el equipo. Cambios en esta guía: el lector de cadena y los pagos viven en `packages/core` (la regla es que solo el core habla con Celo) y `apps/api` es fina; hay un solo `.env` en la raíz; el hosting es Railway y Vercel; `contracts/` se habilita si pasa el spike de D7; las ramas salen de `staging`.
 

@@ -26,6 +26,15 @@ Estado: ✅ en uso · ⏳ pendiente de decidir.
 | 11 | Variables de entorno | **dotenv**, un solo `.env` en la raíz | 18.0 | ✅ |
 | 12 | Persistencia del motor (vaquitas, rondas, aportes) | — | — | ⏳ Hoy el ledger es un JSON en `data/` |
 
+## `contracts/`
+
+| Pieza | Elección | Versión | Estado |
+|---|---|---|---|
+| Contrato y fábrica `CompraColectiva` | **Solidity con Foundry**, fuzzing e invariantes; tests locales sin red | Por definir | ⏳ Condicionado al spike (D11.4) |
+| Utilidades seguras | **OpenZeppelin: `SafeERC20` y `ReentrancyGuard`** | Por definir | ⏳ Anotar en [decisiones.md](decisiones.md) cuando se fije la versión |
+
+`contracts/` se habilita cuando pase el spike; esta tabla no implica instalación ni despliegue. Segunda revisión antes de mainnet (D12.3). Diseño: [plan-compra-colectiva.md](plan-compra-colectiva.md).
+
 ## `apps/bot`
 
 | # | Pieza | Elección | Versión | Estado |

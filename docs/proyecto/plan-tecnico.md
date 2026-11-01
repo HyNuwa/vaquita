@@ -7,6 +7,9 @@ date: 21 de octubre de 2026
 footer: La Vaquita · Plan técnico v2
 ---
 
+> **25/10 · D11:** el alcance, los estados y el cronograma de juntas quedan en pausa; `JuntaReglas` se reemplaza por `CompraColectiva`, sin admin ni actualizaciones. Siguen vigentes la estructura del repo, el pipeline `tagged-sender.ts`, ERC-8021/CIP-64, el ensayo por defecto, las reglas y la entrega. Las fórmulas, garantías simuladas y `JUNTA_MODE` de este cuerpo son antecedentes de juntas, no reglas de campañas. Rige el [plan de compra colectiva](plan-compra-colectiva.md), con su checklist y cronograma.
+
+
 
 > **Actualización 24/10:** el equipo decidió D2, D5, D6, D7 y D10, el `.env` único, el alcance y la estructura ([decisiones.md](decisiones.md)), y Santos dejó el equipo. La tabla de la sección 1 ya tiene los estados nuevos. Donde este plan habla de garantías, déficit o custodia, manda la arquitectura de [plan-junta-contrato.md](plan-junta-contrato.md): el contrato nunca guarda plata y los aportes van de miembro a miembro. El lector de cadena y los pagos viven en `packages/core`, no en `apps/api`.
 
