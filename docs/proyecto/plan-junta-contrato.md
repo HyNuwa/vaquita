@@ -1,3 +1,5 @@
+> **25/10 · D11:** `JuntaReglas` queda reemplazado por `CompraColectiva`; el motor y el cronograma de juntas quedan en pausa. Sigue vigente el spike original (wARS, autorización exacta, `transferFrom`, tag móvil y conciliación), la estructura del repo, el pipeline de envío, las reglas y la fecha de entrega. La pausa por guardián y la Safe del diseño anterior no se trasladan a las campañas: fábrica y campañas sin admin. Rige el [plan de compra colectiva](plan-compra-colectiva.md); el cuerpo se conserva como antecedente.
+
 # Plan: junta con contrato de reglas
 
 21/10/2026 · Maxi · Copia del [documento en Claude Docs](https://claude.ai/artifact/1DoNkMgrdAxe7DaV3VaLgb), que tiene los diagramas. Actualizada el 22/10/2026.

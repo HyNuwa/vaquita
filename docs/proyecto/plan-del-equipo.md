@@ -7,6 +7,9 @@ date: 21 de octubre de 2026
 footer: La Vaquita · Plan del equipo v2
 ---
 
+> **25/10 · D11:** el producto y el cronograma de juntas de este plan quedan reemplazados por el [plan de compra colectiva](plan-compra-colectiva.md); `JuntaReglas` y la demo de juntas quedan en pausa. Siguen vigentes la estructura del repo, el pipeline de envío, las reglas de trabajo, D5 y los requisitos y fecha de entrega. Los responsables y los hitos vigentes están en [tareas/](../tareas/README.md); E1 corta el 29/10 y el nombre se decide el 27/10. El cuerpo se conserva como antecedente.
+
+
 
 > **Actualización 24/10:** Santos dejó el equipo. Sus tareas en este plan pasaron a Maxi, que además coordina las tareas de todos. Ver [equipo.md](../equipo.md) y [tareas/](../tareas/README.md).
 

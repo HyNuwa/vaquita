@@ -19,16 +19,19 @@ Se puede abrir como bóveda de Obsidian (abrir la carpeta `docs/` como vault). L
 
 | Archivo | Qué tiene |
 |---|---|
-| [proyecto/contexto.md](proyecto/contexto.md) | **Fuente de verdad:** qué es, reglas duras, direcciones, estado, junta clásica, obligaciones, mora, restricciones |
-| [proyecto/plan-del-equipo.md](proyecto/plan-del-equipo.md) | **Plan v2 (21/10):** fechas y puertas G1–G7, qué es real y qué es simulado, roles, etapas, recortes, registro de decisiones A1–A7 y D2–D10, pitch y entrega |
-| [proyecto/plan-tecnico.md](proyecto/plan-tecnico.md) | **Plan técnico v2:** alcance del MVP, modos (`LIVE_PAYMENTS`, `JUNTA_MODE`), estados, motor de reglas, exposición, escenarios de déficit, criterios de x402 y Ripio, definición de terminado |
-| [proyecto/plan-junta-contrato.md](proyecto/plan-junta-contrato.md) | **Propuesta v3 (22/10, se decide el 25/10):** contrato de reglas que no guarda plata, aportes P2P, motor de obligaciones, autorizaciones, pagos tardíos, plan B `DIRECT_P2P` y su conciliación |
+| [proyecto/contexto.md](proyecto/contexto.md) | **Fuente de verdad (25/10):** compra colectiva por intención, reglas duras, direcciones, estado y juntas en pausa por D11 |
+| [proyecto/plan-compra-colectiva.md](proyecto/plan-compra-colectiva.md) | **Plan vigente (D11):** contrato y fábrica, tests, core, agente, web, E1, cronograma y riesgos |
+| [proyecto/plan-del-equipo.md](proyecto/plan-del-equipo.md) | **Antecedente v2 (21/10):** cronograma de juntas reemplazado por D11; reglas y entrega según aviso inicial |
+| [proyecto/plan-tecnico.md](proyecto/plan-tecnico.md) | **Antecedente v2:** motor de juntas en pausa; pipeline y reglas vigentes según aviso D11 |
+| [proyecto/plan-junta-contrato.md](proyecto/plan-junta-contrato.md) | **Antecedente v3 (22/10):** `JuntaReglas` reemplazado por `CompraColectiva`; spike original vigente |
 | [proyecto/repositorio-y-entrega.md](proyecto/repositorio-y-entrega.md) | Carpetas y dueños, variables de entorno, evidencias para la entrega y el paso a paso del envío |
 | [proyecto/stack.md](proyecto/stack.md) | Stack por workspace, con versiones y lo pendiente de decidir |
 | [proyecto/decisiones.md](proyecto/decisiones.md) | Registro de decisiones del equipo |
 | [equipo.md](equipo.md) | Integrantes, alias, roles y carpeta de cada uno |
-| [tareas/](tareas/README.md) | Áreas de trabajo, responsables y plan de cada integrante |
+| [tareas/control-entrega.md](tareas/control-entrega.md) | **Control hasta el cierre:** puertas, fechas y recortes |
+| [tareas/](tareas/README.md) | Áreas de trabajo y tareas (desde D12, todas de Maxi) |
 | [investigacion/](investigacion/README.md) | Docs 01–15: hackathon, Celo, Ripio, brainstorming, benchmark, modelo de negocio |
+| [investigacion/la-vaquita-2/](investigacion/la-vaquita-2/README.md) | Investigación de versiones y validación; v4 y debate técnico/jurídico como antecedentes de D11 |
 
 ## Onboarding (una vez por compu)
 

@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-01 · docs(docs): adopt D11 collective purchase and D12 solo delivery
+- **Qué hice:** registré D11 (compra colectiva por intención) y D12 (todas las tareas son mías y los PR no requieren aprobación). Actualicé contexto, reglas, planes y tareas, sumé `docs/tareas/control-entrega.md` con las puertas hasta el cierre y la investigación de `la-vaquita-2/`. En GitHub bajé a 0 las aprobaciones de `staging` y `main`, y mergeé el PR #9.
+- **Archivos clave:** `docs/proyecto/decisiones.md`, `docs/proyecto/plan-compra-colectiva.md`, `docs/tareas/control-entrega.md`, `docs/tareas/maximiliano.md`, `AGENTS.md`.
+- **Próximo paso:** puerta P0 del 2/11: elegir el producto, confirmar la inscripción y el código de atribución, y crear el `.env`.
+
 ## 2026-10-24 · feat(core): add default scenarios and member positions
 - **Qué hice:** escenarios de incumplimiento de D2 en el motor, sin garantías. `stopPayingScenario` dice qué pasa si un miembro deja de pagar desde una ronda: cuánto queda impago, a quién le falta cada aporte y cuánto se lleva neto (o cuánto le debe el grupo, si todavía no cobró). `afterCollectingScenarios` arma la tabla para mostrar antes de entrar. `juntaPosition` da la posición real de cada miembro (recibido, pagado, vencido, lo que le deben) y separa lo vencido de quienes ya cobraron, que es el riesgo que nadie cubre. 11 tests nuevos.
 - **Archivos clave:** `packages/core/src/junta/defaults.ts`, `packages/core/test/defaults.test.ts`.
