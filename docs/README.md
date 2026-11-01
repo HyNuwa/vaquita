@@ -19,7 +19,7 @@ Se puede abrir como bóveda de Obsidian (abrir la carpeta `docs/` como vault). L
 
 | Archivo | Qué tiene |
 |---|---|
-| [proyecto/contexto.md](proyecto/contexto.md) | **Fuente de verdad:** qué es, reglas duras, direcciones, estado, junta justa, mora, restricciones |
+| [proyecto/contexto.md](proyecto/contexto.md) | **Fuente de verdad:** qué es, reglas duras, direcciones, estado, junta clásica, obligaciones, mora, restricciones |
 | [proyecto/plan-del-equipo.md](proyecto/plan-del-equipo.md) | **Plan v2 (21/10):** fechas y puertas G1–G7, qué es real y qué es simulado, roles, etapas, recortes, registro de decisiones A1–A7 y D2–D10, pitch y entrega |
 | [proyecto/plan-tecnico.md](proyecto/plan-tecnico.md) | **Plan técnico v2:** alcance del MVP, modos (`LIVE_PAYMENTS`, `JUNTA_MODE`), estados, motor de reglas, exposición, escenarios de déficit, criterios de x402 y Ripio, definición de terminado |
 | [proyecto/plan-junta-contrato.md](proyecto/plan-junta-contrato.md) | **Propuesta v3 (22/10, se decide el 25/10):** contrato de reglas que no guarda plata, aportes P2P, motor de obligaciones, autorizaciones, pagos tardíos, plan B `DIRECT_P2P` y su conciliación |
@@ -36,7 +36,7 @@ Se puede abrir como bóveda de Obsidian (abrir la carpeta `docs/` como vault). L
 git clone https://github.com/HyNuwa/vaquita.git
 cd vaquita
 npm install                          # instala todo y activa los hooks del equipo
-git config vaquita.member <tu-slug>  # daniel, esteban, santos o maximiliano
+git config vaquita.member <tu-slug>  # daniel, esteban o maximiliano
 npm run check                        # typecheck + tests, sin red
 ```
 

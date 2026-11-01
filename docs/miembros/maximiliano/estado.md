@@ -1,14 +1,14 @@
 # Estado · Maximiliano
 
-**Última actualización:** 2026-10-18
+**Última actualización:** 2026-10-24
 
 ## En qué estoy
-Armé la base del repo: monorepo con `packages/core` (el scaffold), `apps/bot` y `apps/web`, reglas del equipo, hooks y CI. Las skills de los agentes quedaron en una sola carpeta, `.agents/skills`.
+Coordino las tareas del equipo, que desde el 24/10 somos tres (Santos se fue y sus tareas de producto y entrega son mías). El motor de la junta tiene reglas, obligaciones, pagos tardíos, estado de ronda, compromisos por turno, el buscador de órdenes de turno y los escenarios de incumplimiento de D2 con la posición de cada miembro. Las decisiones de diseño (D2, D5, D6, D7, D10, `.env`, alcance y estructura) están en el PR #6.
 
 ## Próximo paso
-- Confirmar con el equipo las decisiones del 18/10 (monorepo, flujo de trabajo, idioma).
-- Repartir las 4 áreas de `docs/tareas/README.md`.
-- Activar la protección de `main` y `staging` (1 aprobación + CI en verde). `staging` ya existe.
+- Conciliación desde eventos y persistencia del motor (29–30/10).
+- Inscripción en Loops House y campos del formulario de entrega (eran de Santos).
+- Conseguir aprobación de los PRs #4, #6, #7 y el de los docs alineados.
 
 ## Bloqueos
-- La protección de ramas la tiene que activar el dueño del repo en GitHub.
+- D7 en la práctica: no hay registrado ningún resultado del spike del 23/10. Preguntarle a Esteban.

@@ -1,6 +1,6 @@
 # La Vaquita
 
-An AI agent that runs your group's savings circle (junta, tanda or vaca) in digital pesos (wARS by Ripio) on Celo: it collects from everyone, pays the pot to whoever's turn it is and shares inflation fairly, with rules that nobody, not even the agent, can break.
+An AI agent that runs your group's rotating savings circle (junta or tanda) in digital pesos (wARS by Ripio) on Celo. The group agrees on the rules and the turn order, each member pays whoever collects that round through a rules contract that never holds the money, and everyone can check what was paid and what is still owed.
 
 Built for the **Agents on Open Rails** hackathon (Celo × Ripio), Track 1: Stable Agents LatAm.
 
@@ -32,7 +32,7 @@ npm workspaces monorepo:
 git clone https://github.com/HyNuwa/vaquita.git
 cd vaquita
 npm install                          # installs every workspace and turns on the team's git hooks
-git config vaquita.member <slug>     # daniel, esteban, santos or maximiliano
+git config vaquita.member <slug>     # daniel, esteban or maximiliano
 npm run check                        # typecheck + tests, no network
 ```
 

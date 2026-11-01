@@ -2,10 +2,13 @@
 title: Repositorio y guía de entrega
 subtitle: Qué va en cada carpeta, quién la cuida, qué evidencias juntamos y cómo enviamos el proyecto
 kicker: Complemento del plan del equipo y del plan técnico · versión 2
-team: Maxi · Esteban · Daniel · Santos
+team: Maxi · Esteban · Daniel
 date: 21 de octubre de 2026
 footer: La Vaquita · Repositorio y entrega v2
 ---
+
+
+> **Actualización 24/10:** el equipo decidió D2, D5, D6, D7 y D10, el `.env` único, el alcance y la estructura ([decisiones.md](decisiones.md)), y Santos dejó el equipo. Cambios en esta guía: el lector de cadena y los pagos viven en `packages/core` (la regla es que solo el core habla con Celo) y `apps/api` es fina; hay un solo `.env` en la raíz; el hosting es Railway y Vercel; `contracts/` se habilita si pasa el spike de D7; las ramas salen de `staging`.
 
 # 0. Cambios en esta versión
 
@@ -23,12 +26,12 @@ Un solo repositorio público, `la-vaquita` (nombre sujeto a D6), con workspaces 
 
 | Carpeta | Para qué sirve | Dueño | Dónde se publica |
 |---|---|---|---|
-| `packages/core` | Reglas, junta justa, estados, exposición, contabilidad, montos, tokens, envío taggeado, política | Maxi (reglas) · Esteban (cadena) | Lo importan los demás |
-| `apps/api` | API, base de datos, simulación, lector de cadena, jobs, módulos experimentales de pagos, buy | Maxi · Esteban (`chain/`, `payments/`) · Daniel (`buy/`) | Railway o Render (D5) |
-| `apps/bot` | Bot de Telegram y loop del LLM | Daniel | Railway o Render (D5) |
-| `apps/web` | Web de la junta y landing | Maxi (app) · Santos (landing y textos) | Vercel (D5) |
+| `packages/core` | Motor de la junta (reglas, obligaciones, turnos), montos, tokens, envío taggeado, política, lector de cadena y pagos. **El único paquete que habla con Celo** | Maxi (motor) · Esteban (cadena y pagos) | Lo importan los demás |
+| `apps/api` | API fina: HTTP, base de datos, simulación y jobs; importa el motor y la cadena del core | Maxi · Daniel (`buy/`) | Railway (D5) |
+| `apps/bot` | Bot de Telegram y loop del LLM | Daniel | Railway (D5) |
+| `apps/web` | Web de la junta y landing | Maxi | Vercel (D5) |
 | `spikes/textile` | Prueba independiente de Textile FX, **fuera de los workspaces** y con su propia wallet | Quien tenga capacidad libre | No se publica |
-| `docs/` | Planes, registro de decisiones, entrega, legal | Santos · Maxi | En el repo |
+| `docs/` | Planes, registro de decisiones, entrega, legal | Maxi | En el repo |
 
 Código, commits y variables en inglés; documentación y textos de producto en español.
 
@@ -44,11 +47,11 @@ packages/core/src/
 ├── money/         montos en pesos, formato es-AR                (existe)
 ├── identity/      ERC-8004                                      (existe)
 ├── ramp/          links de ramp.ripio.com                       (existe)
-├── junta/         tabla de turnos (Σ = N²·A), N configurable    (nuevo · Maxi)
-├── rules/         máquina de estados, mora, cancelación         (nuevo · Maxi)
-├── exposure/      exposición por turno y por grupo, escenarios  (nuevo · Maxi)
-├── ledger/        contabilidad por grupo e invariantes          (nuevo · Maxi)
-└── types/         Junta, Miembro, Ronda, Aporte, Orden          (nuevo · Maxi)
+├── junta/         reglas, obligaciones, compromisos por turno,
+│                  orden de turnos, escenarios de incumplimiento  (Maxi)
+├── chain/         + lector de eventos (hash + índice de log)    (nuevo · Esteban)
+└── payments/      pay (existe) · x402 y ripio experimentales,
+                   detrás de X402_ENABLED y RIPIO_ENABLED (D8, D9) (nuevo · Esteban)
 ```
 
 ## apps/api
@@ -58,10 +61,6 @@ apps/api/src/
 ├── routes/          juntas · miembros · rondas · publico · admin · pausa
 ├── services/        conciliación · órdenes · idempotencia
 ├── simulacion/      saldos, garantías, incumplimientos y déficit simulados
-├── chain/           lector de eventos (hash + índice de log)       (Esteban)
-├── payments/
-│   ├── x402/        experimental, detrás de X402_ENABLED (D8)     (Esteban)
-│   └── ripio/       experimental, detrás de RIPIO_ENABLED (D9)    (Esteban)
 ├── buy/             pagos del agente con tope de gasto            (Daniel)
 ├── jobs/            agenda de rondas y recordatorios
 └── db/              esquema y migraciones
@@ -87,7 +86,7 @@ El bot **no importa** `tagged-sender` ni ninguna clave de wallet.
 
 ```
 apps/web/app/
-├── page.tsx                 landing                          (Santos)
+├── page.tsx                 landing                          (Maxi)
 └── j/[slug]/
     ├── page.tsx             estado, rotulado "simulado"       (Maxi)
     ├── unirse/              turno, exposición, reglas         (Maxi)
@@ -137,7 +136,7 @@ docs/
 
 # 4. Variables de entorno y secretos
 
-| Variable | Dónde vive | Para qué |
+| Variable | Quién la usa | Para qué |
 |---|---|---|
 | `AGENT_PRIVATE_KEY` | Solo `apps/api` | Firma de pagos técnicos y registro ERC-8004 |
 | `ATTRIBUTION_CODE` | `apps/api` | Código `celo_…` para el tag |
@@ -154,23 +153,23 @@ docs/
 | `NEXT_PUBLIC_API_URL` · `NEXT_PUBLIC_CHAIN_ID=42220` | `apps/web` | Configuración pública |
 | `TEXTILE_TEST_PRIVATE_KEY` | Solo `spikes/textile` | Wallet de pruebas separada, sin fondos de grupos |
 
-Los secretos viven en las variables de entorno del hosting y en un `.env` local ignorado por Git. En el repo hay un `.env.example` por app que separa direcciones públicas, configuración de red y secretos (estos últimos sin valores).
+Los secretos viven en las variables de entorno del hosting y, en local, en **un solo `.env` en la raíz** ignorado por Git, igual que el ledger de gastos (`packages/core/src/config/paths.ts`). Dos ledgers permitirían gastar el presupuesto diario dos veces. En el repo hay un solo `.env.example` que separa direcciones públicas, configuración de red y secretos (estos últimos sin valores). En el hosting, cada servicio recibe solo las variables que usa.
 
 # 5. Cómo trabajar dentro del repo
 
 | Tema | Regla |
 |---|---|
-| Ramas | `main` siempre funciona; ramas `feat/`, `fix/`, `docs/`, `spike/` |
+| Ramas | Se trabaja en ramas `feat/`, `fix/`, `docs/`, `chore/` o `spike/` creadas desde `staging`, con PR a `staging`; `staging` pasa a `main` para las entregas. Los dos están protegidos |
 | Commits | En inglés y cortos: `feat(core): add exposure per turn` |
 | Pull requests | Una revisión mínima. `chain/` y `payments/` los revisa alguien distinto de Esteban; `junta/`, `rules/`, `exposure/` y `ledger/`, alguien distinto de Maxi |
 | CI | `npm test`, `npm run typecheck`, tests de contabilidad y casos de mora, y búsqueda de secretos |
 | Issues | Uno por tarea, con responsable y fecha. Etiquetas: `core`, `api`, `bot`, `web`, `pagos`, `simulacion`, `usuarios`, `entrega`, `bloqueado` |
 | Contratos de datos | Un cambio en `packages/core/types` se avisa antes de mergear |
 | Envíos reales | Regla de las dos llaves antes de activar `LIVE_PAYMENTS` |
-| Decisiones | Todo cambio de estado se anota en `docs/decisiones.md` con fecha y evidencia |
+| Decisiones | Todo cambio de estado se anota en `docs/proyecto/decisiones.md` con fecha y evidencia |
 | Listo significa | Cumple la definición de terminado del plan técnico (sección 16) |
 
-El repo es **público desde el primer día**. Los cuatro tienen permiso de escritura; Maxi es administrador; `main` está protegido.
+El repo es **público desde el primer día**. Los tres tienen permiso de escritura; Maxi es administrador; `main` y `staging` están protegidos.
 
 # 6. Migrar el código existente
 
@@ -204,7 +203,7 @@ git add . && git commit -m "chore: bootstrap monorepo with core package"
 | Juntas, aportes y adjudicaciones | **Simulada** | Capturas y logs rotulados "simulado" | Maxi |
 | Incumplimiento con déficit mayor que la garantía | **Simulada** | Escenario de la demo | Maxi |
 | Usuarios | Real | `docs/usuarios/`: entrevistas, grupos que probaron el flujo simulado y cómo se los consiguió | Santos |
-| Registro de decisiones | — | `docs/decisiones.md` al día | Maxi |
+| Registro de decisiones | — | `docs/proyecto/decisiones.md` al día | Maxi |
 | Prueba de Textile (si se hizo) | Real (aislada) | `docs/pruebas/textile.md` | Quien la haga |
 
 # 8. Entrega en Loops House paso a paso
@@ -287,6 +286,6 @@ Maxi (líder técnico) · Esteban (cadena y pagos) · Daniel (agente) · Santos 
 | El RPC de Forno falla | `CELO_RPC_URL_BACKUP` con Chainstack |
 | El LLM no responde | Plantillas fijas; el motor no depende del LLM |
 | x402 falla en la prueba | Se documenta el resultado en `docs/pruebas/x402.md`; el aporte queda simulado |
-| Un movimiento real queda `SIN_ASIGNAR` | El operador lo revisa y lo anota en `docs/decisiones.md` |
+| Un movimiento real queda `SIN_ASIGNAR` | El operador lo revisa y lo anota en `docs/proyecto/decisiones.md` |
 | El video no sube | Google Drive con acceso por enlace |
 | El formulario no deja enviar | Otro navegador, capturas y aviso en el Telegram del hackathon antes de las 22:00 del domingo |

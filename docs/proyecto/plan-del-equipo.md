@@ -2,10 +2,13 @@
 title: Plan del equipo
 subtitle: Cómo llegamos al 9 de noviembre con un prototipo funcional, pagos reales verificables y riesgos transparentes
 kicker: Agents on Open Rails · Track Stable Agents LatAm · versión 2
-team: Maxi (líder técnico) · Esteban · Daniel · Santos
+team: Maxi (líder técnico) · Esteban · Daniel
 date: 21 de octubre de 2026
 footer: La Vaquita · Plan del equipo v2
 ---
+
+
+> **Actualización 24/10:** Santos dejó el equipo. Sus tareas en este plan pasaron a Maxi, que además coordina las tareas de todos. Ver [equipo.md](../equipo.md) y [tareas/](../tareas/README.md).
 
 # 0. Cambios en esta versión
 
@@ -158,13 +161,13 @@ Estados: **Aprobada**, **Pendiente de prueba**, **Bloqueada por diseño o revisi
 | A5 | Textile FX fuera del camino crítico; prueba independiente si sobra capacidad | Aprobada | Todos | 21/10 | Aprobación de Maxi, 21/10 |
 | A6 | Piloto de 4 a 8 personas; tamaño configurable en el producto | Aprobada | Maxi y Santos | 21/10 | Aprobación de Maxi, 21/10 |
 | A7 | Solo junta rotativa en el MVP (sin vaca de objetivo ni gastos compartidos) | Aprobada | Maxi | 21/10 | Aprobación de Maxi, 21/10 |
-| D2 | Mora después de cobrar y cobertura | Bloqueada por diseño | Maxi | 28/10 | Pendiente: exposición por participante y grupo, escenarios, alternativas de cobertura y decisión escrita |
-| D5 | Hosting (API y bot en Railway o Render; web en Vercel) | Pendiente de prueba | Maxi | 30/10 | Pendiente: despliegue de prueba funcionando |
-| D6 | Nombre | Pendiente de prueba | Todos | 25/10 | Pendiente: búsqueda de marca y opinión de organizadores |
-| D7 | Custodia (wallet declarada, escrow o sin custodia) | Bloqueada por diseño o revisión legal | Maxi y Esteban | 28/10 | Pendiente: modelo documentado, claves, contabilidad por grupo, topes, pausa y revisión legal |
+| D2 | Mora después de cobrar: sin garantías ni compensación automática en el MVP | Aprobada | Maxi | 24/10 | [decisiones.md](decisiones.md), 24/10. Falta: escenarios de incumplimiento en el motor |
+| D5 | Hosting: API y bot en Railway, web en Vercel | Aprobada, pendiente de prueba | Maxi | 24/10 | [decisiones.md](decisiones.md), 24/10. Falta: despliegue de prueba (30/10) |
+| D6 | Nombre: seguimos con La Vaquita y lo aclaramos en el pitch | Aprobada | Maxi | 24/10 | [decisiones.md](decisiones.md), 24/10 |
+| D7 | Contrato de reglas sin custodia, aportes P2P; si el spike falla, `DIRECT_P2P` | Aprobada, condicionada al spike | Maxi y Esteban | 24/10 | [decisiones.md](decisiones.md), 24/10. Falta: resultado del spike |
 | D8 | x402 para aportes | Pendiente de prueba | Esteban | 23/10 | Pendiente: criterios de la sección 10 del plan técnico |
 | D9 | Ripio como camino de aporte | Pendiente de prueba | Esteban | 27/10 | Pendiente: criterios de la sección 10 del plan técnico |
-| D10 | Precio de los turnos, comisión y licitaciones | Bloqueada por revisión legal | Santos | 28/10 | Pendiente: conclusión escrita sobre la RG IGJ 8/2015 |
+| D10 | Junta clásica con cuota fija; precio por turno y licitaciones después de la revisión legal | Aprobada | Maxi | 24/10 | [decisiones.md](decisiones.md), 24/10. La conclusión sobre la RG IGJ 8/2015 sigue pendiente para la hoja de ruta |
 
 Cada cambio de estado se anota acá con su fecha y su evidencia (resultado de la prueba, documento de diseño o conclusión legal).
 

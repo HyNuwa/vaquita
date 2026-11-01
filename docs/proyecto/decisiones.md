@@ -4,6 +4,28 @@ Una entrada por decisión, la más nueva arriba. Formato: fecha · decisión · 
 
 Las decisiones de producto previas al repo (canal Telegram, wARS, junta justa, custodia, onboarding) están en [contexto.md](contexto.md#6-decisiones-de-producto-tomadas).
 
+## 2026-10-24 · Santos deja el equipo; Maxi coordina las tareas · Maximiliano (líder técnico)
+- El equipo queda en tres: Maxi, Esteban y Daniel. Las tareas de Santos (producto, usuarios, legal y D10, landing, deck, video y formulario de entrega) pasan a Maxi.
+- Maxi coordina las tareas de todos: puede reasignarlas y tomar cualquiera para llegar a la entrega, marcándolo en el archivo del responsable y avisando en el PR.
+- Se mantiene la revisión entre dos: cada PR necesita la aprobación de otro integrante.
+- El hook `pre-commit` deja borrar la carpeta de `docs/miembros/` de quien ya no figura en `docs/equipo.md`.
+
+## 2026-10-24 · Decisiones de diseño previstas para el 25/10 · Maximiliano (líder técnico)
+Cierra lo que `plan-junta-contrato.md` ("Qué decide el equipo el 25/10") y `plan-del-equipo.md` (sección 8) dejaban abierto. Desde acá el alcance queda fijo: lo nuevo va a la hoja de ruta.
+
+| # | Decisión | Condición o consecuencia |
+|---|---|---|
+| D7 · Arquitectura | Contrato de reglas `JuntaReglas` con aportes P2P: cada aporte pasa por el contrato y llega al que cobra en la misma transacción; el contrato nunca guarda plata | **Condicionada al spike:** se aprueba solo si confirma pagos en wARS, autorización por aporte, `transferFrom`, tag desde el móvil y conciliación. Si no pasa, las juntas nuevas usan `DIRECT_P2P` con el id de la obligación en la transacción. `contracts/` se habilita cuando el spike pase |
+| D2 · Mora | Sin garantías ni compensación automática en el MVP: obligaciones registradas, pagos verificables y escenarios de incumplimiento explicados antes de entrar | La compensación queda como prototipo en simulación |
+| D10 · Tipo de junta | Junta clásica con cuota fija; el orden se acuerda con el buscador de turnos | Precio por turno y licitaciones, a la hoja de ruta, después de la revisión legal (RG IGJ 8/2015) |
+| `.env` | Un solo `.env` y un solo ledger en la raíz, compartidos por todas las apps (`packages/core/src/config/paths.ts`) | Se corrige `repositorio-y-entrega.md`, que proponía uno por app: dos ledgers permitirían gastar el presupuesto diario dos veces |
+| D6 · Nombre | Seguimos con La Vaquita | Se aclara en el pitch la diferencia con vaquita.fi y VaquitaAI |
+| Alcance | Solo juntas | La vaca de objetivo sale del MVP y va a la hoja de ruta; se quita de `contexto.md` y `AGENTS.md` |
+| Estructura | El motor y todo lo que habla con Celo siguen en `packages/core`. `apps/api` es fina: HTTP, base de datos y jobs, importando del core | Se mantiene la regla de que solo el core habla con la cadena (y su guarda en la CI) |
+| D5 · Hosting | Bot y API en Railway (con su Postgres), web en Vercel | Sujeto a que el despliegue de prueba del 30/10 funcione |
+
+Siguen abiertas, porque dependen de pruebas y no de una decisión: D8 (x402) y D9 (Ripio), a cargo de Esteban.
+
 ## 2026-10-18 · Skills en una sola carpeta: `.agents/skills` · Maximiliano (falta confirmar con el equipo)
 - Las skills de los agentes existen una sola vez, en `.agents/skills/`. Codex, Cursor, Gemini CLI y Copilot la leen directo.
 - Claude Code, Devin y Windsurf usan su propia carpeta: `npm install` crea `.claude/skills`, `.devin/skills` y `.windsurf/skills` como links a `.agents/skills` (`.agents/link-skills.mjs`). En Windows es una *junction*, que no pide permisos de admin.
