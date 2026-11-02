@@ -38,6 +38,7 @@ describe("validateTerms", () => {
   });
 
   it.each<[string, Partial<CampaignTerms>]>([
+    ["un id que la bitácora no aceptaría", { id: "Campaña 1" }],
     ["precio cero", { unitPrice: 0n }],
     ["cargo sin destinatario", { fee: ONE }],
     ["destinatario sin cargo", { feeRecipient: "agente" }],
@@ -310,6 +311,7 @@ describe("decide", () => {
   const snapshot = (over: Partial<LoopSnapshot> = {}): LoopSnapshot => ({
     campaignId: "c1",
     now: farFromDeadline,
+    phase: "COMMITMENTS",
     status: "OPEN",
     deadline,
     minUnits: 2,
@@ -389,6 +391,10 @@ describe("decide", () => {
   it("avisa el faltante en cada umbral, una sola vez", () => {
     const at48 = snapshot({ now: deadline - 48 * 3600, selection: selected(["a"]) });
     expect(decide(at48).actions).toEqual([{ type: "NOTIFY_SHORTFALL", key: "notify-shortfall:0", missing: 1 }]);
+    // Con una lectura fallida o un estado raro no se sabe cuánto falta: no se afirma un número.
+    const blind = { ...at48, selection: { ...at48.selection, unknown: ["beto"] } };
+    expect(decide(blind).actions.filter((a) => a.type === "NOTIFY_SHORTFALL")).toEqual([]);
+    expect(decide({ ...at48, stateConsistent: false }).actions.filter((a) => a.type === "NOTIFY_SHORTFALL")).toEqual([]);
     expect(types({ ...at48, done: { "notify-shortfall:0": 1 } })).toEqual([]);
 
     const at24 = { ...at48, now: deadline - 24 * 3600, done: { "notify-shortfall:0": 1 } };

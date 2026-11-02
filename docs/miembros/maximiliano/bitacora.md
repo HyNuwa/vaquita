@@ -2,6 +2,16 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-02 · chore(repo): document personal wallet in env example
+- **Qué hice:** sumé `MY_WALLET` a `.env.example` como referencia local para probar pagos. El código no la lee: los destinos salen de `ALLOWED_RECIPIENTS`. La clave del agente ya está en `.env` y `preflight` pasa entero.
+- **Archivos clave:** `.env.example`, `docs/tareas/control-entrega.md`, `docs/tareas/maximiliano.md`.
+- **Próximo paso:** primer pago real de $ 1, registro ERC-8004 y compilar el contrato.
+
+## 2026-11-02 · feat(core): add agent loop process and wARS read-only spike
+- **Qué hice:** proceso que corre el loop propio (D13.1) con estado durable y un solo dueño: guarda la tx firmada antes de transmitirla y nunca firma otra mientras la anterior pueda entrar. La revisión con Codex tuvo cuatro pasadas; los dos arreglos de la última tienen tests, pero Codex no los volvió a revisar. Sumé la parte sin fondos del spike de wARS.
+- **Archivos clave:** `packages/core/src/compra/runner.ts`, `store.ts`, `agent-log.ts`, `loop.ts`, `packages/core/scripts/spike-wars.ts`, `docs/pruebas/spike.md`.
+- **Próximo paso:** contrato y tests en local, sin desplegar; primer pago cuando la clave del agente esté en `.env`.
+
 ## 2026-11-02 · feat(core): add collective purchase rules and agent loop
 - **Qué hice:** módulo `compra/` de reglas puras: condiciones y tope, selección igual a la del contrato, estado desde eventos, ofertas y voto, reglas del loop propio (D13.1) y bitácora pública sin texto libre (D13.2). Pasó la skill `review` y dos revisiones con Codex: la primera encontró 10 problemas, todos corregidos con tests.
 - **Archivos clave:** `packages/core/src/compra/`, `packages/core/test/compra.test.ts`.

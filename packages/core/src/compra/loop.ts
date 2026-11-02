@@ -11,6 +11,8 @@ import { isOpenAt, type CampaignStatus } from "./state.js";
  */
 
 export const LOOP_RULES = {
+  /** Cada cuánto mira el proceso. */
+  tickSeconds: 60,
   /** Espera antes de reclamarle a un proveedor que no respondió. */
   supplierReminderAfterSeconds: 24 * 3600,
   /** Antes del límite, avisar al grupo si no se llegó al mínimo. */
@@ -18,13 +20,21 @@ export const LOOP_RULES = {
   /** Con el mínimo cubierto, ejecutar dentro de esta ventana final. */
   executionWindowSeconds: 2 * 3600,
   maxExecutionAttempts: 3,
+  /** Tiempo sin confirmar una tx enviada antes de avisarle a quien opera. */
+  executionTimeoutSeconds: 10 * 60,
+  /** Los avisos que fallan se reintentan siempre, cada vez más espaciados hasta este tope. */
+  noticeRetryMaxSeconds: 60 * 60,
 } as const;
 
 type FundsReason = "INSUFFICIENT_BALANCE" | "INSUFFICIENT_ALLOWANCE";
 
+/** QUOTES: se está cotizando y todavía no hay contrato. COMMITMENTS: campaña en cadena. */
+export type LoopPhase = "QUOTES" | "COMMITMENTS";
+
 export interface LoopSnapshot {
   campaignId: string;
   now: number;
+  phase: LoopPhase;
   status: CampaignStatus;
   deadline: number;
   minUnits: number;
@@ -35,7 +45,7 @@ export interface LoopSnapshot {
   stateConsistent: boolean;
   /** Proveedores contactados que no respondieron, con la fecha del pedido. */
   pendingSuppliers: readonly { supplier: string; requestedAt: number }[];
-  /** Cierre del plazo de ofertas; ausente si ya hay campaña creada. */
+  /** Cierre del plazo de ofertas, mientras se cotiza. */
   offersCloseAt?: number;
   /** Quedan fondos para pagar el gas de la ejecución. */
   gasBudgetOk: boolean;
@@ -102,6 +112,11 @@ export function decide(s: LoopSnapshot): LoopDecision {
   }
 
   if (!isOpenAt(s.status, s.deadline, s.now)) {
+    // Con un historial raro la compra pudo haber ocurrido: no se dice que nadie pagó.
+    if (!s.stateConsistent) {
+      skipped.push({ rule: "EXECUTE", code: "STATE_INCONSISTENT" });
+      return { actions, skipped };
+    }
     once({ type: "NOTIFY_EXPIRED", key: "notify-expired" });
     return { actions, skipped };
   }
@@ -116,6 +131,9 @@ export function decide(s: LoopSnapshot): LoopDecision {
     once({ type: "PUBLISH_COMPARISON", key: "publish-comparison" });
   }
 
+  // Sin contrato todavía no hay compromisos que contar ni nada que ejecutar.
+  if (s.phase === "QUOTES") return { actions, skipped };
+
   for (const { buyer, reason } of s.selection.excluded) {
     if (reason === "OVER_QUOTA") continue;
     const episode = s.fundsEpisodes?.get(buyer) ?? 0;
@@ -125,7 +143,8 @@ export function decide(s: LoopSnapshot): LoopDecision {
   const units = s.selection.selected.length;
   const remaining = s.deadline - s.now;
 
-  if (units < s.minUnits) {
+  // Con lecturas incompletas no se sabe cuánto falta: no se afirma un número.
+  if (units < s.minUnits && s.stateConsistent && s.selection.unknown.length === 0) {
     // Solo el umbral más urgente alcanzado: si el loop arranca tarde, no manda dos avisos juntos.
     const reached = LOOP_RULES.shortfallNoticeBeforeSeconds.filter((before) => remaining <= before).length;
     if (reached > 0) {

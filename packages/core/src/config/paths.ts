@@ -15,3 +15,9 @@ export const ENV_FILE = join(REPO_ROOT, ".env");
  * y los scripts usaran ledgers distintos, el presupuesto diario se podría gastar dos veces.
  */
 export const LEDGER_FILE = join(REPO_ROOT, "data", "ledger.json");
+
+/** Campañas y lo que el loop ya hizo en cada una (D13.1). */
+export const CAMPAIGNS_FILE = join(REPO_ROOT, "data", "campaigns.json");
+
+/** Bitácora pública del agente (D13.2). */
+export const AGENT_LOG_FILE = join(REPO_ROOT, "data", "agent-log.jsonl");
