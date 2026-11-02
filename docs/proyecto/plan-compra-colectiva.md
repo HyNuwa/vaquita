@@ -107,16 +107,51 @@ Las herramientas se implementan con zod `.strict()`, identificadores validados y
 | Herramienta | Acción permitida |
 |---|---|
 | `proponer_campana` | Preparar intención y condiciones para confirmar |
-| `pedir_cotizaciones` | Preparar mensajes; envía un humano o canal permitido |
+| `pedir_cotizaciones` | Enviar pedidos a proveedores de la lista permitida; sin canal, los envía un humano |
 | `registrar_oferta` | Guardar una oferta con evidencia y confirmación humana |
 | `comparar_ofertas` | Explicar precio total, plazo y entrega con datos validados |
 | `estado_campana` | Consultar términos, eventos y progreso observado |
-| `recordar_compromisos` | Preparar avisos y enviarlos solo por canales habilitados |
-| `ejecutar_campana` | Solicitar ejecución de una campaña ya aprobada y habilitada por código |
+| `recordar_compromisos` | Enviar avisos solo por canales habilitados; también lo dispara el loop |
+| `ejecutar_campana` | Explicar o solicitar la ejecución de una campaña habilitada por código; normalmente la dispara el loop |
 
 El código verifica estado, plazo, elegibilidad, selección, mínimo, máximo, autorización, topes, cargo y simulación antes de habilitar la última herramienta. La tx va por `tagged-sender.ts`; respeta ensayo, atribución y presupuesto de gas. La wallet del agente solo envía ejecución y registro ERC-8004. Crear campañas corresponde a la comunidad desde la web, con helpers del core.
 
 El LLM propone, resume y recuerda. La comunidad elige proveedor; cada comprador firma. El código calcula importes y decide validez; el contrato vuelve a comprobarla al ejecutar. Si la simulación deja de valer, se informa la falla, sin cambiar condiciones ni insistir sin límite.
+
+### Loop propio (D13.1)
+
+Un proceso revisa la cadena y el estado de cada campaña en un intervalo configurable, sin que nadie le escriba. **Las reglas son código, sin LLM:** el LLM solo redacta el mensaje, con importes de plantilla.
+
+| Disparador | Acción | Límite |
+|---|---|---|
+| Un proveedor no respondió el pedido | Reclamo por canal permitido | 1 por proveedor |
+| Cierra el plazo de ofertas | Publica la comparación y abre el voto; no elige | 1 por campaña |
+| Falta poco para la fecha límite y no se llegó al mínimo | Aviso al grupo con cuánto falta | 2 por campaña |
+| Un compromiso pierde saldo o autorización | Aviso a ese comprador | 1 por cambio de estado |
+| Se llega al máximo, o al mínimo dentro de la última ventana antes del límite | Simula y ejecuta sin pedir confirmación: las condiciones ya estaban en la campaña que cada comprador firmó | Una ejecución; respeta dry-run y presupuesto de gas |
+| La simulación falla | Recalcula, reintenta y, si sigue fallando, avisa y se detiene | 3 intentos |
+| La campaña vence sin mínimo | Avisa que nadie pagó | 1 por campaña |
+| Se ejecutó la compra | Pide al proveedor la confirmación de entrega y publica el recibo | 1 reclamo |
+
+Plazos, intervalo y ventana son constantes del core, con tests sin red. Los pedidos automáticos solo salen hacia proveedores de una lista permitida. Sin presupuesto de gas, el loop avisa y no ejecuta.
+
+### Bitácora pública (D13.2)
+
+Cada acción guarda fecha, campaña, disparador, regla aplicada, resultado y hash si hubo transacción, en un registro de solo agregado bajo `data/`. La web lo muestra en lenguaje simple. Solo alias y datos públicos; también incluye lo que el agente decidió no hacer y por qué.
+
+### Cobro por x402 (D13.3)
+
+El organizador firma el pago del cargo en wARS desde su wallet, sin gas, y el facilitador de Celo lo liquida a nuestra wallet PayTo. Al confirmarse, el agente empieza a pedir cotizaciones. El cargo se fija en la configuración y se muestra antes de firmar.
+
+Puntos a respetar, según el [SKILL.md del facilitador](https://x402.celo.org/SKILL.md), que se relee antes de escribir código:
+
+- Paquetes `@x402/*` v2; `assetTransferMethod: "permit2"` y precio explícito en la ruta.
+- `extensions.eip2612GasSponsoring` en la ruta, para que una wallet nueva no tenga que aprobar antes.
+- El comprador tiene que permitir wARS en `spendControls.allowedAssets`, con un tope por pago.
+- La clave del facilitador va en `.env` y nunca llega al navegador.
+- wARS no está en la testnet: la prueba real es en mainnet, con un monto mínimo, fuera de los tests automáticos.
+
+Hay que probar un pago real antes de confiar en la integración: el `SKILL.md` da wARS por habilitado, pero `/api/config` devolvió solo USDC, USDT y USAT al 1/11. Se aplican los criterios de D8, con conciliación contra la campaña en lugar de la ronda.
 
 ## 7. Web: `/c/:slug`
 

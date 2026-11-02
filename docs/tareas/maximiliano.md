@@ -8,13 +8,13 @@ Todos los de la [tabla de áreas](README.md#áreas).
 
 ## Plan
 
-Fuente de producto: [D11](../proyecto/decisiones.md) y [plan de compra colectiva](../proyecto/plan-compra-colectiva.md), hasta confirmar el producto en P0. Las tareas de P2 a P5 cambian si se elige Vaquita Club.
+Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decisiones.md) y [plan de compra colectiva](../proyecto/plan-compra-colectiva.md).
 
 ### P0 · Lunes 2/11, 12:00
 
 | Tarea | Venía de | Estado |
 |---|---|---|
-| Elegir el producto: D11 o Vaquita Club; registrarlo en `decisiones.md` | Nueva | Pendiente |
+| Elegir el producto: D11 (D13.6) | Nueva | Hecho el 1/11 |
 | Confirmar inscripción, wallet inscripta, código `celo_...` y campos del formulario | Santos | Sin confirmar |
 | Crear `.env` en esta computadora y fondear la wallet del agente; correr `preflight` | Esteban | Pendiente |
 | Commitear D11 y D12; mergear el PR #9 y cerrar los PR viejos | Maxi | Hecho el 1/11 |
@@ -54,7 +54,9 @@ Fuente de producto: [D11](../proyecto/decisiones.md) y [plan de compra colectiva
 |---|---|---|
 | Desplegar y verificar en Celo mainnet; probar etiqueta, CIP-64 y wallet móvil | Esteban | Pendiente, sujeto a tests y revisión |
 | Bot y loop del LLM con esquemas zod `.strict()` y alias | Daniel | Pendiente |
-| Herramientas: `proponer_campana`, `registrar_oferta`, `comparar_ofertas`, `estado_campana`, `ejecutar_campana`; si hay tiempo, `pedir_cotizaciones` y `recordar_compromisos` | Daniel | Pendiente |
+| Las 7 herramientas del [plan](../proyecto/plan-compra-colectiva.md#6-el-agente), incluidas `pedir_cotizaciones` y `recordar_compromisos` | Daniel | Pendiente |
+| Loop propio: disparadores, límites y ejecución sin confirmación manual, con tests sin red (D13.1) | Nueva | Pendiente |
+| Bitácora pública del agente en la web (D13.2) | Nueva | Pendiente |
 | Mensajes sobre fondos, cancelación irreversible, entrega y errores, sin jerga cripto | Daniel | Pendiente |
 | Campaña completa del equipo con plata real y montos chicos | Todos | Pendiente |
 
@@ -63,6 +65,7 @@ Fuente de producto: [D11](../proyecto/decisiones.md) y [plan de compra colectiva
 | Tarea | Venía de | Estado |
 |---|---|---|
 | Campaña chica con personas ajenas al equipo, si se cumple D11.5 | Maxi | Pendiente |
+| Cobro x402 en wARS detrás de `X402_ENABLED`: pago real mínimo y criterios de D8 en `docs/pruebas/x402.md`; si no pasa, queda apagado (D13.3) | Nueva | Pendiente |
 | Evidencias: despliegues, código verificado, compromisos, ejecución, importes, `verifyTx` y ERC-8004 | Esteban | Pendiente |
 | Congelar el código a las 20:00 | Maxi | Pendiente |
 
@@ -73,11 +76,11 @@ Fuente de producto: [D11](../proyecto/decisiones.md) y [plan de compra colectiva
 | README, arquitectura y pitch; distinguir lo real, lo simulado y lo que falta | Maxi | Pendiente |
 | Grabar el video y armar el deck | Maxi, Daniel | Pendiente |
 | Buscar secretos en todo el historial | Esteban | Pendiente |
-| Mergear `staging` a `main`, enviar el formulario y probar los enlaces en incógnito | Maxi | Pendiente |
+| Mergear `staging` a `main`, enviar el formulario con la wallet PayTo si x402 quedó activo, y probar los enlaces en incógnito | Maxi | Pendiente |
 
 **Alternativas:** sin ofertas escritas al 5/11, campaña del equipo con proveedor amigo, declarada en el pitch. Sin spike aprobado, transferencias P2P directas registradas por el agente, sin ejecución atómica: pierde la prueba del profesor y no se presenta como equivalente.
 
-**Fuera de la entrega salvo que sobre tiempo:** nombre comercial nuevo, x402 (D8), Ripio (D9) y juntas.
+**Fuera de la entrega salvo que sobre tiempo:** nombre comercial nuevo, Ripio (D9), `buy` (D13.5) y juntas.
 
 ## Hecho (en pausa por D11)
 

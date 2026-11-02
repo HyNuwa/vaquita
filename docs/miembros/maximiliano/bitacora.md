@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-01 · docs(docs): close product on D11 and add autonomous agent plan
+- **Qué hice:** registré D13: el producto queda cerrado en D11, el agente suma un loop propio y una bitácora pública, y se agrega un cobro opcional por x402 en wARS. `buy` queda opcional. Corregí nuestras notas sobre los criterios del hackathon y sumé la excepción de x402 a la regla 3.
+- **Archivos clave:** `docs/proyecto/decisiones.md`, `docs/proyecto/plan-compra-colectiva.md`, `docs/tareas/control-entrega.md`, `AGENTS.md`.
+- **Próximo paso:** empezar a construir el módulo `compra/` y cerrar la puerta P0.
+
 ## 2026-11-01 · docs(docs): adopt D11 collective purchase and D12 solo delivery
 - **Qué hice:** registré D11 (compra colectiva por intención) y D12 (todas las tareas son mías y los PR no requieren aprobación). Actualicé contexto, reglas, planes y tareas, sumé `docs/tareas/control-entrega.md` con las puertas hasta el cierre y la investigación de `la-vaquita-2/`. En GitHub bajé a 0 las aprobaciones de `staging` y `main`, y mergeé el PR #9.
 - **Archivos clave:** `docs/proyecto/decisiones.md`, `docs/proyecto/plan-compra-colectiva.md`, `docs/tareas/control-entrega.md`, `docs/tareas/maximiliano.md`, `AGENTS.md`.

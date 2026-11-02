@@ -2,7 +2,7 @@
 
 **Desde el 1/11, todas las tareas son de Maxi** ([D12](../proyecto/decisiones.md)). Fechas, puertas y recortes: [control-entrega.md](control-entrega.md). Lista completa: [maximiliano.md](maximiliano.md).
 
-Plan de producto vigente: [compra colectiva por intención](../proyecto/plan-compra-colectiva.md), según [D11](../proyecto/decisiones.md), hasta que la puerta P0 confirme el producto final. El cronograma de juntas sigue en pausa.
+Plan de producto vigente: [compra colectiva por intención](../proyecto/plan-compra-colectiva.md), según [D11](../proyecto/decisiones.md) y [D13](../proyecto/decisiones.md). El cronograma de juntas sigue en pausa.
 
 ## Quién coordina
 

@@ -36,6 +36,8 @@ En LatAm mover plata casi siempre pasa por el dólar, con comisiones en cada pas
 
 ## Cómo evalúan el Track 1
 
+> **Corrección del 1/11:** la [página oficial](https://www.loops.house/agents-on-open-rails/) lista estos cinco criterios sin pesos y sin definir "autónomo". Allí no figuran "cada criterio vale 20%" ni el detalle de "actúa solo y ahorra tiempo o plata". Lo que se hace con esto está en D13.
+
 Cada criterio vale 20%:
 
 1. **Funciona en mainnet con wFIAT real**, verificado por tu tag de atribución.

@@ -103,7 +103,7 @@ Full context in [`docs/proyecto/contexto.md`](docs/proyecto/contexto.md) section
 
 1. **Celo mainnet only** (chainId 42220). Testnet only in local tests.
 2. **Real Ripio wFIAT.** Token addresses come from `packages/core/src/config/tokens.ts`. **Never** invent or type an address from memory.
-3. **Every tx carries the ERC-8021 tag** (`ATTRIBUTION_CODE`). Without it the tx is not broadcast.
+3. **Every tx we send carries the ERC-8021 tag** (`ATTRIBUTION_CODE`). Without it the tx is not broadcast. Exception (D13.3): x402 settlements are sent by the facilitator, so they carry no tag and we declare the PayTo wallet.
 4. **ERC-8004 identity** registered from the agent wallet before 2026-11-09.
 5. **Gas in stablecoin** via fee abstraction (CIP-64, `feeCurrency` = USDC adapter). wARS is not a fee currency.
 6. **The LLM proposes, the code decides.** Caps, budgets, recipients, campaign rules (quota, buyer selection, per-buyer cap, when to execute), pot amounts, turn order and late-payment rules are deterministic code. The LLM never picks the provider: the community votes. The LLM never sees addresses, only aliases.

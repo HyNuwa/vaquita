@@ -4,6 +4,18 @@ Una entrada por decisión, la más nueva arriba. Formato: fecha · decisión · 
 
 Las decisiones de producto previas al repo (canal Telegram, wARS, junta justa, custodia, onboarding) están en [contexto.md](contexto.md#6-decisiones-de-producto-tomadas).
 
+## 2026-11-01 · D13: el agente actúa solo y cobra por x402; `buy` queda opcional · Maximiliano (líder técnico)
+**Por qué:** el track pide que "the agent is autonomous and useful", sin definirlo. La mejor pista de la [página oficial](https://www.loops.house/agents-on-open-rails/) es "a way to pay and get paid without a human in the loop". En D11 el agente no cobraba ni pagaba, y casi todas sus acciones terminaban en un humano. x402 no es obligatorio en LatAm ni da un bonus declarado: suma como uso real del stack. Esta es nuestra interpretación, no una regla de las bases.
+
+| # | Decisión | Condición o consecuencia |
+|---|---|---|
+| D13.1 · Loop propio | El agente lee eventos y actúa sin que nadie le escriba: reclama cotizaciones, publica la comparación, avisa cuando faltan compromisos o fondos, ejecuta al cumplirse las condiciones y reintenta con límite. Las reglas son código; el LLM solo redacta | Detalle en [plan-compra-colectiva.md](plan-compra-colectiva.md#loop-propio-d131). Amplía D11.6: la comunidad sigue votando, el agente nunca firma por un comprador y el dry-run sigue por defecto. No se recorta |
+| D13.2 · Bitácora pública | Cada acción del agente queda registrada con su motivo y, si corresponde, su hash; se muestra en la web de la campaña | Solo alias y datos públicos. No se recorta |
+| D13.3 · Cobro por x402 | El organizador paga un cargo chico en wARS por "pedir cotizaciones", y ese pago activa al agente. Módulo `packages/core/src/payments/x402.ts` detrás de `X402_ENABLED`, apagado por defecto | Se construye después de la campaña del viernes 6/11; si no pasa los criterios de D8 antes del congelamiento, queda afuera. Las liquidaciones las envía el facilitador y no llevan nuestra etiqueta: se aprueba esa excepción a la regla 3 y se declara la wallet PayTo. Solo prueba D11.8 si paga alguien ajeno al equipo |
+| D13.4 · x402 y compromisos | Los compromisos **no** usan x402 | x402 le paga al vendedor en el momento, sin condición: se perdería la ejecución atómica de D11.3 |
+| D13.6 · Producto | **Queda cerrado: se entrega D11.** Vaquita Club no sigue en esta entrega | Cierra la elección de producto de D12.4 y de la puerta P0 |
+| D13.5 · `buy` | Queda opcional: solo después de P5 y solo para gastos reales del agente (inferencia y datos para buscar proveedores) | Sin implementar por ahora. Choca con las reglas 8 y 9 porque guarda la clave en el keychain y no pasa por `tagged-sender.ts`: activarlo requiere otra entrada acá, con wallet aparte y tope de gasto. Las bases avisan: "Spamming the cheapest call scores nothing" |
+
 ## 2026-11-01 · D12: Maxi toma todas las tareas y los PR dejan de requerir aprobación · Maximiliano (líder técnico)
 **Por qué:** faltan 8 días para el cierre y la entrega no puede depender de disponibilidad ajena. Los PR estaban trabados: cinco abiertos desde el 24/10, sin aprobar.
 
