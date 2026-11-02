@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-02 · chore(repo): fill agent card for Vaqui
+- **Qué hice:** completé `public/agent.json` con el nombre Vaqui, que todavía no está registrado. Saqué la imagen porque no hay logo; el servicio web apunta al repo hasta que exista la página.
+- **Archivos clave:** `public/agent.json`, `docs/tareas/control-entrega.md`, `docs/tareas/maximiliano.md`.
+- **Próximo paso:** publicar la tarjeta en `staging`, ensayar el registro y lanzarlo desde la wallet del agente.
+
 ## 2026-11-02 · feat(repo): add collective purchase contract and factory
 - **Qué hice:** escribí `CompraColectiva` y su fábrica en local, sin desplegar (D14), con tests de fallas del token, fuzzing e invariantes, y sumé `forge test` a la CI. Registré el primer pago real en `spike.md`. Codex no encontró forma de cobrar de más ni de cobrarle a quien no se comprometió; corregí sus dos hallazgos de código, sin que los volviera a revisar. El tercero, un comprador bloqueado que frena la campaña, queda aceptado en D14.3. No es una auditoría.
 - **Archivos clave:** `contracts/src/`, `contracts/test/`, `.github/workflows/ci.yml`, `packages/core/src/compra/selection.ts`, `docs/proyecto/decisiones.md`, `docs/pruebas/spike.md`.
