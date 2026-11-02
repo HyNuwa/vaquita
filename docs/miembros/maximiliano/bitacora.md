@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-02 · feat(repo): add collective purchase contract and factory
+- **Qué hice:** escribí `CompraColectiva` y su fábrica en local, sin desplegar (D14), con tests de fallas del token, fuzzing e invariantes, y sumé `forge test` a la CI. Registré el primer pago real en `spike.md`. Codex no encontró forma de cobrar de más ni de cobrarle a quien no se comprometió; corregí sus dos hallazgos de código, sin que los volviera a revisar. El tercero, un comprador bloqueado que frena la campaña, queda aceptado en D14.3. No es una auditoría.
+- **Archivos clave:** `contracts/src/`, `contracts/test/`, `.github/workflows/ci.yml`, `packages/core/src/compra/selection.ts`, `docs/proyecto/decisiones.md`, `docs/pruebas/spike.md`.
+- **Próximo paso:** `agent.json` real y registro ERC-8004 como Vaqui; después, despliegue de prueba para el spike con fondos.
+
 ## 2026-11-02 · chore(repo): document personal wallet in env example
 - **Qué hice:** sumé `MY_WALLET` a `.env.example` como referencia local para probar pagos. El código no la lee: los destinos salen de `ALLOWED_RECIPIENTS`. La clave del agente ya está en `.env` y `preflight` pasa entero.
 - **Archivos clave:** `.env.example`, `docs/tareas/control-entrega.md`, `docs/tareas/maximiliano.md`.

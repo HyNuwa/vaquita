@@ -65,6 +65,23 @@ describe("selectBuyers", () => {
     expect(r.meetsMinimum).toBe(true);
   });
 
+  it("sin saldo, una autorización ilegible no frena la campaña, igual que en el contrato", () => {
+    const r = selectBuyers(
+      terms(),
+      new Set(["ana", "beto", "caro"]),
+      fundsOf({ ana: { balance: 0n, allowance: null }, beto: rich, caro: rich }),
+    );
+    expect(r.unknown).toEqual([]);
+    expect(r.excluded).toEqual([{ buyer: "ana", reason: "INSUFFICIENT_BALANCE" }]);
+    expect(r.selected).toEqual(["beto", "caro"]);
+  });
+
+  it("con saldo, una autorización ilegible no prueba nada", () => {
+    const r = selectBuyers(terms(), new Set(["ana"]), fundsOf({ ana: { balance: rich.balance, allowance: null } }));
+    expect(r.unknown).toEqual(["ana"]);
+    expect(r.meetsMinimum).toBe(false);
+  });
+
   it("saltea sin fondos o sin autorización, y el siguiente ocupa su lugar", () => {
     const r = selectBuyers(
       terms(),

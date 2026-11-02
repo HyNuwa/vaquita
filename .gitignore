@@ -1,6 +1,8 @@
 node_modules/
 dist/
 coverage/
+contracts/out/
+contracts/cache/
 
 # Secretos: NUNCA al repo
 .env

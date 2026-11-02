@@ -4,6 +4,16 @@ Una entrada por decisión, la más nueva arriba. Formato: fecha · decisión · 
 
 Las decisiones de producto previas al repo (canal Telegram, wARS, junta justa, custodia, onboarding) están en [contexto.md](contexto.md#6-decisiones-de-producto-tomadas).
 
+## 2026-11-02 · D14: el contrato se escribe antes del spike completo; se despliega después · Maximiliano
+**Por qué:** la parte con fondos del spike necesita un contrato desplegado, y esperar dejaba sin margen la puerta P2.
+
+| # | Decisión | Condición o consecuencia |
+|---|---|---|
+| D14.1 · Excepción a D11.4 | `contracts/` se abre antes de que pase el spike, solo para escribir y probar en local | No se despliega para uso real hasta que pase el spike. Un despliegue de prueba, con montos chicos y wallets del equipo, es parte del spike |
+| D14.2 · Versiones | Solidity 0.8.30, Foundry 1.8.7, OpenZeppelin 5.6.1, forge-std 1.17.0, como submódulos con versión fija | Cambiarlas requiere otra entrada acá |
+| D14.3 · Comprador bloqueado | Si el token rechaza el cobro de un comprador que tiene saldo y autorización, por ejemplo porque Ripio lo bloqueó, la ejecución revierte entera. El contrato no lo saltea, porque D11.4 no permite saltear por un error desconocido | La campaña queda frenada hasta que ese comprador cancele o revoque, o hasta que venza. Nadie pierde plata. El loop avisa que la ejecución se detuvo y la salida es una campaña nueva sin ese comprador, con compromisos nuevos |
+| D14.4 · Nombre del agente | La identidad ERC-8004 se registra como **Vaqui** | El producto sigue siendo La Vaquita (nombre de trabajo, D6) |
+
 ## 2026-11-01 · D13: el agente actúa solo y cobra por x402; `buy` queda opcional · Maximiliano (líder técnico)
 **Por qué:** el track pide que "the agent is autonomous and useful", sin definirlo. La mejor pista de la [página oficial](https://www.loops.house/agents-on-open-rails/) es "a way to pay and get paid without a human in the loop". En D11 el agente no cobraba ni pagaba, y casi todas sus acciones terminaban en un humano. x402 no es obligatorio en LatAm ni da un bonus declarado: suma como uso real del stack. Esta es nuestra interpretación, no una regla de las bases.
 
