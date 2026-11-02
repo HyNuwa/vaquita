@@ -8,12 +8,12 @@ D13 suma al agente un loop propio y una bitácora pública, y un cobro por x402 
 
 ## Próximo paso
 Puerta P1, martes 3/11 a las 23:59:
-- Poner la clave privada del agente en `.env`, correr `preflight` y hacer el primer pago.
+- Hacer el primer pago real: `preflight` y el ensayo ya pasan.
 - Registrar ERC-8004 y agregar la wallet `0x1F1Cd124f456eecA90d8cb44BACB3Da031cC4170` a la inscripción.
 - Escribir el contrato y sus tests en local, sin desplegar.
 
 ## Bloqueos
-- Sin la clave privada del agente en `.env` no se puede firmar: frena el primer pago y ERC-8004. La wallet ya tiene fondos.
+- Falta sumar OpenZeppelin y forge-std a `contracts/` para compilar el contrato.
 - Falta definir cómo firma el comprador desde la web sin romper la regla 9 ni la guarda de la CI.
 - Falta un contacto con una comunidad y con proveedores para E1.
 - Lo que toque plata ya no tiene un segundo revisor humano; lo reemplaza la revisión con agentes, que no es una auditoría.

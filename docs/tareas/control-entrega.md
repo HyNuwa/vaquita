@@ -14,7 +14,7 @@ Este archivo manda sobre las fechas de cualquier otro plan. La lista de tareas e
 | `staging` | Al día; no quedan PR viejos abiertos | PR #9 mergeado el 1/11 |
 | Documentación de D11 y D12 | En `staging` desde el 1/11 | Este archivo |
 | Producto final | Cerrado: D11 | D13.6 en `decisiones.md` |
-| Inscripción y código `celo_...` | Hechos; wallet con fondos; falta la clave en `.env` y agregarla a la inscripción | Perfil de Loops House; `preflight` |
+| Inscripción y código `celo_...` | Hechos; wallet con fondos y `preflight` en verde; falta agregarla a la inscripción | Perfil de Loops House; `preflight` |
 | Identidad ERC-8004 | Sin evidencia | `public/agent.json` sigue con los valores de ejemplo |
 | Spike de D7/D11 y primer pago | Parte sin fondos hecha; falta el primer pago y la parte con fondos | `docs/pruebas/spike.md` |
 | E1 (cotizaciones) | Sin evidencia; venció el 29/10 | No existe `docs/usuarios/` |

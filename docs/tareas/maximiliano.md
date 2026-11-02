@@ -16,7 +16,7 @@ Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decision
 |---|---|---|
 | Elegir el producto: D11 (D13.6) | Nueva | Hecho el 1/11 |
 | Confirmar inscripción, wallet inscripta, código `celo_...` y campos del formulario | Santos | Inscripción y código hechos; falta agregar la wallet `0x1F1C…4170` |
-| Crear `.env` en esta computadora y fondear la wallet del agente; correr `preflight` | Esteban | Wallet con fondos; falta la clave en `.env` |
+| Crear `.env` en esta computadora y fondear la wallet del agente; correr `preflight` | Esteban | Hecho: wallet con fondos y `preflight` en verde |
 | Commitear D11 y D12; mergear el PR #9 y cerrar los PR viejos | Maxi | Hecho el 1/11 |
 
 ### P1 · Martes 3/11
