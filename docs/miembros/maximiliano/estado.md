@@ -3,11 +3,11 @@
 **Última actualización:** 2026-11-01
 
 ## En qué estoy
-Tomé todas las tareas de la entrega ([D12](../../proyecto/decisiones.md)). Esteban y Daniel quedan como colaboradores opcionales, y los PR ya no necesitan aprobación. El control está en [`docs/tareas/control-entrega.md`](../../tareas/control-entrega.md). D11 sigue siendo el plan escrito, pero el producto final no está cerrado: Vaquita Club quedó a mitad de intake en `docs/investigacion/vaquita-club/`.
+Tomé todas las tareas de la entrega ([D12](../../proyecto/decisiones.md)). Esteban y Daniel quedan como colaboradores opcionales, y los PR ya no necesitan aprobación. El control está en [`docs/tareas/control-entrega.md`](../../tareas/control-entrega.md). El producto quedó cerrado: se entrega D11 (D13.6).
+D13 suma al agente un loop propio y una bitácora pública, y un cobro por x402 opcional.
 
 ## Próximo paso
 Puerta P0, lunes 2/11 a las 12:00:
-- Elegir el producto: D11 o Vaquita Club.
 - Confirmar inscripción, código `celo_...` y wallet del agente; crear `.env` en esta computadora.
 
 ## Bloqueos

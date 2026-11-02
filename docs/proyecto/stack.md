@@ -35,6 +35,14 @@ Estado: ✅ en uso · ⏳ pendiente de decidir.
 
 `contracts/` se habilita cuando pase el spike; esta tabla no implica instalación ni despliegue. Segunda revisión antes de mainnet (D12.3). Diseño: [plan-compra-colectiva.md](plan-compra-colectiva.md).
 
+## Cobro por x402 (D13.3)
+
+| Pieza | Elección | Versión | Estado |
+|---|---|---|---|
+| Vendedor y comprador x402 | **`@x402/*`** (`core`, `evm`, middleware del servidor y `fetch`) | v2; se fija al instalar | ⏳ Detrás de `X402_ENABLED`, sujeto a D8 |
+
+`@celo/buy` no se instala salvo una decisión nueva (D13.5).
+
 ## `apps/bot`
 
 | # | Pieza | Elección | Versión | Estado |

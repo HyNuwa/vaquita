@@ -67,12 +67,12 @@ TypeScript + viem 2.57 + `@celo/attribution-tags@0.5.0` + zod + vitest. **131 te
 El motor `junta/` y sus tests se conservan **en pausa por D11.7**; salen del recorrido de la demo. Los 131 tests son el estado registrado, no una validación del contrato de compra, que todavía falta crear.
 
 **Falta (en orden, desde D12 todo a cargo de Maxi):** las puertas P0 a P6 de [control-entrega.md](../tareas/control-entrega.md).
-1. **P0, 2/11:** producto final, inscripción, código de atribución y `.env`.
+1. **P0, 2/11:** inscripción, código de atribución y `.env`.
 2. **P1, 3/11:** primer pago con `verifyTx`, registro ERC-8004 y spike: wARS, autorización exacta, `transferFrom`, etiqueta desde el celular y conciliación.
 3. **P2, 4/11:** `CompraColectiva` y fábrica, si pasa el spike; Foundry con fuzzing e invariantes; segunda revisión; pedidos de E1 enviados.
 4. **P3, 5/11:** módulo `compra/`, lector de eventos y web `/c/:slug`. E1 corta a las 12:00.
-5. **P4, 6/11:** despliegue en mainnet, agente mínimo y campaña del equipo con plata real.
-6. **P5, 7/11:** campaña chica con terceros bajo D11.5 y código congelado. Sin ofertas en E1, campaña del equipo con proveedor amigo; se declara en el pitch.
+5. **P4, 6/11:** despliegue en mainnet, agente con loop propio y bitácora pública (D13), y campaña del equipo con plata real.
+6. **P5, 7/11:** campaña chica con terceros bajo D11.5, cobro x402 probado o apagado (D13.3) y código congelado. Sin ofertas en E1, campaña del equipo con proveedor amigo; se declara en el pitch.
 7. **P6, 8/11:** evidencias, pitch, video y formulario; envío antes de las 20:00 ART. Cierre: 9/11, 09:00 GMT.
 
 Si falla el spike: compromisos y transferencias P2P directas registrados por el agente, sin ejecución atómica. Este plan B pierde la prueba del profesor; no se presenta como equivalente. Detalle en el [plan vigente](plan-compra-colectiva.md).
@@ -117,7 +117,7 @@ Las decisiones nuevas van en [`decisiones.md`](decisiones.md).
 - **Leaderboard:** cuentan **firmantes independientes**, es decir, wallets ajenas, no fondeadas por nosotros y con actividad previa en Celo. Cada comprador **firma su propio `comprometer()` en cadena**, con tag, para contar como firmante independiente si cumple esos criterios. Firmar solo un `permit` fuera de cadena no alcanza; N wallets no prueban N personas.
 - **Regulación AR:** no depositar fondos no excluye automáticamente transferencia o administración por cuenta de terceros. La consulta CNV, IGJ, consumo y entrega queda abierta; el [debate jurídico](../investigacion/la-vaquita-2/fast-track/debate-ronda-3.md#2-jurídico-mejor-argumento-ninguna-exclusión-automática) reemplaza la extrapolación anterior por pozos de juntas, sin afirmar una exención aplicable al producto.
 - **MiniPay no soporta wFIAT.** MetaMask ignora `feeCurrency`. Valora elige la moneda del gas por su cuenta.
-- **x402:** el facilitador de Celo acepta wARS, wBRL y wCOP vía Permit2. Esas tx no llevan tag; se informa la wallet PayTo.
+- **x402:** el facilitador de Celo acepta wARS, wBRL y wCOP vía Permit2. Esas tx no llevan tag; se informa la wallet PayTo. Se usa solo para el cargo del organizador, nunca para los compromisos (D13).
 
 ## 9. Verificar antes de asumir
 - [x] ¿wARS implementa `permit` (EIP-2612)? El ABI verificado expone `permit`, pausa y lista de bloqueo, según [debate, ronda 3 §1](../investigacion/la-vaquita-2/fast-track/debate-ronda-3.md#1-técnico-atomicidad-no-garantiza-ejecución); el token es actualizable. Respondido a nivel de interfaz, no de funcionamiento real.
