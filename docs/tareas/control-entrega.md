@@ -20,7 +20,7 @@ Este archivo manda sobre las fechas de cualquier otro plan. La lista de tareas e
 | E1 (cotizaciones) | Sin evidencia; venció el 29/10 | No existe `docs/usuarios/` |
 | Nombre | Sin decidir; venció el 27/10 | D6 reabierta |
 | Contrato | No empezado | No existe `contracts/` |
-| Módulo `compra/` | No empezado | No existe la carpeta |
+| Módulo `compra/` | Reglas puras hechas y revisadas; falta conectarlas a la cadena | `packages/core/src/compra/` |
 | Bot y web | No empezados | `apps/` solo tiene `package.json` y `README.md` |
 
 "Sin evidencia" significa que no hay nada registrado en el repo. Si algo se hizo fuera del repo, se anota acá con su evidencia.
