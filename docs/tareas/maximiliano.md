@@ -44,7 +44,7 @@ Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decision
 | Tarea | Venía de | Estado |
 |---|---|---|
 | Registrar el resultado de E1, aunque sea cero | Maxi | Pendiente |
-| `compra/`: cotizaciones, voto, elegibilidad, selección determinística y estado desde eventos; montos `bigint`, tests sin red | Maxi | Pendiente |
+| `compra/`: cotizaciones, voto, elegibilidad, selección determinística y estado desde eventos; montos `bigint`, tests sin red | Maxi | Reglas puras hechas el 2/11 |
 | Lector de eventos: hash + índice de log, bloque y campaña; reprocesamiento sin doble conteo | Esteban | Pendiente |
 | Web `/c/:slug`: ofertas, voto, compromiso y cancelación con wallet propia, progreso e historial | Maxi | Pendiente |
 
@@ -55,8 +55,8 @@ Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decision
 | Desplegar y verificar en Celo mainnet; probar etiqueta, CIP-64 y wallet móvil | Esteban | Pendiente, sujeto a tests y revisión |
 | Bot y loop del LLM con esquemas zod `.strict()` y alias | Daniel | Pendiente |
 | Las 7 herramientas del [plan](../proyecto/plan-compra-colectiva.md#6-el-agente), incluidas `pedir_cotizaciones` y `recordar_compromisos` | Daniel | Pendiente |
-| Loop propio: disparadores, límites y ejecución sin confirmación manual, con tests sin red (D13.1) | Nueva | Pendiente |
-| Bitácora pública del agente en la web (D13.2) | Nueva | Pendiente |
+| Loop propio: disparadores, límites y ejecución sin confirmación manual, con tests sin red (D13.1) | Nueva | Reglas hechas; falta el proceso que las corre |
+| Bitácora pública del agente en la web (D13.2) | Nueva | Registro hecho; falta mostrarla en la web |
 | Mensajes sobre fondos, cancelación irreversible, entrega y errores, sin jerga cripto | Daniel | Pendiente |
 | Campaña completa del equipo con plata real y montos chicos | Todos | Pendiente |
 

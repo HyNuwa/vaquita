@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-02 · feat(core): add collective purchase rules and agent loop
+- **Qué hice:** módulo `compra/` de reglas puras: condiciones y tope, selección igual a la del contrato, estado desde eventos, ofertas y voto, reglas del loop propio (D13.1) y bitácora pública sin texto libre (D13.2). Pasó la skill `review` y dos revisiones con Codex: la primera encontró 10 problemas, todos corregidos con tests.
+- **Archivos clave:** `packages/core/src/compra/`, `packages/core/test/compra.test.ts`.
+- **Próximo paso:** proceso que corre el loop y script del spike, los dos en dry-run; puerta P0 (inscripción, código y `.env`).
+
 ## 2026-11-01 · docs(docs): close product on D11 and add autonomous agent plan
 - **Qué hice:** registré D13: el producto queda cerrado en D11, el agente suma un loop propio y una bitácora pública, y se agrega un cobro opcional por x402 en wARS. `buy` queda opcional. Corregí nuestras notas sobre los criterios del hackathon y sumé la excepción de x402 a la regla 3.
 - **Archivos clave:** `docs/proyecto/decisiones.md`, `docs/proyecto/plan-compra-colectiva.md`, `docs/tareas/control-entrega.md`, `AGENTS.md`.
