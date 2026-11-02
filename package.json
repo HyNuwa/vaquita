@@ -15,6 +15,7 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "check": "npm run typecheck && npm test",
     "preflight": "tsx packages/core/scripts/preflight.ts",
+    "spike:lectura": "tsx packages/core/scripts/spike-wars.ts",
     "pago:primero": "tsx packages/core/scripts/send-first-wars.ts",
     "identidad:registrar": "tsx packages/core/scripts/register-agent.ts",
     "ramp:link": "tsx packages/core/scripts/ramp-link.ts",

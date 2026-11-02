@@ -1,7 +1,8 @@
-import { appendFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, readFileSync, truncateSync } from "node:fs";
 import { dirname } from "node:path";
 import { z } from "zod";
 import type { LoopAction, SkipCode } from "./loop.js";
+import { CAMPAIGN_ID } from "./terms.js";
 
 /**
  * Bitácora pública del agente (D13.2): qué hizo, qué decidió no hacer y por qué.
@@ -38,9 +39,10 @@ const TX_HASH = /^0x(?!0{24})[0-9a-f]{64}$/;
 
 const entrySchema = z
   .object({
+    /** Una entrada reintentada tras un corte no se escribe dos veces. */
+    id: z.uuid().optional(),
     at: z.iso.datetime(),
-    // Un slug, nunca algo con forma de dirección, con o sin prefijo.
-    campaignId: z.string().regex(/^(?!0x)(?![0-9a-f]{40}$)[a-z0-9][a-z0-9-]{0,63}$/),
+    campaignId: z.string().regex(CAMPAIGN_ID),
     action: z.enum(ACTIONS),
     outcome: z.enum(["DONE", "SKIPPED", "FAILED", "DRY_RUN"]),
     skipCode: z.enum(SKIP_CODES).optional(),
@@ -63,13 +65,26 @@ export class AgentLog {
     const parsed = entrySchema.safeParse(entry);
     if (!parsed.success) throw new AgentLogError("Entrada de bitácora inválida: la bitácora es pública.");
     mkdirSync(dirname(this.file), { recursive: true });
+    const { id } = parsed.data;
+    const written = this.repaired();
+    if (id && written.includes(`"id":"${id}"`)) return;
     appendFileSync(this.file, `${JSON.stringify(parsed.data)}\n`);
+  }
+
+  /** Lo escrito por completo. Una línea que un corte dejó por la mitad se descarta y se reintenta. */
+  private repaired(): string {
+    if (!existsSync(this.file)) return "";
+    const bytes = readFileSync(this.file);
+    const end = bytes.lastIndexOf(0x0a) + 1;
+    if (end < bytes.length) truncateSync(this.file, end);
+    return bytes.subarray(0, end).toString("utf8");
   }
 
   read(campaignId: string): AgentLogEntry[] {
     if (!existsSync(this.file)) return [];
     return readFileSync(this.file, "utf8")
       .split("\n")
+      .slice(0, -1)
       .filter(Boolean)
       .map((line) => entrySchema.parse(JSON.parse(line)))
       .filter((entry) => entry.campaignId === campaignId);

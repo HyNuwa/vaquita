@@ -15,8 +15,8 @@ Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decision
 | Tarea | Venía de | Estado |
 |---|---|---|
 | Elegir el producto: D11 (D13.6) | Nueva | Hecho el 1/11 |
-| Confirmar inscripción, wallet inscripta, código `celo_...` y campos del formulario | Santos | Sin confirmar |
-| Crear `.env` en esta computadora y fondear la wallet del agente; correr `preflight` | Esteban | Pendiente |
+| Confirmar inscripción, wallet inscripta, código `celo_...` y campos del formulario | Santos | Inscripción y código hechos; falta agregar la wallet `0x1F1C…4170` |
+| Crear `.env` en esta computadora y fondear la wallet del agente; correr `preflight` | Esteban | Hecho: wallet con fondos y `preflight` en verde |
 | Commitear D11 y D12; mergear el PR #9 y cerrar los PR viejos | Maxi | Hecho el 1/11 |
 
 ### P1 · Martes 3/11
@@ -25,7 +25,7 @@ Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decision
 |---|---|---|
 | Primer pago mínimo real (`pago:primero`) con la etiqueta verificada (`tx:verificar`) | Esteban | Sin evidencia |
 | Completar `public/agent.json` y registrar ERC-8004 (`identidad:registrar`) | Esteban | Sin evidencia |
-| Spike: wARS, autorización exacta, `transferFrom`, etiqueta desde el celular y conciliación; peor caso de gas; resultado en `docs/pruebas/spike.md` | Esteban | Sin evidencia |
+| Spike: wARS, autorización exacta, `transferFrom`, etiqueta desde el celular y conciliación; peor caso de gas; resultado en `docs/pruebas/spike.md` | Esteban | Parte sin fondos hecha |
 | Probar `permit` con firma real, si no se recortó | Esteban | Pendiente |
 | Definir cómo firma el comprador desde la web sin romper la regla 9 ni la guarda de la CI | Maxi | Pendiente |
 
