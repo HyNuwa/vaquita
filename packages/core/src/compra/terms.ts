@@ -23,6 +23,9 @@ export interface CampaignTerms {
   buyers: readonly string[];
 }
 
+/** El id se publica en la bitácora: un slug, nunca algo con forma de dirección. */
+export const CAMPAIGN_ID = /^(?!0x)(?![0-9a-f]{40}$)[a-z0-9][a-z0-9-]{0,63}$/;
+
 export class CampaignTermsError extends Error {
   override name = "CampaignTermsError";
 }
@@ -39,7 +42,7 @@ export const totalPerBuyer = (terms: Pick<CampaignTerms, "unitPrice" | "fee">) =
 
 export function validateTerms(terms: CampaignTerms): void {
   const { id, supplier, unitPrice, fee, feeRecipient, minUnits, maxUnits, deadline, buyers } = terms;
-  if (!id) throw new CampaignTermsError("La campaña necesita un id.");
+  if (!CAMPAIGN_ID.test(id)) throw new CampaignTermsError("El id de la campaña tiene que ser un slug en minúsculas.");
   if (!supplier) throw new CampaignTermsError("La campaña necesita un proveedor.");
   if (unitPrice <= 0n) throw new CampaignTermsError("El precio tiene que ser mayor a cero.");
   if (fee < 0n) throw new CampaignTermsError("El cargo no puede ser negativo.");
