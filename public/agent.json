@@ -1,10 +1,9 @@
 {
   "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
-  "name": "NOMBRE DEL AGENTE",
-  "description": "Qué hace el agente, para quién y en qué moneda (2 líneas).",
-  "image": "https://TU-DOMINIO/logo.png",
+  "name": "Vaqui",
+  "description": "Agente de compras colectivas para comunidades de LatAm: reúne una necesidad compartida, hace competir a proveedores con cotizaciones y ejecuta la compra en pesos digitales (wARS) en Celo, sin guardar nunca la plata.",
   "services": [
-    { "name": "web", "endpoint": "https://TU-DOMINIO" }
+    { "name": "web", "endpoint": "https://github.com/HyNuwa/vaquita" }
   ],
   "x402Support": false,
   "active": true,

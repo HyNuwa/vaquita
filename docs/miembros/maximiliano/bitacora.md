@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-02 · chore(repo): fill agent card for Vaqui
+- **Qué hice:** completé `public/agent.json` con el nombre Vaqui, que todavía no está registrado. Saqué la imagen porque no hay logo; el servicio web apunta al repo hasta que exista la página.
+- **Archivos clave:** `public/agent.json`, `docs/tareas/control-entrega.md`, `docs/tareas/maximiliano.md`.
+- **Próximo paso:** publicar la tarjeta en `staging`, ensayar el registro y lanzarlo desde la wallet del agente.
+
 ## 2026-11-02 · chore(repo): document personal wallet in env example
 - **Qué hice:** sumé `MY_WALLET` a `.env.example` como referencia local para probar pagos. El código no la lee: los destinos salen de `ALLOWED_RECIPIENTS`. La clave del agente ya está en `.env` y `preflight` pasa entero.
 - **Archivos clave:** `.env.example`, `docs/tareas/control-entrega.md`, `docs/tareas/maximiliano.md`.
