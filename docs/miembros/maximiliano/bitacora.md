@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-03 · docs(docs): record D15 wallet decision and add spec
+- **Qué hice:** registré D15: billetera externa con RainbowKit, Valora primero y MetaMask de respaldo; sin thirdweb ni servicios pagos; el contrato no cambia y no se suma ahorro. Escribí `spec.md` y actualicé contexto, reglas, stack, puertas y tareas. No hay código nuevo ni pruebas nuevas.
+- **Archivos clave:** `docs/proyecto/decisiones.md`, `docs/proyecto/spec.md`, `docs/tareas/control-entrega.md`, `AGENTS.md`, `apps/web/README.md`.
+- **Próximo paso:** armar la página local y probar `approve(0)` con etiqueta desde MetaMask.
+
 ## 2026-11-02 · feat(core): add contract deployment and funded spike script
 - **Qué hice:** `tagged-sender` ahora despliega contratos, solo con un pedido explícito, y tiene un tope de gas aparte para operaciones de contrato (D14.5). Sumé `spike:contrato`, que recorre una compra real de $ 1 y concilia eventos y saldos. Codex encontró 8 problemas, ya corregidos: dos corridas simultáneas, presupuesto liberado tras un cobro, un `deploy: false` que creaba contratos y el tope alto en cualquier llamada, entre otros. Una segunda pasada encontró 2 más, también corregidos: `revocar` podía olvidar una compra cobrada y el mensaje de recuperación permitía una segunda firma; Codex no revisó estas dos correcciones. Lanzado en mainnet: la compra de $ 1 quedó conciliada, con hashes en `spike.md`. La primera corrida frenó por un nodo atrasado, así que el script ahora espera tras cada confirmación.
 - **Archivos clave:** `packages/core/src/chain/tagged-sender.ts`, `packages/core/src/config/policy.ts`, `packages/core/scripts/spike-contrato.ts`, `packages/core/test/tagged-sender.test.ts`.

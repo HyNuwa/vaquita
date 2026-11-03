@@ -23,11 +23,11 @@ Diseño completo: [plan-compra-colectiva.md](plan-compra-colectiva.md). Especifi
 2. **wFIAT real de Ripio.** Las direcciones salen de `packages/core/src/config/tokens.ts`; **jamás** se inventan ni se escriben de memoria.
 3. **Cada tx lleva el tag ERC-8021** (`ATTRIBUTION_CODE`, formato `celo_xxxxxxxx`), agregado en el cliente con `@celo/attribution-tags`. Si falta, la tx no se transmite.
 4. **Identidad ERC-8004** registrada desde la wallet del agente, antes del 9/11.
-5. **Gas en stablecoin** con fee abstraction: tx CIP-64 con `feeCurrency` = adapter de USDC. **wARS no es fee currency.**
+5. **Gas en stablecoin** con fee abstraction: tx CIP-64 con `feeCurrency` = adapter de USDC. **wARS no es fee currency.** Vale para la wallet del agente; el comprador paga la comisión desde su billetera (D15.4).
 6. **El LLM propone, el código dispone.** Topes, presupuestos, destinatarios, montos de pozo, orden de turnos, reglas de mora y reglas de campaña (cupo, selección, topes, ejecución) son código determinístico. El LLM nunca ve direcciones: solo alias.
 7. **Modo ensayo por defecto.** Plata real solo con `LIVE_PAYMENTS=si-muevo-plata-real`.
 8. **Claves solo en `.env`**, nunca en el repo ni en logs.
-9. **Tests antes de mainnet.** Toda tx pasa por `packages/core/src/chain/tagged-sender.ts`; no llamar `sendTransaction` ni `writeContract` directo.
+9. **Tests antes de mainnet.** Toda tx pasa por `packages/core/src/chain/tagged-sender.ts`; no llamar `sendTransaction` ni `writeContract` directo. Excepción (D15.5): las firmas del comprador salen de `apps/web/src/lib/firmar.ts`, con la transacción que arma el core.
 10. **UX para no-cripto.** Montos en moneda local (`$ 1.234,50`), sin "wei", "gas", "calldata" ni direcciones en los mensajes al usuario. Español rioplatense.
 
 ## 3. Direcciones verificadas (Celo mainnet)
@@ -114,16 +114,18 @@ Las decisiones nuevas van en [`decisiones.md`](decisiones.md).
 - No hay ingresos validados. Medir aceptación del proveedor y ahorro neto frente a compra directa. El abono por miembro y el precio por turno dejan de ser el modelo del MVP.
 
 ## 8. Restricciones externas
-- **Leaderboard:** cuentan **firmantes independientes**, es decir, wallets ajenas, no fondeadas por nosotros y con actividad previa en Celo. Cada comprador **firma su propio `comprometer()` en cadena**, con tag, para contar como firmante independiente si cumple esos criterios. Firmar solo un `permit` fuera de cadena no alcanza; N wallets no prueban N personas.
+- **Leaderboard:** cuentan **firmantes independientes**, es decir, wallets ajenas, no fondeadas por nosotros y con actividad previa en Celo. Cada comprador **firma su propio `comprometer()` en cadena**, con tag, para contar como firmante independiente si cumple esos criterios. Firmar solo un `permit` fuera de cadena no alcanza; N wallets no prueban N personas. Según la [página oficial](https://www.loops.house/agents-on-open-rails), el puntaje mira a quien firma y autoriza, no solo a quien paga el gas, y un usuario nuevo en Celo no descalifica, aunque no cuente como independiente.
 - **Regulación AR:** no depositar fondos no excluye automáticamente transferencia o administración por cuenta de terceros. La consulta CNV, IGJ, consumo y entrega queda abierta; el [debate jurídico](../investigacion/la-vaquita-2/fast-track/debate-ronda-3.md#2-jurídico-mejor-argumento-ninguna-exclusión-automática) reemplaza la extrapolación anterior por pozos de juntas, sin afirmar una exención aplicable al producto.
-- **MiniPay no soporta wFIAT.** MetaMask ignora `feeCurrency`. Valora elige la moneda del gas por su cuenta.
+- **MiniPay no soporta wFIAT.** MetaMask ignora `feeCurrency`. Valora elige la moneda del gas por su cuenta. Billetera de la entrega: Valora, con MetaMask de respaldo técnico (D15.2).
 - **x402:** el facilitador de Celo acepta wARS, wBRL y wCOP vía Permit2. Esas tx no llevan tag; se informa la wallet PayTo. Se usa solo para el cargo del organizador, nunca para los compromisos (D13).
 
 ## 9. Verificar antes de asumir
 - [x] ¿wARS implementa `permit` (EIP-2612)? El ABI verificado expone `permit`, pausa y lista de bloqueo, según [debate, ronda 3 §1](../investigacion/la-vaquita-2/fast-track/debate-ronda-3.md#1-técnico-atomicidad-no-garantiza-ejecución); el token es actualizable. Respondido a nivel de interfaz, no de funcionamiento real.
-- [ ] Probar `permit` con una firma real: dominio, nonce, vencimiento y autorización exacta en el spike.
-- [ ] ¿Qué wallet para no-cripto firma CIP-64 con wARS? Probar Valora y Para.
-- [ ] ¿El tag sobrevive con wallets embebidas o smart accounts? Comprobar con `verifyTx`.
+- [ ] Probar `permit` en una transacción real. La firma real ya pasó en simulación.
+- [ ] ¿La etiqueta sobrevive en Valora con WalletConnect? Comprobar con `verifyTx` en mainnet.
+- [ ] ¿Valora muestra wARS y qué moneda usa para la comisión de una app externa?
+- [ ] ¿Cómo consigue moneda para la comisión quien solo cargó wARS por Ripio? Es el riesgo 1 de [spec.md](spec.md#10-riesgos-y-preguntas-abiertas).
+- [ ] ¿Cómo cobra y retira los pesos el comercio con `ramp.ripio.com/offramp`?
 - [ ] Parámetro `token` de ramp.ripio.com distinto de WARS.
 
 ## 10. Índice de documentos
@@ -138,4 +140,4 @@ En [`docs/investigacion/`](../investigacion/README.md):
 [15 qué cambia + junta justa](../investigacion/15-que-cambia-con-la-vaquita.md) ·
 [La Vaquita 2: investigación y versiones](../investigacion/la-vaquita-2/README.md) (antecedentes; el alcance vigente es D11).
 
-En [`docs/proyecto/`](.): este resumen, [plan de compra colectiva (vigente)](plan-compra-colectiva.md), [stack](stack.md), [decisiones](decisiones.md), [plan del equipo](plan-del-equipo.md), [plan técnico](plan-tecnico.md), [repositorio y entrega](repositorio-y-entrega.md) y [plan de la junta con contrato de reglas (en pausa)](plan-junta-contrato.md). Los planes anteriores conservan su cuerpo como antecedente; sus avisos D11 indican qué sigue vigente.
+En [`docs/proyecto/`](.): este resumen, [spec de la entrega](spec.md), [plan de compra colectiva (vigente)](plan-compra-colectiva.md), [stack](stack.md), [decisiones](decisiones.md), [plan del equipo](plan-del-equipo.md), [plan técnico](plan-tecnico.md), [repositorio y entrega](repositorio-y-entrega.md) y [plan de la junta con contrato de reglas (en pausa)](plan-junta-contrato.md). Los planes anteriores conservan su cuerpo como antecedente; sus avisos D11 indican qué sigue vigente.

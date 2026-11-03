@@ -76,5 +76,5 @@ Se ensaya con `npm run spike:contrato -- <alias>` y se lanza con `LIVE_PAYMENTS=
 - [x] Primer pago con etiqueta verificada: ver arriba.
 - [x] `approve` y `transferFrom` reales a través de un contrato: ver arriba.
 - [x] Conciliación por eventos y saldos: ver arriba.
-- [ ] Etiqueta desde la wallet del celular.
+- [ ] Etiqueta desde la wallet del celular: `approve(0)` desde MetaMask móvil con WalletConnect, verificado con `verifyTx`. Es prueba técnica: falta repetirla con Valora, la primera opción del comprador (D15.2).
 - [ ] Peor caso de gas con varios compradores.

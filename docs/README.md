@@ -20,6 +20,7 @@ Se puede abrir como bóveda de Obsidian (abrir la carpeta `docs/` como vault). L
 | Archivo | Qué tiene |
 |---|---|
 | [proyecto/contexto.md](proyecto/contexto.md) | **Fuente de verdad (25/10):** compra colectiva por intención, reglas duras, direcciones, estado y juntas en pausa por D11 |
+| [proyecto/spec.md](proyecto/spec.md) | **Spec de la entrega (D15):** experiencia, arquitectura, cumplimiento, riesgos y plan |
 | [proyecto/plan-compra-colectiva.md](proyecto/plan-compra-colectiva.md) | **Plan vigente (D11):** contrato y fábrica, tests, core, agente, web, E1, cronograma y riesgos |
 | [proyecto/plan-del-equipo.md](proyecto/plan-del-equipo.md) | **Antecedente v2 (21/10):** cronograma de juntas reemplazado por D11; reglas y entrega según aviso inicial |
 | [proyecto/plan-tecnico.md](proyecto/plan-tecnico.md) | **Antecedente v2:** motor de juntas en pausa; pipeline y reglas vigentes según aviso D11 |
