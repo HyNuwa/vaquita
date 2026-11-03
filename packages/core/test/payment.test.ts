@@ -22,6 +22,15 @@ function setup(over: { live?: boolean; reader?: Parameters<typeof fakeReader>[0]
 
 const oneWars = { token: "wARS" as const, amount: "1", recipient: "mama", reason: "prueba" };
 
+describe("pay() — tope de gas", () => {
+  it("un pago no puede usar el tope de contratos: 0,10 de reserva se rechaza", async () => {
+    const { deps, reader } = setup({ reader: { estimateGas: async () => 2_800_000n } });
+    const r = await pay(deps, oneWars);
+    expect(r.status).toBe("rejected");
+    expect(reader.sendRaw).not.toHaveBeenCalled();
+  });
+});
+
 describe("pay() — modo ensayo (por defecto)", () => {
   it("firma la transacción completa pero NO la transmite", async () => {
     const { deps, reader } = setup();

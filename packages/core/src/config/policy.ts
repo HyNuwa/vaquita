@@ -24,6 +24,8 @@ export interface Policy {
    * (para USDC/USDT/USDm ≈ dólares). 0.05 = cinco centavos de dólar.
    */
   maxGasPerTx18: bigint;
+  /** Tope para desplegar, crear campañas y ejecutarlas (D14.5). Los pagos no lo usan. */
+  maxGasPerContractTx18: bigint;
 }
 
 const deepFreeze = <T>(o: T): T => {
@@ -37,4 +39,5 @@ export const POLICY: Readonly<Policy> = deepFreeze({
     wARS: { maxPerPayment: "5000", dailyBudget: "20000", maxPaymentsPerDay: 20 },
   },
   maxGasPerTx18: 50_000_000_000_000_000n, // 0.05
+  maxGasPerContractTx18: 200_000_000_000_000_000n, // 0.20
 });
