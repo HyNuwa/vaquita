@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-02 · chore(repo): add ERC-8004 registration to agent card
+- **Qué hice:** registré a Vaqui en ERC-8004 desde la wallet del agente (`agentId` 10026) y sumé el registro a `public/agent.json`. La etiqueta quedó comprobada con `tx:verificar`.
+- **Archivos clave:** `public/agent.json`, `docs/pruebas/spike.md`, `docs/tareas/control-entrega.md`.
+- **Próximo paso:** script de despliegue de prueba para el spike con fondos.
+
 ## 2026-11-02 · chore(repo): fill agent card for Vaqui
 - **Qué hice:** completé `public/agent.json` con el nombre Vaqui, que todavía no está registrado. Saqué la imagen porque no hay logo; el servicio web apunta al repo hasta que exista la página.
 - **Archivos clave:** `public/agent.json`, `docs/tareas/control-entrega.md`, `docs/tareas/maximiliano.md`.

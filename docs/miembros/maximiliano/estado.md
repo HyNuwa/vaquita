@@ -9,7 +9,8 @@ D13 suma al agente un loop propio y una bitácora pública, y un cobro por x402 
 ## Próximo paso
 Puerta P1, martes 3/11 a las 23:59:
 - Primer pago real hecho y verificado: ver [`docs/pruebas/spike.md`](../../pruebas/spike.md).
-- Registrar ERC-8004 como Vaqui (D14.4) y agregar la wallet `0x1F1Cd124f456eecA90d8cb44BACB3Da031cC4170` a la inscripción.
+- ERC-8004 registrado: Vaqui, `agentId` 10026.
+- Agregar la wallet `0x1F1Cd124f456eecA90d8cb44BACB3Da031cC4170` a la inscripción.
 - Spike con fondos: despliegue de prueba, `transferFrom` real, etiqueta desde el celular y gas con wARS real.
 
 ## Bloqueos

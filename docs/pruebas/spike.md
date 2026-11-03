@@ -31,6 +31,14 @@ Una simulación no es una transacción: esto no reemplaza la parte con fondos.
 
 Es un pago entre wallets del mismo dueño: prueba la tubería, no cuenta como usuario independiente.
 
+## Identidad ERC-8004 · 2026-11-02 · hecho
+
+Vaqui quedó registrado desde la wallet del agente con `agentId` 10026.
+
+- Transacción: [`0x11a82c1ca5ae37c67b7294264571352d016cc518a68d7e1f0148b41356eb058b`](https://celoscan.io/tx/0x11a82c1ca5ae37c67b7294264571352d016cc518a68d7e1f0148b41356eb058b), estado `success`.
+- Etiqueta `celo_c3121001b7ca`, comprobada con `tx:verificar`.
+- Tarjeta: [`public/agent.json`](https://raw.githubusercontent.com/HyNuwa/vaquita/staging/public/agent.json).
+
 ## Parte con fondos · pendiente
 
 - [x] Primer pago con etiqueta verificada: ver abajo.
