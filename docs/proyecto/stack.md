@@ -30,10 +30,10 @@ Estado: ✅ en uso · ⏳ pendiente de decidir.
 
 | Pieza | Elección | Versión | Estado |
 |---|---|---|---|
-| Contrato y fábrica `CompraColectiva` | **Solidity con Foundry**, fuzzing e invariantes; tests locales sin red | Por definir | ⏳ Condicionado al spike (D11.4) |
-| Utilidades seguras | **OpenZeppelin: `SafeERC20` y `ReentrancyGuard`** | Por definir | ⏳ Anotar en [decisiones.md](decisiones.md) cuando se fije la versión |
+| Contrato y fábrica `CompraColectiva` | **Solidity con Foundry**, fuzzing e invariantes; tests locales sin red | Solidity 0.8.30, Foundry 1.8.7, forge-std 1.17.0 | ⏳ Escrito y sin desplegar: el despliegue sigue condicionado al spike (D14) |
+| Utilidades seguras | **OpenZeppelin: `SafeERC20` y `ReentrancyGuard`** | 5.6.1 | ✅ Fijada en [D14](decisiones.md) |
 
-`contracts/` se habilita cuando pase el spike; esta tabla no implica instalación ni despliegue. Segunda revisión antes de mainnet (D12.3). Diseño: [plan-compra-colectiva.md](plan-compra-colectiva.md).
+`contracts/` se escribe y se prueba en local desde D14; el despliegue se habilita cuando pase el spike. Segunda revisión antes de mainnet (D12.3). Diseño: [plan-compra-colectiva.md](plan-compra-colectiva.md).
 
 ## Cobro por x402 (D13.3)
 

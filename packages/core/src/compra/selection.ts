@@ -46,12 +46,14 @@ export function selectBuyers(
     }
 
     const read = funds.get(buyer);
-    if (!read || read.balance === null || read.allowance === null) {
+    // Mismo orden que el contrato: sin saldo no consulta la autorización, así que una
+    // lectura fallida de la autorización no cambia nada en ese caso.
+    if (!read || read.balance === null) {
       unknown.push(buyer);
-      continue;
-    }
-    if (read.balance < total) {
+    } else if (read.balance < total) {
       excluded.push({ buyer, reason: "INSUFFICIENT_BALANCE" });
+    } else if (read.allowance === null) {
+      unknown.push(buyer);
     } else if (read.allowance < total) {
       excluded.push({ buyer, reason: "INSUFFICIENT_ALLOWANCE" });
     } else {

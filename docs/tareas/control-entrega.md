@@ -16,10 +16,10 @@ Este archivo manda sobre las fechas de cualquier otro plan. La lista de tareas e
 | Producto final | Cerrado: D11 | D13.6 en `decisiones.md` |
 | Inscripción y código `celo_...` | Hechos; wallet con fondos y `preflight` en verde; falta agregarla a la inscripción | Perfil de Loops House; `preflight` |
 | Identidad ERC-8004 | Tarjeta completa, sin registrar | `public/agent.json`; falta el hash del registro |
-| Spike de D7/D11 y primer pago | Parte sin fondos hecha; falta el primer pago y la parte con fondos | `docs/pruebas/spike.md` |
+| Spike de D7/D11 y primer pago | Parte sin fondos y primer pago hechos; falta la parte con contrato y celular | `docs/pruebas/spike.md` |
 | E1 (cotizaciones) | Sin evidencia; venció el 29/10 | No existe `docs/usuarios/` |
 | Nombre | Sin decidir; venció el 27/10 | D6 reabierta |
-| Contrato | No empezado | No existe `contracts/` |
+| Contrato | Escrito, en local y sin desplegar; tests en verde y revisado por Codex | `contracts/`; `forge test` |
 | Módulo `compra/` | Reglas puras hechas y revisadas; falta conectarlas a la cadena | `packages/core/src/compra/` |
 | Bot y web | No empezados | `apps/` solo tiene `package.json` y `README.md` |
 

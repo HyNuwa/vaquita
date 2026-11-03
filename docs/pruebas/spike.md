@@ -19,9 +19,21 @@ Contra wARS real en Celo mainnet, con simulaciones (`eth_call`):
 
 Una simulación no es una transacción: esto no reemplaza la parte con fondos.
 
+## Primer pago · 2026-11-02 · hecho
+
+| Dato | Valor |
+|---|---|
+| Comprobante | [`0xad963fb9fe7feb93e82c380fb642eaeff35409d7f5d667d6b82bcb23e03fc1a0`](https://celoscan.io/tx/0xad963fb9fe7feb93e82c380fb642eaeff35409d7f5d667d6b82bcb23e03fc1a0) |
+| Estado | Confirmada en el bloque 81729367 |
+| Monto | 1 wARS, de la wallet del agente `0x1F1Cd124f456eecA90d8cb44BACB3Da031cC4170` a una segunda wallet del equipo |
+| Etiqueta | `celo_c3121001b7ca`, leída de la cadena con `npm run tx:verificar` |
+| Gas | Pagado en USDT por fee abstraction: el saldo bajó de 1 a 0,997785 USDT |
+
+Es un pago entre wallets del mismo dueño: prueba la tubería, no cuenta como usuario independiente.
+
 ## Parte con fondos · pendiente
 
-- [ ] Primer pago con etiqueta verificada.
+- [x] Primer pago con etiqueta verificada: ver abajo.
 - [ ] `approve` y `transferFrom` reales a través de un contrato.
 - [ ] Etiqueta desde la wallet del celular.
 - [ ] Conciliación por eventos y peor caso de gas con la lista completa.
