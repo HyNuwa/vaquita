@@ -24,7 +24,7 @@ Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decision
 | Tarea | Venía de | Estado |
 |---|---|---|
 | Primer pago mínimo real (`pago:primero`) con la etiqueta verificada (`tx:verificar`) | Esteban | Hecho: `docs/pruebas/spike.md` |
-| Completar `public/agent.json` y registrar ERC-8004 (`identidad:registrar`) | Esteban | Tarjeta completa; falta registrar |
+| Completar `public/agent.json` y registrar ERC-8004 (`identidad:registrar`) | Esteban | Hecho: `agentId` 10026, en `docs/pruebas/spike.md` |
 | Spike: wARS, autorización exacta, `transferFrom`, etiqueta desde el celular y conciliación; peor caso de gas; resultado en `docs/pruebas/spike.md` | Esteban | Parte sin fondos y primer pago hechos |
 | Probar `permit` con firma real, si no se recortó | Esteban | Pendiente |
 | Definir cómo firma el comprador desde la web sin romper la regla 9 ni la guarda de la CI | Maxi | Pendiente |
