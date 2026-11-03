@@ -108,7 +108,8 @@ Next.js en Vercel (D5) · RainbowKit, wagmi y viem · WalletConnect · `@celo/at
 
 - [x] Contrato, fábrica y compra real de $ 1 conciliada
 - [x] ERC-8004
-- [ ] Etiqueta desde una billetera externa en mainnet (MetaMask y después Valora)
+- [x] Etiqueta desde una billetera externa en mainnet, con MetaMask
+- [ ] Etiqueta desde Valora
 - [ ] `permit` en una transacción real
 - [ ] Peor caso de gas con varios compradores
 - [ ] Web: conectar, cargar pesos, comprometerse, cancelar y ver el progreso

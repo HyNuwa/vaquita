@@ -16,12 +16,12 @@ Este archivo manda sobre las fechas de cualquier otro plan. La lista de tareas e
 | Producto final | Cerrado: D11 | D13.6 en `decisiones.md` |
 | Inscripción y código `celo_...` | Hechos; wallet con fondos y `preflight` en verde; falta agregarla a la inscripción | Perfil de Loops House; `preflight` |
 | Identidad ERC-8004 | Hecha: Vaqui, `agentId` 10026 | `docs/pruebas/spike.md`; `public/agent.json` |
-| Spike de D7/D11 y primer pago | Compra real de $ 1 por contrato hecha y conciliada; falta la etiqueta desde el celular y el peor caso de gas | `docs/pruebas/spike.md` |
+| Spike de D7/D11 y primer pago | Compra real de $ 1 por contrato hecha y conciliada; etiqueta desde el celular comprobada con MetaMask; falta Valora y el peor caso de gas | `docs/pruebas/spike.md` |
 | E1 (cotizaciones) | Sin evidencia; venció el 29/10 | No existe `docs/usuarios/` |
 | Nombre | Sin decidir; venció el 27/10 | D6 reabierta |
 | Contrato | Tests en verde y revisado por Codex; fábrica de prueba en mainnet, todavía no para uso real | `contracts/`; `docs/pruebas/spike.md` |
 | Módulo `compra/` | Reglas puras hechas y revisadas; falta conectarlas a la cadena | `packages/core/src/compra/` |
-| Bot y web | No empezados; recorrido y billetera definidos en D15 | [`spec.md`](../proyecto/spec.md) |
+| Bot y web | Bot sin empezar; web con la página de prueba de firma; recorrido y billetera definidos en D15 | [`spec.md`](../proyecto/spec.md) |
 
 "Sin evidencia" significa que no hay nada registrado en el repo. Si algo se hizo fuera del repo, se anota acá con su evidencia.
 
@@ -32,7 +32,7 @@ Una puerta se cierra solo con su evidencia. Si a la hora límite está abierta, 
 | # | Límite (ART) | Debe quedar | Evidencia | Si no se cumple | Estado |
 |---|---|---|---|---|---|
 | P0 | Lun 2/11, 12:00 | Inscripción confirmada; código `celo_...` y wallet del agente con fondos en `.env` | Entrada en `decisiones.md`; `preflight` sin errores | Sin inscripción o sin código, se frena todo lo demás hasta resolverlo: la etiqueta no se agrega después | Abierta |
-| P1 | Mar 3/11, 23:59 | Primer pago con etiqueta verificada; ERC-8004 registrado con `agent.json` real; spike de autorización exacta, `transferFrom` y etiqueta desde el celular | `docs/pruebas/spike.md` con hashes | Falla el spike: plan B de transferencias directas, declarado en la demo. Falla el ERC-8004: es requisito, se sigue hasta resolverlo | Abierta |
+| P1 | Mar 3/11, 23:59 | Primer pago con etiqueta verificada; ERC-8004 registrado con `agent.json` real; spike de autorización exacta, `transferFrom` y etiqueta desde el celular | `docs/pruebas/spike.md` con hashes | Falla el spike: plan B de transferencias directas, declarado en la demo. Falla el ERC-8004: es requisito, se sigue hasta resolverlo | Cerrada el 3/11, con MetaMask como prueba técnica |
 | P2 | Mié 4/11, 23:59 | Contrato y checklist de Foundry en verde; segunda revisión hecha; pedidos de cotización enviados | Salida de `forge test`; hallazgos resueltos en el PR | Recortes 4 y 5. Si el jueves a la mañana sigue en rojo: plan B | Abierta |
 | P3 | Jue 5/11, 23:59 | `compra/` con tests; web donde el comprador se compromete y cancela con su wallet; guarda de la CI con la excepción de D15.5 | CI en verde; prueba local desde el celular | Recortes 6 y 7 | Abierta |
 | P4 | Vie 6/11, 23:59 | Contrato en mainnet; agente con loop propio y bitácora pública; una campaña completa del equipo con plata real y montos chicos | Hashes de compromiso y ejecución en `docs/entrega/transacciones.md` | Recorte 8. Sin campaña real el viernes, el sábado se dedica solo a eso | Abierta |

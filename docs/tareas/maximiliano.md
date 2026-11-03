@@ -25,10 +25,10 @@ Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decision
 |---|---|---|
 | Primer pago mínimo real (`pago:primero`) con la etiqueta verificada (`tx:verificar`) | Esteban | Hecho: `docs/pruebas/spike.md` |
 | Completar `public/agent.json` y registrar ERC-8004 (`identidad:registrar`) | Esteban | Hecho: `agentId` 10026, en `docs/pruebas/spike.md` |
-| Spike: wARS, autorización exacta, `transferFrom`, etiqueta desde el celular y conciliación; peor caso de gas; resultado en `docs/pruebas/spike.md` | Esteban | Compra real conciliada; faltan celular y peor caso de gas |
+| Spike: wARS, autorización exacta, `transferFrom`, etiqueta desde el celular y conciliación; peor caso de gas; resultado en `docs/pruebas/spike.md` | Esteban | Compra real conciliada y etiqueta desde el celular; falta el peor caso de gas |
 | Probar `permit` con firma real, si no se recortó | Esteban | Pasó en simulación; falta en una transacción real |
 | Definir cómo firma el comprador desde la web sin romper la regla 9 ni la guarda de la CI | Maxi | Decidido: D15.5 |
-| `approve(0)` con etiqueta desde MetaMask móvil y WalletConnect, por QR desde una página local. Es la prueba técnica de P1 | Nueva | Pendiente |
+| `approve(0)` con etiqueta desde MetaMask móvil y WalletConnect, por QR desde una página local. Es la prueba técnica de P1 | Nueva | Hecho: `docs/pruebas/spike.md` |
 | Repetir la prueba con Valora, que sigue siendo la primera opción del comprador (D15.2) | Nueva | Pendiente: hay que instalarla |
 
 ### P2 · Miércoles 4/11
@@ -50,7 +50,7 @@ Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decision
 | `compra/`: cotizaciones, voto, elegibilidad, selección determinística y estado desde eventos; montos `bigint`, tests sin red | Maxi | Reglas puras hechas el 2/11 |
 | Lector de eventos: hash + índice de log, bloque y campaña; reprocesamiento sin doble conteo | Esteban | Pendiente |
 | Web `/c/:slug`: ofertas, voto, compromiso y cancelación con wallet propia, progreso e historial, con RainbowKit y wagmi (D15) | Maxi | Pendiente |
-| Guarda de la CI: exceptuar solo `apps/web/src/lib/firmar.ts` (D15.5) | Nueva | Pendiente |
+| Guarda de la CI: exceptuar solo `apps/web/src/lib/firmar.ts` (D15.5) | Nueva | Hecho, junto con la página de prueba |
 
 ### P4 · Viernes 6/11
 

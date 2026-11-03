@@ -55,6 +55,8 @@ Estado: ✅ en uso · ⏳ pendiente de decidir.
 
 | # | Pieza | Elección | Versión | Estado |
 |---|---|---|---|---|
-| 16 | Framework | **Next.js** (D15.8) | Se fija al instalar | ⏳ Sin instalar |
+| 16 | Framework | **Next.js** (D15.8) | 15.5.28 | ✅ |
 | 17 | Hosting | **Vercel** (D5); tiene que servir `agent.json` por HTTPS para ERC-8004 | — | ⏳ Sin desplegar |
-| 18 | Billetera del comprador | **RainbowKit, wagmi, viem y WalletConnect**; Valora primero, MetaMask de respaldo (D15.2) | Se fija al instalar | ⏳ Sin instalar; falta el proyecto gratuito de WalletConnect |
+| 18 | Billetera del comprador | **RainbowKit, wagmi, viem y WalletConnect**; Valora primero, MetaMask de respaldo (D15.2) | RainbowKit 2.2.11, wagmi 2.19.5, viem 2.57.7 | ✅ Probada con MetaMask móvil |
+| 19 | TypeScript de la web | **5.9**, solo en `apps/web`: Next 15 rechaza TypeScript 7 | 5.9.3 | ✅ El resto del repo sigue en 7 |
+| 20 | QR de RainbowKit | **`qr` fijo y `cuer`**, con `overrides` en la raíz: `qr` 0.6 o mayor rechaza el borde en 0 que pide `cuer` y rompe el QR | qr 0.5.5, cuer 0.0.3 | ✅ |
