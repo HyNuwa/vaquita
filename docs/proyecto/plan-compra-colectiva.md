@@ -155,7 +155,7 @@ Hay que probar un pago real antes de confiar en la integración: el `SKILL.md` d
 
 ## 7. Web: `/c/:slug`
 
-Maxi arma la campaña, ofertas comparables, voto, términos, progreso e historial. Cada comprador conecta su wallet para comprometerse y cancelar; autoriza el total exacto. El cliente agrega el tag usando helpers del core: la app no construye transacciones ni importa clientes de Celo por su cuenta. El firmante es el usuario; el agente nunca recibe su clave. Se conserva `tagged-sender.ts` como camino de envío, adaptando la firma del usuario dentro del core.
+Maxi arma la campaña, ofertas comparables, voto, términos, progreso e historial. Cada comprador conecta su wallet para comprometerse y cancelar; autoriza el total exacto. El cliente agrega el tag usando helpers del core: la app no construye transacciones ni importa clientes de Celo por su cuenta. El firmante es el usuario; el agente nunca recibe su clave. **D15.5:** el core arma `{ to, data }` con la etiqueta y `apps/web/src/lib/firmar.ts` lo pasa a la billetera del comprador con RainbowKit y wagmi; `tagged-sender.ts` queda para la wallet del agente. Recorrido completo en [spec.md](spec.md).
 
 Pantalla previa: “Te comprometés por $ 1.234,50. La plata queda en tu billetera hasta que se ejecute la compra”. Cancelación confirmada: “Cancelaste tu compromiso. No podés volver a sumarte a esta campaña”. No mostrar cancelado mientras la tx siga pendiente. Montos locales, sin direcciones ni jerga de red; costos y riesgos explicados antes de firmar. La prueba móvil incluye aprobación, compromiso y cancelación.
 

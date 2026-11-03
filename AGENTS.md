@@ -105,9 +105,9 @@ Full context in [`docs/proyecto/contexto.md`](docs/proyecto/contexto.md) section
 2. **Real Ripio wFIAT.** Token addresses come from `packages/core/src/config/tokens.ts`. **Never** invent or type an address from memory.
 3. **Every tx we send carries the ERC-8021 tag** (`ATTRIBUTION_CODE`). Without it the tx is not broadcast. Exception (D13.3): x402 settlements are sent by the facilitator, so they carry no tag and we declare the PayTo wallet.
 4. **ERC-8004 identity** registered from the agent wallet before 2026-11-09.
-5. **Gas in stablecoin** via fee abstraction (CIP-64, `feeCurrency` = USDC adapter). wARS is not a fee currency.
+5. **Gas in stablecoin** via fee abstraction (CIP-64, `feeCurrency` = USDC adapter) for the agent wallet. wARS is not a fee currency. Buyers pay from their own wallet (D15.4).
 6. **The LLM proposes, the code decides.** Caps, budgets, recipients, campaign rules (quota, buyer selection, per-buyer cap, when to execute), pot amounts, turn order and late-payment rules are deterministic code. The LLM never picks the provider: the community votes. The LLM never sees addresses, only aliases.
 7. **Dry-run by default.** Real money only with `LIVE_PAYMENTS=si-muevo-plata-real`.
 8. **Keys only in `.env`**, never in the repo, in logs or in docs. The `pre-commit` hook and CI scan every diff for keys and tokens. If a key is ever pushed, treat it as leaked: move the funds and rotate it; deleting the commit is not enough.
-9. **Tests before mainnet.** Every tx goes through `packages/core/src/chain/tagged-sender.ts`; never call `sendTransaction` or `writeContract` directly (CI blocks it outside `packages/core/src/chain/`). Tests never touch the network.
+9. **Tests before mainnet.** Every tx goes through `packages/core/src/chain/tagged-sender.ts`; never call `sendTransaction` or `writeContract` directly (CI blocks it outside `packages/core/src/chain/`). Only exception (D15.5, enabled in the CI guard at P3): buyer signatures in `apps/web/src/lib/firmar.ts`, sending the transaction the core built. Tests never touch the network.
 10. **UX for non-crypto users.** Amounts in local currency (`$ 1.234,50`); no "wei", "gas", "calldata" or addresses in user messages.

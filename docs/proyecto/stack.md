@@ -55,5 +55,6 @@ Estado: ✅ en uso · ⏳ pendiente de decidir.
 
 | # | Pieza | Elección | Versión | Estado |
 |---|---|---|---|---|
-| 16 | Framework | — | — | ⏳ |
-| 17 | Hosting | — (tiene que servir `agent.json` por HTTPS para ERC-8004) | — | ⏳ |
+| 16 | Framework | **Next.js** (D15.8) | Se fija al instalar | ⏳ Sin instalar |
+| 17 | Hosting | **Vercel** (D5); tiene que servir `agent.json` por HTTPS para ERC-8004 | — | ⏳ Sin desplegar |
+| 18 | Billetera del comprador | **RainbowKit, wagmi, viem y WalletConnect**; Valora primero, MetaMask de respaldo (D15.2) | Se fija al instalar | ⏳ Sin instalar; falta el proyecto gratuito de WalletConnect |

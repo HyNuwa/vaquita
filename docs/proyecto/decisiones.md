@@ -4,6 +4,21 @@ Una entrada por decisión, la más nueva arriba. Formato: fecha · decisión · 
 
 Las decisiones de producto previas al repo (canal Telegram, wARS, junta justa, custodia, onboarding) están en [contexto.md](contexto.md#6-decisiones-de-producto-tomadas).
 
+## 2026-11-03 · D15: billetera externa para la entrega y compra colectiva sin cambios · Maximiliano
+**Por qué:** la prioridad es que una persona pueda usar la compra colectiva de principio a fin. Evaluamos wallets embebidas: thirdweb ofrece [gas patrocinado con EIP-7702 en Celo](https://portal.thirdweb.com/changelog/sponsored-eip-7702-transactions-now-on-celo), pero sus [planes](https://thirdweb.com/pricing) arrancan en US$ 99 por mes y no hay presupuesto. Seguimos la arquitectura de [Alcancía](https://github.com/artugrande/alcancia) como referencia técnica, adaptada a nuestra compra colectiva. Detalle en [spec.md](spec.md).
+
+| # | Decisión | Condición o consecuencia |
+|---|---|---|
+| D15.1 · Producto | Se entrega la compra colectiva (D11). **No se agrega ahorro por metas** y el contrato no cambia, incluida la prueba de `permit` | El ahorro queda como visión posterior |
+| D15.2 · Billetera | **RainbowKit, wagmi, viem y WalletConnect.** Valora es la primera opción del comprador y MetaMask el respaldo técnico. Se descarta thirdweb para P1 y **no se contratan servicios pagos de wallets** | MetaMask ignora `feeCurrency`: quien lo use necesita CELO. El proyecto de WalletConnect tiene que ser gratuito; si no lo es, se vuelve a decidir |
+| D15.3 · Etiqueta | Se mantiene ERC-8021 con `@celo/attribution-tags`. Se verifica con `verifyTx` en transacciones reales, no solo en la construcción | Solo se acredita el código asignado en Loops House. Se puede sumar el derivado del repo en el mismo sufijo, como hace Alcancía |
+| D15.4 · Comisiones del comprador | **El comprador paga su comisión** al principio. Su billetera elige la moneda. wARS no sirve para eso. La regla 5 (CIP-64) sigue valiendo para la wallet del agente | [Valora](https://support.valoraapp.com/hc/en-us/articles/4402359409165-Transaction-Fees) lista CELO, cUSD, cEUR, cREAL, USDC y USD₮, y falta comprobar el recorrido por WalletConnect. Quien solo tenga wARS no puede firmar; es el riesgo 1 de la spec. No fondeamos compradores, porque dejarían de contar como independientes |
+| D15.5 · Cómo firma el comprador | El core arma `{ to, data }` con la etiqueta, en un módulo puro sin `.env`. La web solo lo pasa a la billetera, desde **un único archivo** (`apps/web/src/lib/firmar.ts`). Solo ese archivo queda exceptuado en la guarda de la CI | Cierra el bloqueo de la regla 9. La excepción cubre firmas del comprador, nunca la clave del agente. `tagged-sender.ts` sigue siendo el único camino de la wallet del agente. El cambio de la guarda entra con la web, en P3 |
+| D15.6 · Pesos | Ripio Ramp por link, sin credenciales, para cargar wARS. La **salida de fondos del comercio queda pendiente de validar** | No se afirma que la compra está resuelta de punta a punta hasta validar el cobro. D9 (Ripio como camino de aporte) sigue fuera |
+| D15.7 · Después del hackathon | Investigar wallet embebida y gas patrocinado para llegar a la blockchain invisible | Mientras tanto, la web no usa jerga y dice que hace falta una billetera |
+| D15.8 · Web | Next.js en Vercel, dentro de D5 | No se suma infraestructura aparte. Es lo que usa Alcancía y funciona con RainbowKit |
+| D15.9 · Alcancía | Es referencia técnica, sin copiar código | El repo no publica licencia y el hackathon pide código escrito durante el evento |
+
 ## 2026-11-02 · D14: el contrato se escribe antes del spike completo; se despliega después · Maximiliano
 **Por qué:** la parte con fondos del spike necesita un contrato desplegado, y esperar dejaba sin margen la puerta P2.
 

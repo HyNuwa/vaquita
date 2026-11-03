@@ -26,8 +26,10 @@ Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decision
 | Primer pago mínimo real (`pago:primero`) con la etiqueta verificada (`tx:verificar`) | Esteban | Hecho: `docs/pruebas/spike.md` |
 | Completar `public/agent.json` y registrar ERC-8004 (`identidad:registrar`) | Esteban | Hecho: `agentId` 10026, en `docs/pruebas/spike.md` |
 | Spike: wARS, autorización exacta, `transferFrom`, etiqueta desde el celular y conciliación; peor caso de gas; resultado en `docs/pruebas/spike.md` | Esteban | Compra real conciliada; faltan celular y peor caso de gas |
-| Probar `permit` con firma real, si no se recortó | Esteban | Pendiente |
-| Definir cómo firma el comprador desde la web sin romper la regla 9 ni la guarda de la CI | Maxi | Pendiente |
+| Probar `permit` con firma real, si no se recortó | Esteban | Pasó en simulación; falta en una transacción real |
+| Definir cómo firma el comprador desde la web sin romper la regla 9 ni la guarda de la CI | Maxi | Decidido: D15.5 |
+| `approve(0)` con etiqueta desde MetaMask móvil y WalletConnect, por QR desde una página local. Es la prueba técnica de P1 | Nueva | Pendiente |
+| Repetir la prueba con Valora, que sigue siendo la primera opción del comprador (D15.2) | Nueva | Pendiente: hay que instalarla |
 
 ### P2 · Miércoles 4/11
 
@@ -38,6 +40,7 @@ Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decision
 | Segunda revisión del contrato con la skill `review` y otro agente; resolver hallazgos | Maxi | Pendiente |
 | E1: elegir una necesidad digital real y enviar los pedidos a 3–15 proveedores. Corte nuevo: jueves 5/11, 12:00 | Maxi | Sin evidencia |
 | Preguntas legales por escrito: CNV, IGJ, consumo y entrega | Maxi | Pendiente |
+| Compra real de pesos por Ripio Ramp hacia una wallet del comprador; KYC, costos y cómo consigue moneda para la comisión | Nueva | Pendiente |
 
 ### P3 · Jueves 5/11
 
@@ -46,7 +49,8 @@ Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decision
 | Registrar el resultado de E1, aunque sea cero | Maxi | Pendiente |
 | `compra/`: cotizaciones, voto, elegibilidad, selección determinística y estado desde eventos; montos `bigint`, tests sin red | Maxi | Reglas puras hechas el 2/11 |
 | Lector de eventos: hash + índice de log, bloque y campaña; reprocesamiento sin doble conteo | Esteban | Pendiente |
-| Web `/c/:slug`: ofertas, voto, compromiso y cancelación con wallet propia, progreso e historial | Maxi | Pendiente |
+| Web `/c/:slug`: ofertas, voto, compromiso y cancelación con wallet propia, progreso e historial, con RainbowKit y wagmi (D15) | Maxi | Pendiente |
+| Guarda de la CI: exceptuar solo `apps/web/src/lib/firmar.ts` (D15.5) | Nueva | Pendiente |
 
 ### P4 · Viernes 6/11
 
@@ -65,6 +69,7 @@ Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decision
 | Tarea | Venía de | Estado |
 |---|---|---|
 | Campaña chica con personas ajenas al equipo, si se cumple D11.5 | Maxi | Pendiente |
+| Probar cómo cobra y retira los pesos el comercio con `ramp.ripio.com/offramp`; si no se llega, se declara pendiente | Nueva | Pendiente |
 | Cobro x402 en wARS detrás de `X402_ENABLED`: pago real mínimo y criterios de D8 en `docs/pruebas/x402.md`; si no pasa, queda apagado (D13.3) | Nueva | Pendiente |
 | Evidencias: despliegues, código verificado, compromisos, ejecución, importes, `verifyTx` y ERC-8004 | Esteban | Pendiente |
 | Congelar el código a las 20:00 | Maxi | Pendiente |
@@ -80,7 +85,7 @@ Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decision
 
 **Alternativas:** sin ofertas escritas al 5/11, campaña del equipo con proveedor amigo, declarada en el pitch. Sin spike aprobado, transferencias P2P directas registradas por el agente, sin ejecución atómica: pierde la prueba del profesor y no se presenta como equivalente.
 
-**Fuera de la entrega salvo que sobre tiempo:** nombre comercial nuevo, Ripio (D9), `buy` (D13.5) y juntas.
+**Fuera de la entrega salvo que sobre tiempo:** nombre comercial nuevo, Ripio como camino de aporte (D9), `buy` (D13.5) y juntas. Tampoco entran ahorro por metas, wallet embebida ni gas patrocinado (D15).
 
 ## Hecho (en pausa por D11)
 
