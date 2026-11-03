@@ -25,7 +25,7 @@ Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decision
 |---|---|---|
 | Primer pago mínimo real (`pago:primero`) con la etiqueta verificada (`tx:verificar`) | Esteban | Hecho: `docs/pruebas/spike.md` |
 | Completar `public/agent.json` y registrar ERC-8004 (`identidad:registrar`) | Esteban | Hecho: `agentId` 10026, en `docs/pruebas/spike.md` |
-| Spike: wARS, autorización exacta, `transferFrom`, etiqueta desde el celular y conciliación; peor caso de gas; resultado en `docs/pruebas/spike.md` | Esteban | Parte sin fondos y primer pago hechos |
+| Spike: wARS, autorización exacta, `transferFrom`, etiqueta desde el celular y conciliación; peor caso de gas; resultado en `docs/pruebas/spike.md` | Esteban | Compra real conciliada; faltan celular y peor caso de gas |
 | Probar `permit` con firma real, si no se recortó | Esteban | Pendiente |
 | Definir cómo firma el comprador desde la web sin romper la regla 9 ni la guarda de la CI | Maxi | Pendiente |
 
@@ -33,7 +33,7 @@ Fuente de producto: [D11](../proyecto/decisiones.md), [D13](../proyecto/decision
 
 | Tarea | Venía de | Estado |
 |---|---|---|
-| `CompraColectiva` y fábrica sin admin ni actualizaciones, con términos inmutables, lista acotada y tope de $ 5.000 | Esteban | Escrito en local; despliegue condicionado al spike (D14) |
+| `CompraColectiva` y fábrica sin admin ni actualizaciones, con términos inmutables, lista acotada y tope de $ 5.000 | Esteban | Fábrica de prueba en mainnet; uso real condicionado al spike (D14) |
 | Foundry: [checklist del plan](../proyecto/plan-compra-colectiva.md#4-checklist-de-tests-en-foundry), con fuzzing e invariantes | Esteban | Tests en verde; falta medir con wARS real |
 | Segunda revisión del contrato con la skill `review` y otro agente; resolver hallazgos | Maxi | Pendiente |
 | E1: elegir una necesidad digital real y enviar los pedidos a 3–15 proveedores. Corte nuevo: jueves 5/11, 12:00 | Maxi | Sin evidencia |

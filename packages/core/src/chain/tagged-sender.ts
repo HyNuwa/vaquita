@@ -1,4 +1,4 @@
-import { getAddress, keccak256, type Address, type Hex, type LocalAccount } from "viem";
+import { getAddress, keccak256, toFunctionSelector, type Address, type Hex, type LocalAccount } from "viem";
 import { parseTransaction, serializeTransaction } from "viem/celo";
 import { appendTag, assertTagged } from "../attribution/tag.js";
 import type { AppConfig } from "../config/env.js";
@@ -17,6 +17,9 @@ import type { ChainReader } from "./reader.js";
  *   5. firma local de una tx CIP-64 (type 0x7b) con feeCurrency
  *   6. se PARSEA la tx firmada y se vuelve a verificar tag, chainId, feeCurrency y destino:
  *      lo que se valida es exactamente lo que se transmitiría
+ *
+ * Un despliegue se pide de forma explícita con `{ deploy: true }`: si faltar el destino
+ * bastara para desplegar, un pago con un error crearía un contrato en vez de pagar.
  *   7. ensayo → se devuelve la tx firmada sin transmitir; real → sendRawTransaction
  */
 
@@ -28,13 +31,21 @@ export interface SenderDeps {
   config: Pick<AppConfig, "attributionCode" | "feeCurrency" | "live">;
   reader: ChainReader;
   account: LocalAccount;
-  policy: Readonly<Pick<Policy, "maxGasPerTx18">>;
+  policy: Readonly<Pick<Policy, "maxGasPerTx18" | "maxGasPerContractTx18">>;
 }
 
-export interface Call {
-  to: Address;
-  data: Hex;
-}
+/** "contract" solo para crear campañas y ejecutarlas; por defecto rige el tope de pagos. */
+export type GasClass = "payment" | "contract";
+
+export type Call =
+  | { to: Address; data: Hex; gasClass?: GasClass; deploy?: never }
+  | { deploy: true; data: Hex; to?: never; gasClass?: never };
+
+/** D14.5: solo estas llamadas pueden pedir el tope de contratos. */
+const CONTRACT_GAS_SELECTORS: readonly string[] = [
+  toFunctionSelector("createCampaign((bytes32,address,uint256,uint256,address,uint32,uint32,uint64),address[])"),
+  toFunctionSelector("ejecutar()"),
+];
 
 export type Prepared =
   | { ok: true; signedTx: Hex; txHash: Hex; maxGasCost18: bigint; gas: bigint }
@@ -54,18 +65,26 @@ export async function prepareTaggedTx(deps: SenderDeps, call: Call): Promise<Pre
   const { reader, account, config, policy } = deps;
   const code = config.attributionCode;
   const feeCurrency = config.feeCurrency.feeCurrency;
+  const deploy = call.deploy === true;
+  const to = call.to;
+  if (deploy ? to !== undefined : !to) throw new Error("El destino no coincide con lo pedido: despliegue sin destino, llamada con destino.");
+  const contractGas = call.gasClass === "contract";
+  if (contractGas && !CONTRACT_GAS_SELECTORS.includes(call.data.slice(0, 10))) {
+    throw new Error("Esta llamada no puede usar el tope de gas de contratos.");
+  }
+  const cap = deploy || contractGas ? policy.maxGasPerContractTx18 : policy.maxGasPerTx18;
 
   await assertMainnet(reader);
 
   const data = appendTag(call.data, code);
   assertTagged(data, code);
 
-  const estimated = await reader.estimateGas({ from: account.address, to: call.to, data, feeCurrency });
+  const estimated = await reader.estimateGas({ from: account.address, to, data, feeCurrency });
   const gas = (estimated * GAS_MARGIN_NUM) / GAS_MARGIN_DEN;
   const fees = await reader.feesPerGas(feeCurrency);
   const maxGasCost18 = gas * fees.maxFeePerGas;
 
-  if (maxGasCost18 > policy.maxGasPerTx18) return { ok: false, reason: "GAS_OVER_CAP", maxGasCost18 };
+  if (maxGasCost18 > cap) return { ok: false, reason: "GAS_OVER_CAP", maxGasCost18 };
 
   // balanceOf en el adapter devuelve 18 decimales, igual que los precios de gas
   const feeBalance18 = await reader.balanceOf(feeCurrency, account.address);
@@ -78,7 +97,7 @@ export async function prepareTaggedTx(deps: SenderDeps, call: Call): Promise<Pre
       type: "cip64",
       chainId: CELO_MAINNET.chainId,
       nonce,
-      to: call.to,
+      to,
       data,
       value: 0n,
       gas,
@@ -99,7 +118,11 @@ export async function prepareTaggedTx(deps: SenderDeps, call: Call): Promise<Pre
   if (!parsed.feeCurrency || getAddress(parsed.feeCurrency) !== getAddress(feeCurrency)) {
     throw new Error("La tx firmada no tiene la feeCurrency esperada.");
   }
-  if (!parsed.to || getAddress(parsed.to) !== getAddress(call.to)) throw new Error("La tx firmada apunta a otro contrato.");
+  if (to) {
+    if (!parsed.to || getAddress(parsed.to) !== getAddress(to)) throw new Error("La tx firmada apunta a otro contrato.");
+  } else if (parsed.to) {
+    throw new Error("La tx de despliegue firmada tiene un destino.");
+  }
 
   return { ok: true, signedTx, txHash: keccak256(signedTx), maxGasCost18, gas };
 }

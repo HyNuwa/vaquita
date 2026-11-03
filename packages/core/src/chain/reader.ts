@@ -11,7 +11,8 @@ export interface ChainReader {
   erc20Meta(token: Address): Promise<{ symbol: string; decimals: number }>;
   balanceOf(token: Address, owner: Address): Promise<bigint>;
   nonce(addr: Address): Promise<number>;
-  estimateGas(p: { from: Address; to: Address; data: Hex; feeCurrency: Address }): Promise<bigint>;
+  /** Sin `to` estima una creación de contrato. */
+  estimateGas(p: { from: Address; to: Address | undefined; data: Hex; feeCurrency: Address }): Promise<bigint>;
   /** Precios de gas expresados en la fee currency (18 decimales) */
   feesPerGas(feeCurrency: Address): Promise<{ maxFeePerGas: bigint; maxPriorityFeePerGas: bigint }>;
   sendRaw(serialized: Hex): Promise<Hex>;

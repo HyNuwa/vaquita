@@ -16,6 +16,7 @@
     "check": "npm run typecheck && npm test",
     "preflight": "tsx packages/core/scripts/preflight.ts",
     "spike:lectura": "tsx packages/core/scripts/spike-wars.ts",
+    "spike:contrato": "tsx packages/core/scripts/spike-contrato.ts",
     "pago:primero": "tsx packages/core/scripts/send-first-wars.ts",
     "identidad:registrar": "tsx packages/core/scripts/register-agent.ts",
     "ramp:link": "tsx packages/core/scripts/ramp-link.ts",
