@@ -17,6 +17,7 @@ Las decisiones de producto previas al repo (canal Telegram, wARS, junta justa, c
 | D15.6 · Pesos | Ripio Ramp por link, sin credenciales, para cargar wARS. La **salida de fondos del comercio queda pendiente de validar** | No se afirma que la compra está resuelta de punta a punta hasta validar el cobro. D9 (Ripio como camino de aporte) sigue fuera |
 | D15.7 · Después del hackathon | Investigar wallet embebida y gas patrocinado para llegar a la blockchain invisible | Mientras tanto, la web no usa jerga y dice que hace falta una billetera |
 | D15.8 · Web | Next.js en Vercel, dentro de D5 | No se suma infraestructura aparte. Es lo que usa Alcancía y funciona con RainbowKit |
+| D15.10 · Wallet del agente | **Excepción temporal a la regla 8:** hasta la entrega, la wallet del agente sigue siendo la cuenta de MetaMask de Maxi, así que su clave no está solo en el `.env`. Cambiarla ahora obliga a repetir el registro ERC-8004 | Saldo mínimo, sin plata personal ni en otras cuentas de esa frase, y sin conectarla a otros sitios. No firma como compradora. Después del hackathon se crea una wallet exclusiva y se mueve lo que quede |
 | D15.9 · Alcancía | Es referencia técnica, sin copiar código | El repo no publica licencia y el hackathon pide código escrito durante el evento |
 
 ## 2026-11-02 · D14: el contrato se escribe antes del spike completo; se despliega después · Maximiliano

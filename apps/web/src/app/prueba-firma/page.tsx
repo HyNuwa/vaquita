@@ -2,18 +2,23 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { autorizarCampana } from "@vaquita/core/compra/firmas";
 import { useState } from "react";
-import { getAddress, type Hex } from "viem";
+import { getAddress } from "viem";
 import { useAccount } from "wagmi";
-import { firmarYEsperar } from "@/lib/firmar";
+import { firmarYEsperar, type ResultadoFirma } from "@/lib/firmar";
 
 // Campaña del spike, ya ejecutada (docs/pruebas/spike.md). Autorizarla en cero no le permite cobrar nada.
 const CAMPANA_DE_PRUEBA = getAddress("0x803bcbBD2E99f4e71bdE806F83aD3d9aC03B1B99");
 
-type Estado =
-  | { tipo: "inicio" }
-  | { tipo: "firmando" }
-  | { tipo: "listo"; hash: Hex; ok: boolean }
-  | { tipo: "error"; mensaje: string };
+const MENSAJES: Record<ResultadoFirma["estado"], string> = {
+  confirmada: "Listo: la transacción se confirmó.",
+  fallida: "La transacción se confirmó con un error. No se autorizó nada.",
+  reemplazada: "Cancelaste o cambiaste la transacción desde tu billetera. Esta firma no se aplicó.",
+  pendiente: "Se envió, pero todavía no se confirmó. Revisá el enlace en unos minutos antes de volver a firmar.",
+  rechazada: "Rechazaste la firma en tu billetera. No se hizo nada.",
+  "sin-enviar": "No se pudo enviar a tu billetera. No se hizo nada; probá de nuevo.",
+};
+
+type Estado = { tipo: "inicio" } | { tipo: "firmando" } | { tipo: "listo"; resultado: ResultadoFirma };
 
 export default function PruebaFirma() {
   const { isConnected } = useAccount();
@@ -23,10 +28,10 @@ export default function PruebaFirma() {
     setEstado({ tipo: "firmando" });
     try {
       const tx = autorizarCampana(CAMPANA_DE_PRUEBA, 0n, process.env.NEXT_PUBLIC_ATTRIBUTION_CODE ?? "");
-      setEstado({ tipo: "listo", ...(await firmarYEsperar(tx)) });
-    } catch (e) {
-      const corto = (e as { shortMessage?: string }).shortMessage;
-      setEstado({ tipo: "error", mensaje: corto ?? (e as Error).message });
+      setEstado({ tipo: "listo", resultado: await firmarYEsperar(tx) });
+    } catch {
+      // El core no armó la transacción: nunca llegó a la billetera.
+      setEstado({ tipo: "listo", resultado: { estado: "sin-enviar" } });
     }
   }
 
@@ -43,16 +48,17 @@ export default function PruebaFirma() {
         </p>
       )}
       {estado.tipo === "listo" && (
-        <div>
-          <p>{estado.ok ? "Listo: la transacción se confirmó." : "La transacción se confirmó con error."}</p>
-          <p style={{ overflowWrap: "anywhere" }}>
-            <a href={`https://celoscan.io/tx/${estado.hash}`} target="_blank" rel="noreferrer">
-              {estado.hash}
-            </a>
-          </p>
+        <div role="status">
+          <p>{MENSAJES[estado.resultado.estado]}</p>
+          {"hash" in estado.resultado && (
+            <p style={{ overflowWrap: "anywhere" }}>
+              <a href={`https://celoscan.io/tx/${estado.resultado.hash}`} target="_blank" rel="noreferrer">
+                Ver la transacción
+              </a>
+            </p>
+          )}
         </div>
       )}
-      {estado.tipo === "error" && <p role="alert">No se pudo firmar: {estado.mensaje}</p>}
     </main>
   );
 }

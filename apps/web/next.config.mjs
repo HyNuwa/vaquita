@@ -3,9 +3,11 @@ import { resolve } from "node:path";
 import { parse } from "dotenv";
 
 // El .env vive solo en la raíz del repo; en Vercel estas variables vienen del entorno.
-// Se leen solo estas dos, públicas: la clave del agente nunca entra al proceso de la web.
+// Se descartan las demás líneas antes de interpretarlo: la clave del agente no pasa a ninguna variable de este proceso.
+const PUBLICA = /^\s*(export\s+)?(NEXT_PUBLIC_WC_PROJECT_ID|ATTRIBUTION_CODE)\s*=/;
 const raiz = resolve(import.meta.dirname, "../../.env");
-const local = existsSync(raiz) ? parse(readFileSync(raiz)) : {};
+const lineas = existsSync(raiz) ? readFileSync(raiz, "utf8").split(/\r?\n/) : [];
+const local = parse(lineas.filter((l) => PUBLICA.test(l)).join("\n"));
 const leer = (nombre) => process.env[nombre] ?? local[nombre] ?? "";
 
 /** @type {import("next").NextConfig} */

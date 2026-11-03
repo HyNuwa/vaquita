@@ -16,6 +16,7 @@ Puerta P1 cerrada el 3/11, con MetaMask como prueba técnica. Sigue P2, miércol
 Después: construir la web según [`spec.md`](../../proyecto/spec.md).
 
 ## Bloqueos
+- La wallet del agente es una cuenta personal de MetaMask: excepción temporal a la regla 8, hasta la entrega (D15.10).
 - Quien solo cargó wARS por Ripio no tiene con qué pagar la comisión: hay que comprobar cómo la consigue (riesgo 1 de la spec).
 - Falta un contacto con una comunidad y con proveedores para E1.
 - Lo que toque plata ya no tiene un segundo revisor humano; lo reemplaza la revisión con agentes, que no es una auditoría.
