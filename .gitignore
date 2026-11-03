@@ -19,3 +19,8 @@ data/*
 .claude/skills
 .devin/skills
 .windsurf/skills
+
+# Next.js
+.next/
+next-env.d.ts
+*.tsbuildinfo

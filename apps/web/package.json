@@ -1,10 +1,31 @@
 {
   "name": "@vaquita/web",
   "version": "0.1.0",
-  "description": "Página web pública de estado de cada vaquita. Solo lectura.",
+  "description": "Página de cada campaña: el comprador se compromete y cancela firmando con su billetera.",
   "private": true,
   "type": "module",
   "dependencies": {
-    "@vaquita/core": "*"
+    "@rainbow-me/rainbowkit": "2.2.11",
+    "@tanstack/react-query": "5.104.3",
+    "@vaquita/core": "*",
+    "cuer": "0.0.3",
+    "dotenv": "^18.0.9",
+    "next": "15.5.28",
+    "qr": "0.5.5",
+    "react": "19.2.1",
+    "react-dom": "19.2.1",
+    "viem": "2.57.7",
+    "wagmi": "2.19.5"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "5.9.3"
   }
 }

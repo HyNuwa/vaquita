@@ -2,6 +2,16 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-03 · fix(web): handle replaced and stuck buyer transactions
+- **Qué hice:** corregí lo que encontró la revisión de Codex: la web leía el `.env` completo, una transacción cancelada podía figurar como confirmada, una perdida dejaba la página colgada y los errores salían en inglés. Registré D15.10. La firma corregida no se volvió a probar desde el celular.
+- **Archivos clave:** `apps/web/next.config.mjs`, `apps/web/src/lib/firmar.ts`, `apps/web/src/app/prueba-firma/page.tsx`, `docs/proyecto/decisiones.md`.
+- **Próximo paso:** repetir la firma cuando se use la web de verdad y seguir con P2.
+
+## 2026-11-03 · feat(web): add buyer signing page and tag test
+- **Qué hice:** arranqué `apps/web` con Next.js, RainbowKit y wagmi. El core arma la transacción del comprador (`compra/firmas.ts`) y solo `firmar.ts` la envía a la billetera; la guarda de la CI exceptúa ese archivo. Una autorización de $ 0 firmada en MetaMask móvil conservó la etiqueta en mainnet, pero salió de la wallet del agente y no se probó Valora.
+- **Archivos clave:** `packages/core/src/compra/firmas.ts`, `apps/web/src/lib/firmar.ts`, `apps/web/src/app/prueba-firma/page.tsx`, `.github/scripts/check-pr.sh`, `docs/pruebas/spike.md`.
+- **Próximo paso:** P2: segunda revisión del contrato, `permit` en una transacción real, peor caso de gas y compra de pesos por Ripio Ramp.
+
 ## 2026-11-03 · docs(docs): record D15 wallet decision and add spec
 - **Qué hice:** registré D15: billetera externa con RainbowKit, Valora primero y MetaMask de respaldo; sin thirdweb ni servicios pagos; el contrato no cambia y no se suma ahorro. Escribí `spec.md` y actualicé contexto, reglas, stack, puertas y tareas. No hay código nuevo ni pruebas nuevas.
 - **Archivos clave:** `docs/proyecto/decisiones.md`, `docs/proyecto/spec.md`, `docs/tareas/control-entrega.md`, `AGENTS.md`, `apps/web/README.md`.

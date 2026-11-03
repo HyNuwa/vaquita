@@ -69,6 +69,21 @@ Comprobado después, leyendo la cadena:
 
 Nota: la primera corrida frenó después de desplegar porque el RPC respondió vacío justo tras confirmar, y sin mover wARS. La fábrica estaba bien; el script ahora espera 8 segundos tras cada confirmación y se retomó sin firmar de nuevo lo ya hecho.
 
+## Firma desde el celular · 2026-11-03 · hecha
+
+Autorización de $ 0 sobre wARS, armada por el core y firmada en MetaMask móvil con WalletConnect, desde `/prueba-firma`. Es una prueba técnica (D15.2).
+
+- Transacción: [`0x4dc1fa54…`](https://celoscan.io/tx/0x4dc1fa5449b0366f3b7af9666fe9d94fa540c3616b23424ebfc284b031ac041a), confirmada y con 31.973 de gas.
+- Etiqueta: `npm run tx:verificar` devuelve `celo_c3121001b7ca`. MetaMask conservó el sufijo.
+- Comisión: transacción común (tipo 2), pagada en CELO. Es lo esperado: MetaMask ignora `feeCurrency`.
+
+**Qué no prueba:**
+
+- La firmante fue la wallet del agente (`0x1F1C…4170`), así que no cuenta como comprador independiente.
+- No prueba Valora, que sigue siendo la primera opción del comprador, ni su moneda de comisión.
+- No cubre una autorización mayor a cero ni `comprometer()` desde el celular.
+- No confirma que el leaderboard la acredite: solo que la etiqueta está en la cadena.
+
 ## Parte con fondos · pendiente
 
 Se ensaya con `npm run spike:contrato -- <alias>` y se lanza con `LIVE_PAYMENTS=si-muevo-plata-real`. Hace falta `forge build` antes. Recorre una compra real de $ 1 con la wallet del agente como única compradora. Si se corta, retoma donde quedó; con `revocar` al final deja en cero la autorización de una campaña sin ejecutar.
@@ -76,5 +91,6 @@ Se ensaya con `npm run spike:contrato -- <alias>` y se lanza con `LIVE_PAYMENTS=
 - [x] Primer pago con etiqueta verificada: ver arriba.
 - [x] `approve` y `transferFrom` reales a través de un contrato: ver arriba.
 - [x] Conciliación por eventos y saldos: ver arriba.
-- [ ] Etiqueta desde la wallet del celular: `approve(0)` desde MetaMask móvil con WalletConnect, verificado con `verifyTx`. Es prueba técnica: falta repetirla con Valora, la primera opción del comprador (D15.2).
+- [x] Etiqueta desde la wallet del celular, con MetaMask: ver arriba.
+- [ ] Etiqueta desde Valora, la primera opción del comprador (D15.2).
 - [ ] Peor caso de gas con varios compradores.

@@ -31,7 +31,7 @@ fi
 echo "== Only the core talks to the chain"
 # Rule 9: every tx goes through packages/core/src/chain/tagged-sender.ts.
 direct=$(git grep -nE 'sendTransaction|writeContract|sendRawTransaction|createWalletClient' "$head" -- \
-  'apps/*' 'packages/*' ':!packages/core/src/chain/*' ':!**/*.md' | sed "s/^$head://")
+  'apps/*' 'packages/*' ':!packages/core/src/chain/*' ':!apps/web/src/lib/firmar.ts' ':!**/*.md' | sed "s/^$head://")
 if [ -n "$direct" ]; then
   echo "$direct" | sed 's/^/  /'
   echo "  Send transactions only through packages/core/src/chain/tagged-sender.ts."
