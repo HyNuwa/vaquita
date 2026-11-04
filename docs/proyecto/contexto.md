@@ -1,36 +1,43 @@
 # La Vaquita — Contexto para agentes de IA
 
 > Leé esto antes de tocar código o responder sobre el proyecto. Es la fuente de verdad resumida.
-> El detalle está en [`docs/investigacion/`](../investigacion/README.md). Si algo acá contradice a otro documento, gana este.
-> Las reglas de trabajo del equipo están en [`AGENTS.md`](../../AGENTS.md).
-> Estado al 25/10/2026. Rutas de código relativas a `packages/core/src/` salvo que se diga otra cosa.
+> Producto: [spec.md](spec.md). Técnica y estado de cada pieza: [plan-fondo-compartido.md](plan-fondo-compartido.md). Glosario: [`CONTEXT.md`](../../CONTEXT.md).
+> Las reglas de trabajo del equipo están en [`AGENTS.md`](../../AGENTS.md). Si algo acá contradice a otro documento, gana este.
+> Estado al 4/11/2026, tras [D16](decisiones.md). Rutas de código relativas a `packages/core/src/` salvo que se diga otra cosa.
 
 ## 1. Qué es
-**La Vaquita** (nombre de trabajo) es un agente de IA que organiza **compras colectivas por intención**, en pesos digitales **wARS de Ripio sobre Celo mainnet**. Vive en Telegram y tiene una web por campaña.
-- Una comunidad de desarrolladores de Jujuy publica una necesidad de bienes digitales o servicios; el agente prepara y compara cotizaciones y la comunidad vota una oferta.
-- Cada comprador firma su compromiso en cadena y autoriza el importe exacto. La plata queda en su wallet hasta la ejecución.
-- Si se alcanza el cupo, el contrato cobra y transfiere directo al proveedor en una sola transacción. Si no alcanza el mínimo, revierte todo. Registra compras y cancelaciones; nunca guarda aportes.
 
-Promesa (D11): *"Un agente que junta la demanda de comunidades tech de LatAm, consigue que los proveedores compitan y ejecuta la compra en wARS sin custodiar la plata."* El compromiso no reserva fondos y el pago no garantiza entrega. wARS es pausable, tiene lista de bloqueo y es actualizable por Ripio.
+**La Vaquita** permite que grupos y comunidades administren dinero compartido mediante reglas transparentes, sin depender de una sola persona. Vaqui automatiza operaciones dentro de los permisos que el grupo le concede.
+
+- **Safe** establece el control compartido: tres responsables, dos firmas.
+- **Zodiac Roles** limita a Vaqui en cadena.
+- **Vaqui** ejecuta pagos programados y prepara propuestas. Nunca es responsable ni dueño del fondo.
+- El fondo está en pesos digitales: **wARS de Ripio sobre Celo mainnet**.
+
+No es un banco, un protocolo de inversiones ni un clon de Splitwise. Tampoco un producto de ahorro: un aporte es del grupo.
+
+Es un **prototipo experimental**. Lo que se puede y no se puede afirmar está en [spec.md §6](spec.md#6-qué-garantizamos-y-qué-no).
 
 Hackathon: **Agents on Open Rails** (Celo × Ripio), Track 1 **Stable Agents LatAm**.
 **Entrega: lunes 9/11/2026, 09:00 GMT (06:00 ART).** Ganadores: 13/11.
 
-Diseño completo: [plan-compra-colectiva.md](plan-compra-colectiva.md). Especificación: [D11 del 25/10](decisiones.md). El motor de juntas queda en pausa (D11.7).
-
 ## 2. Reglas duras (nunca romper)
+
 1. **Solo Celo mainnet** (chainId 42220, RPC `https://forno.celo.org`). Testnet solo en pruebas locales.
-2. **wFIAT real de Ripio.** Las direcciones salen de `packages/core/src/config/tokens.ts`; **jamás** se inventan ni se escriben de memoria.
+2. **wFIAT real de Ripio.** Las direcciones salen de `packages/core/src/config/`; **jamás** se inventan ni se escriben de memoria.
 3. **Cada tx lleva el tag ERC-8021** (`ATTRIBUTION_CODE`, formato `celo_xxxxxxxx`), agregado en el cliente con `@celo/attribution-tags`. Si falta, la tx no se transmite.
-4. **Identidad ERC-8004** registrada desde la wallet del agente, antes del 9/11.
-5. **Gas en stablecoin** con fee abstraction: tx CIP-64 con `feeCurrency` = adapter de USDC. **wARS no es fee currency.** Vale para la wallet del agente; el comprador paga la comisión desde su billetera (D15.4).
-6. **El LLM propone, el código dispone.** Topes, presupuestos, destinatarios, montos de pozo, orden de turnos, reglas de mora y reglas de campaña (cupo, selección, topes, ejecución) son código determinístico. El LLM nunca ve direcciones: solo alias.
+4. **Identidad ERC-8004:** Vaqui, `agentId` 10026.
+5. **Gas en stablecoin** con fee abstraction: tx CIP-64 con `feeCurrency`. **wARS no es fee currency.** Vale para la wallet de Vaqui; las personas pagan la comisión desde su billetera (D15.4).
+6. **El LLM propone, el código dispone.** Topes, destinatarios, pagos programados y reglas del fondo son código, y los límites de Vaqui se aplican en cadena. El LLM no elige destinatarios ni montos, no paga con una herramienta y no ve direcciones ni claves.
 7. **Modo ensayo por defecto.** Plata real solo con `LIVE_PAYMENTS=si-muevo-plata-real`.
-8. **Claves solo en `.env`**, nunca en el repo ni en logs.
-9. **Tests antes de mainnet.** Toda tx pasa por `packages/core/src/chain/tagged-sender.ts`; no llamar `sendTransaction` ni `writeContract` directo. Excepción (D15.5): las firmas del comprador salen de `apps/web/src/lib/firmar.ts`, con la transacción que arma el core.
-10. **UX para no-cripto.** Montos en moneda local (`$ 1.234,50`), sin "wei", "gas", "calldata" ni direcciones en los mensajes al usuario. Español rioplatense.
+8. **Claves solo en `.env` o en secretos del entorno de ejecución**, nunca en el repo, el frontend ni los logs.
+9. **Pruebas antes de mainnet.** Toda tx de Vaqui pasa por `chain/tagged-sender.ts`. Excepción (D15.5): las firmas de las personas salen de `apps/web/src/lib/firmar.ts`, con la transacción que arma el core.
+10. **UX para no-cripto.** Montos como `$ 1.234,50`, sin "wei", "gas", "calldata", "Safe" ni direcciones en los mensajes. Español rioplatense.
+11. **Solo versiones corregidas de Zodiac.** Roles 2.1.0 y Delay 1.1.0 están prohibidas. Antes de conectar fondos se verifican bytecode, mastercopy, Safe y permisos efectivos.
+12. **Lo que se comunica coincide con lo implementado.** Un límite fuera de cadena nunca se presenta como garantía en cadena.
 
 ## 3. Direcciones verificadas (Celo mainnet)
+
 | Qué | Dirección |
 |---|---|
 | wARS (18 dec) | `0x0DC4F92879B7670e5f4e4e6e3c801D229129D90D` |
@@ -40,104 +47,72 @@ Diseño completo: [plan-compra-colectiva.md](plan-compra-colectiva.md). Especifi
 | ERC-8004 Identity Registry | `0x8004A169FB4a3325136EB29fA0ceB6D2e539a432` |
 | ERC-8004 Reputation Registry | `0x8004BAa17C55a88189AE136b182e5fdA19dE9b63` |
 
-En el código, las direcciones se leen **siempre** de `tokens.ts` y `network.ts`; esta tabla es para leer, no para copiar.
+Safe y Zodiac: [plan técnico §2](plan-fondo-compartido.md#2-contratos-oficiales), con el estado de su verificación.
+
+En el código, las direcciones se leen **siempre** de `config/`; esta tabla es para leer, no para copiar.
 
 ## 4. Estado del repo
-Monorepo con npm workspaces: `packages/core` (el scaffold `stable-agent-latam` más el motor de la junta), `apps/bot` y `apps/web` (vacías). `apps/api` se suma como capa fina (HTTP, base y jobs) que importa del core.
-TypeScript + viem 2.57 + `@celo/attribution-tags@0.5.0` + zod + vitest. **131 tests en verde, sin red.**
 
-**Ya hecho** (en `packages/core/src/`):
-- `chain/tagged-sender.ts`: el único camino a la red.
-  1. Verifica chainId.
-  2. Agrega el tag al calldata.
-  3. Estima gas con `feeCurrency`.
-  4. Controla tope y saldo de gas.
-  5. Firma CIP-64.
-  6. **Parsea la tx firmada** y re-verifica tag, chainId, `feeCurrency` y destino.
-  7. En ensayo, devuelve la tx firmada; en real, la transmite, espera el recibo y la verifica con `verifyTx`.
-- `payments/pay.ts`: pago wARS de punta a punta, con política, chequeo de `symbol()`/`decimals()` on-chain y saldo.
-- `policy/engine.ts` (puro) + `policy/ledger.ts`: presupuesto diario en hora de Buenos Aires; reserva antes de transmitir.
-- `config/policy.ts`: límites congelados (wARS: $5.000 por pago, $20.000 por día, 20 pagos por día; gas ≤ 0,05 USD por tx).
-- `config/paths.ts`: `.env` y ledger únicos en la raíz del repo, para todas las apps y scripts.
-- `agent/tools.ts`: herramienta `pagar` para el LLM, con destinatario como enum de alias y zod `.strict()`.
-- `identity/erc8004.ts` + `packages/core/scripts/register-agent.ts`. `ramp/ripio.ts` arma links de `ramp.ripio.com`.
-- `junta/`: el motor. Reglas de la junta clásica, una obligación por miembro y ronda, pagos idempotentes por hash + índice de log, pagos tardíos, estado de ronda (cerrada por fecha y saldada), suspensión, compromisos por turno y buscador de órdenes de turno.
-- Scripts (se corren desde la raíz): `preflight`, `pago:primero` (1 wARS), `identidad:registrar`, `ramp:link`, `tx:verificar`.
+Monorepo con npm workspaces: `packages/core`, `apps/web`, `apps/bot` y `contracts`.
 
-El motor `junta/` y sus tests se conservan **en pausa por D11.7**; salen del recorrido de la demo. Los 131 tests son el estado registrado, no una validación del contrato de compra, que todavía falta crear.
+**Reutilizable y probado en mainnet:** `chain/tagged-sender.ts` (etiqueta y CIP-64), `attribution/`, `identity/` y la firma desde el celular con MetaMask (`apps/web/src/lib/firmar.ts`).
 
-**Falta (en orden, desde D12 todo a cargo de Maxi):** las puertas P0 a P6 de [control-entrega.md](../tareas/control-entrega.md).
-1. **P0, 2/11:** inscripción, código de atribución y `.env`.
-2. **P1, 3/11:** primer pago con `verifyTx`, registro ERC-8004 y spike: wARS, autorización exacta, `transferFrom`, etiqueta desde el celular y conciliación.
-3. **P2, 4/11:** `CompraColectiva` y fábrica, si pasa el spike; Foundry con fuzzing e invariantes; segunda revisión; pedidos de E1 enviados.
-4. **P3, 5/11:** módulo `compra/`, lector de eventos y web `/c/:slug`. E1 corta a las 12:00.
-5. **P4, 6/11:** despliegue en mainnet, agente con loop propio y bitácora pública (D13), y campaña del equipo con plata real.
-6. **P5, 7/11:** campaña chica con terceros bajo D11.5, cobro x402 probado o apagado (D13.3) y código congelado. Sin ofertas en E1, campaña del equipo con proveedor amigo; se declara en el pitch.
-7. **P6, 8/11:** evidencias, pitch, video y formulario; envío antes de las 20:00 ART. Cierre: 9/11, 09:00 GMT.
+**Existe, sin probar en este producto:** `policy/`, `ramp/ripio.ts` y la conexión de billetera en `apps/web`.
 
-Si falla el spike: compromisos y transferencias P2P directas registrados por el agente, sin ejecución atómica. Este plan B pierde la prueba del profesor; no se presenta como equivalente. Detalle en el [plan vigente](plan-compra-colectiva.md).
+**En pausa:** `compra/` y `contracts/` (compra colectiva, D16.1) y `junta/` (D11.7). Su evidencia en mainnet está en [`docs/pruebas/spike.md`](../pruebas/spike.md), y no prueba nada de Safe ni de Roles.
 
-Quién hace qué: [`docs/tareas/`](../tareas/README.md).
+**Por hacer:** todo `fondo/`, la web del fondo, el bot y el proceso de Vaqui. Orden y fechas en [control-entrega.md](../tareas/control-entrega.md).
 
-## 5. Reglas de negocio (implementar en código, con tests)
+## 5. Reglas de negocio
 
-### Campañas de compra colectiva (D11)
-- Solo bienes digitales y servicios para comunidades dev de Jujuy. Oferta escrita, voto de la comunidad y proveedor verificado antes de crear; el agente no elige proveedor.
-- Token, proveedor, precio unitario, mínimo y máximo de unidades, fecha límite, tope por comprador, cargo opcional y su destinatario, y lista acotada de compradores quedan fijados al crear. Fábrica y campañas sin admin ni actualizaciones.
-- Una unidad y una adhesión por comprador en el MVP. La fábrica fija **$ 5.000 por compromiso**, incluido cargo (D11.5); subirlo requiere nueva decisión. Montos en `bigint`, con 18 decimales.
-- Cada comprador firma `comprometer()` con `approve` exacto previo o `permit` en la misma tx. Nunca alcanza un `permit` fuera de cadena. La autorización no reserva fondos.
-- `cancelarCompromiso()` es irreversible para esa adhesión. Gastar saldo o revocar autorización no cancela; recargar puede volver a habilitar el cobro si no se canceló.
-- `ejecutar()` es pública, antes del límite y una sola vez: selección por orden inmutable de la lista hasta el máximo; solo se saltea cancelación o insuficiencia comprobada de saldo o autorización. Cualquier otro error del token revierte todo, incluido el cargo. La autorización insuficiente es la aclaración del pedido y del debate §1 sobre D11.4.
-- Transferencia directa comprador→proveedor y, si corresponde, al destinatario del cargo; el contrato no acumula aportes. Sin mínimo, no paga nadie. Estados: abierta, ejecutada y vencida; `vencer()` desde el límite, sin reembolsos porque no hubo depósito.
-- Foundry, `SafeERC20`, `nonReentrant`, segunda revisión (D12.3) y peor caso de gas medido antes de mainnet. El progreso informa compromisos con fondos **ahora**, no reservas ni entrega garantizada.
+Completas en [spec.md](spec.md) y [D16](decisiones.md). Las que más condicionan el código:
 
-### Juntas (en pausa, D11.7)
-- Se conserva el motor y sus tests. D10: junta clásica con cuota fija A, N miembros, **pozo = (N − 1) · A**; turnos acordados según cuánto puede adelantar cada miembro.
-- Obligaciones por miembro y ronda, pagos tardíos asignados a la deuda original, rondas superpuestas y revisión de pagos que no coinciden. Sin doble conteo.
-- D2: sin garantías ni compensación automática; el grupo decide continuar, suspender o terminar. Al suspender se anulan rondas futuras; la compensación queda en simulación.
-- Precio por turno y licitaciones siguen fuera, sujetos a revisión legal. Solo se muestra si sobra tiempo, sin usuarios reales; no integra la demo principal.
+- **Aprobar:** dos de tres responsables. Dos pueden reemplazar al tercero. Una propuesta pendiente por grupo, como límite de nuestro backend.
+- **Cancelar una propuesta:** reemplazo en cadena con el mismo `nonce`. Borrar un registro no cancela nada.
+- **Vaqui:** solo `transfer` de wARS a destinatarios definidos, con $ 5.000 por transferencia y $ 20.000 cada 30 días **en cadena**. Peor caso declarado: hasta dos presupuestos seguidos al cruzar la renovación.
+- **Pagos programados:** los aprueban dos responsables. La fecha la aplica el scheduler y no es una garantía en cadena.
+- **Saldos:** total en cadena, aportes identificados y fondos sin atribución. La cadena es la fuente de verdad.
+- **Cuotas:** son una expectativa. Sin cargos, multas ni expulsiones.
+- **Salida y disolución:** sin retiro automático. El reparto proporcional es una sugerencia.
+- **Límites operativos, no en cadena:** $ 5.000 por aporte desde la interfaz y objetivo de $ 100.000 por grupo.
+- **Rechazos de wARS:** no se esquivan y no se reintenta lo que no es transitorio.
 
 ## 6. Decisiones de producto tomadas
-- **Canal: Telegram + web por campaña.** WhatsApp limita a los asistentes de IA externos desde 01/2026; Zapia tuvo que salir de AR, CO y MX.
-- **Moneda inicial: wARS.** wBRL, wCOP y wMXN después.
-- **Alcance (D11.1–2): compra colectiva por intención**, solo digital y servicios. Juntas en pausa; bienes físicos, tesorerías y gastos compartidos fuera del MVP.
-- **Sin custodia (D11.3, reemplaza D7):** compromiso sin depósito y compra atómica; cobra directo de compradores al proveedor. El agente solo envía `ejecutar()` y registro ERC-8004, por `tagged-sender.ts`; nunca firma por un comprador. Sigue vigente el spike original.
-- **Aportes de personas ajenas al equipo (D11.5):** contrato con tests y revisión, montos chicos y riesgos explicados por escrito. No equivale a una exclusión regulatoria; las preguntas legales siguen abiertas.
-- **Nombre (D6 reabierta):** se recomienda cambiar el comercial por colisiones; se decide el **27/10**. Hasta entonces La Vaquita es nombre de trabajo. `@vaquita/*` no se renombra antes del 9/11.
+
+- **Producto (D16.1):** fondo compartido. Fuera: compras grupales, juntas, Splitwise completo, crédito, reputación, gobernanza general y rendimiento.
+- **Piloto (D16.2):** comunidades dev o web3. No es el nicho definitivo.
+- **Fondos (D16.19):** primero solo del equipo; después pocas personas invitadas, con su wallet y hasta $ 5.000.
+- **Canal:** Telegram + web. WhatsApp limita a los asistentes de IA externos desde 01/2026.
+- **Moneda:** wARS.
+- **Billetera (D15.2):** RainbowKit y WalletConnect, con Valora primero y MetaMask de respaldo técnico. La billetera invisible queda como aspiración.
+- **Nombres (D16.6):** La Vaquita y Vaqui. `@vaquita/*` no se renombra.
 - **Onboarding:** link de `ramp.ripio.com` con `country=AR&chain=42220&token=WARS&amount=…&address=…`.
 
 Las decisiones nuevas van en [`decisiones.md`](decisiones.md).
 
-## 7. Modelo de negocio (hipótesis)
-- **D11.8:** comisión del proveedor por la demanda acercada; hipótesis de **10–15% en digital**, a validar en E1.
-- **Alternativa:** cargo visible, opcional, fijado al crear la campaña e inmutable, con destinatario y total aceptados por los compradores.
-- No hay ingresos validados. Medir aceptación del proveedor y ahorro neto frente a compra directa. El abono por miembro y el precio por turno dejan de ser el modelo del MVP.
+## 7. Modelo de negocio
+
+Sin monetización en la primera versión y sin comisiones artificiales para el pitch (D16.17). Hipótesis futura: suscripción por grupo; falta saber quién pagaría y por qué. Se pregunta en las [entrevistas](../usuarios/guion-entrevistas.md).
 
 ## 8. Restricciones externas
-- **Leaderboard:** cuentan **firmantes independientes**, es decir, wallets ajenas, no fondeadas por nosotros y con actividad previa en Celo. Cada comprador **firma su propio `comprometer()` en cadena**, con tag, para contar como firmante independiente si cumple esos criterios. Firmar solo un `permit` fuera de cadena no alcanza; N wallets no prueban N personas. Según la [página oficial](https://www.loops.house/agents-on-open-rails), el puntaje mira a quien firma y autoriza, no solo a quien paga el gas, y un usuario nuevo en Celo no descalifica, aunque no cuente como independiente.
-- **Regulación AR:** no depositar fondos no excluye automáticamente transferencia o administración por cuenta de terceros. La consulta CNV, IGJ, consumo y entrega queda abierta; el [debate jurídico](../investigacion/la-vaquita-2/fast-track/debate-ronda-3.md#2-jurídico-mejor-argumento-ninguna-exclusión-automática) reemplaza la extrapolación anterior por pozos de juntas, sin afirmar una exención aplicable al producto.
-- **MiniPay no soporta wFIAT.** MetaMask ignora `feeCurrency`. Valora elige la moneda del gas por su cuenta. Billetera de la entrega: Valora, con MetaMask de respaldo técnico (D15.2).
-- **x402:** el facilitador de Celo acepta wARS, wBRL y wCOP vía Permit2. Esas tx no llevan tag; se informa la wallet PayTo. Se usa solo para el cargo del organizador, nunca para los compromisos (D13).
+
+- **Puntaje:** según la [página oficial](https://www.loops.house/agents-on-open-rails), se cuenta a quien firma y autoriza, no solo a quien paga el gas. Un usuario independiente es una wallet ajena, no fondeada por nosotros y con actividad en Celo previa al hackathon. Las wallets del equipo no cuentan. La página no menciona multifirmas. El track evalúa: mainnet con wFiat real, uso real de wFiat y de Celo, agente autónomo y útil, UX usable por una persona real, e impacto claro en LatAm.
+- **Regulación:** se evalúa antes de operar comercialmente, no en esta etapa (D16.18). No se afirma ninguna exención, y el pitch no promete evitar impuestos.
+- **Billeteras:** MiniPay no soporta wFIAT. MetaMask ignora `feeCurrency`. Valora elige la moneda del gas por su cuenta.
+- **wARS:** se puede pausar, tiene lista de bloqueo y Ripio lo puede actualizar.
 
 ## 9. Verificar antes de asumir
-- [x] ¿wARS implementa `permit` (EIP-2612)? El ABI verificado expone `permit`, pausa y lista de bloqueo, según [debate, ronda 3 §1](../investigacion/la-vaquita-2/fast-track/debate-ronda-3.md#1-técnico-atomicidad-no-garantiza-ejecución); el token es actualizable. Respondido a nivel de interfaz, no de funcionamiento real.
-- [ ] Probar `permit` en una transacción real. La firma real ya pasó en simulación.
-- [ ] ¿La etiqueta sobrevive en Valora con WalletConnect? Comprobar con `verifyTx` en mainnet.
-- [ ] ¿Valora muestra wARS y qué moneda usa para la comisión de una app externa?
-- [ ] ¿Cómo consigue moneda para la comisión quien solo cargó wARS por Ripio? Es el riesgo 1 de [spec.md](spec.md#10-riesgos-y-preguntas-abiertas).
-- [ ] ¿Cómo cobra y retira los pesos el comercio con `ramp.ripio.com/offramp`?
-- [ ] Parámetro `token` de ramp.ripio.com distinto de WARS.
+
+Lista completa y estados en el [plan técnico](plan-fondo-compartido.md). Lo principal:
+
+- [ ] Versiones oficiales de Safe y Roles en Celo: bytecode, mastercopy y checker.
+- [ ] `approveHash` y `execTransaction` con etiqueta en un Safe real.
+- [ ] Permisos de Roles y todas las pruebas negativas, incluido el cruce de la renovación.
+- [ ] ¿Cómo consigue moneda para la comisión quien solo cargó wARS por Ripio?
+- [ ] ¿Cómo cobra y retira pesos un destinatario?
+- [ ] Etiqueta, wARS y comisión en Valora con WalletConnect.
+- [ ] ¿Los grupos reales lo quieren en lugar de una cuenta común?
 
 ## 10. Índice de documentos
-En [`docs/investigacion/`](../investigacion/README.md):
-[01 hackathon](../investigacion/01-hackathon.md) · [02 requisitos](../investigacion/02-requisitos.md) ·
-[03 Celo](../investigacion/03-celo.md) · [04 Ripio y wFIAT](../investigacion/04-ripio-wfiat.md) ·
-[05 stack y recursos](../investigacion/05-stack-recursos.md) · [06 principios de diseño](../investigacion/06-principios-diseno.md) ·
-[07 prompt base](../investigacion/07-prompt-base.md) · [08 brainstorming](../investigacion/08-brainstorming.md) ·
-[09 próximos pasos](../investigacion/09-proximos-pasos.md) · [10 scaffold](../investigacion/10-scaffold-stable-agent.md) ·
-[11 ideas](../investigacion/11-ideas.md) · [12 Mesada](../investigacion/12-idea-mesada.md) ·
-[13 benchmark](../investigacion/13-vaquita-benchmark-y-mejoras.md) · [14 modelo de negocio](../investigacion/14-vaquita-modelo-de-negocio.md) ·
-[15 qué cambia + junta justa](../investigacion/15-que-cambia-con-la-vaquita.md) ·
-[La Vaquita 2: investigación y versiones](../investigacion/la-vaquita-2/README.md) (antecedentes; el alcance vigente es D11).
 
-En [`docs/proyecto/`](.): este resumen, [spec de la entrega](spec.md), [plan de compra colectiva (vigente)](plan-compra-colectiva.md), [stack](stack.md), [decisiones](decisiones.md), [plan del equipo](plan-del-equipo.md), [plan técnico](plan-tecnico.md), [repositorio y entrega](repositorio-y-entrega.md) y [plan de la junta con contrato de reglas (en pausa)](plan-junta-contrato.md). Los planes anteriores conservan su cuerpo como antecedente; sus avisos D11 indican qué sigue vigente.
+[`docs/README.md`](../README.md) tiene el mapa completo. Antecedentes: [spec de la compra colectiva](spec-compra-colectiva.md), [plan de la compra colectiva](plan-compra-colectiva.md), [plan de la junta](plan-junta-contrato.md) e [investigación](../investigacion/README.md). Investigación que llevó a D16: [relevamiento del 4/11](../miembros/maximiliano/relevamientos/2026-11-04-fondos-compartidos.md).

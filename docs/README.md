@@ -19,9 +19,13 @@ Se puede abrir como bóveda de Obsidian (abrir la carpeta `docs/` como vault). L
 
 | Archivo | Qué tiene |
 |---|---|
-| [proyecto/contexto.md](proyecto/contexto.md) | **Fuente de verdad (25/10):** compra colectiva por intención, reglas duras, direcciones, estado y juntas en pausa por D11 |
-| [proyecto/spec.md](proyecto/spec.md) | **Spec de la entrega (D15):** experiencia, arquitectura, cumplimiento, riesgos y plan |
-| [proyecto/plan-compra-colectiva.md](proyecto/plan-compra-colectiva.md) | **Plan vigente (D11):** contrato y fábrica, tests, core, agente, web, E1, cronograma y riesgos |
+| [`CONTEXT.md`](../CONTEXT.md) | **Glosario:** los términos del producto |
+| [proyecto/contexto.md](proyecto/contexto.md) | **Fuente de verdad (4/11, D16):** fondo compartido, reglas duras, direcciones y estado |
+| [proyecto/spec.md](proyecto/spec.md) | **Spec del producto (D16):** recorridos, garantías, saldos, privacidad y riesgos |
+| [proyecto/plan-fondo-compartido.md](proyecto/plan-fondo-compartido.md) | **Plan técnico (D16):** Safe, Roles, datos, lector y pruebas, con lo implementado, lo verificado y lo pendiente |
+| [usuarios/](usuarios/README.md) | Guion de entrevistas y resultados anonimizados |
+| [proyecto/spec-compra-colectiva.md](proyecto/spec-compra-colectiva.md) | **Antecedente (D15):** spec de la compra colectiva, en pausa |
+| [proyecto/plan-compra-colectiva.md](proyecto/plan-compra-colectiva.md) | **Antecedente (D11):** contrato y fábrica de la compra colectiva, en pausa por D16 |
 | [proyecto/plan-del-equipo.md](proyecto/plan-del-equipo.md) | **Antecedente v2 (21/10):** cronograma de juntas reemplazado por D11; reglas y entrega según aviso inicial |
 | [proyecto/plan-tecnico.md](proyecto/plan-tecnico.md) | **Antecedente v2:** motor de juntas en pausa; pipeline y reglas vigentes según aviso D11 |
 | [proyecto/plan-junta-contrato.md](proyecto/plan-junta-contrato.md) | **Antecedente v3 (22/10):** `JuntaReglas` reemplazado por `CompraColectiva`; spike original vigente |
