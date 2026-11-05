@@ -24,7 +24,7 @@ Estado: ✅ en uso · ⏳ pendiente de decidir.
 | 9 | Cliente de Celo | **viem** (tx CIP-64) | 2.57 | ✅ |
 | 10 | Atribución ERC-8021 | **@celo/attribution-tags** | 0.5.0 (fija) | ✅ |
 | 11 | Variables de entorno | **dotenv**, un solo `.env` en la raíz | 18.0 | ✅ |
-| 12 | Persistencia del fondo | **PostgreSQL administrado** (D16.30) | Proveedor y plan gratuito a verificar | ⏳ El ledger de gasto sigue en `data/` |
+| 12 | Persistencia del fondo | **PostgreSQL administrado** con `pg`; PGlite en tests (D16.30 y D16.35) | Se fijan al instalar. Neon, a verificar | ⏳ El ledger de gasto sigue en `data/` |
 
 ## Fondo compartido (D16)
 
@@ -32,7 +32,7 @@ Estado: ✅ en uso · ⏳ pendiente de decidir.
 |---|---|---|---|
 | Control compartido | **Safe** (`SafeL2`, fábrica y `CompatibilityFallbackHandler`), contratos oficiales | 1.4.1 | ⏳ Sin probar. Direcciones en el [plan](plan-fondo-compartido.md#2-contratos-oficiales) |
 | Permisos del agente | **Zodiac Roles** | **2.1.1**; 2.1.0 prohibida | ⏳ Sin probar |
-| Configuración de permisos | SDK de Roles, solo para generar y revisar | Se fija al instalar | ⏳ |
+| Configuración de permisos | **viem** con el ABI de 2.1.1, sin SDK (D16.34) | La del core | ⏳ |
 | Comprobación de módulos | **`@gnosis-guild/zodiac`** (`sanityCheckZodiacModuleAddress`) | 5.0.1, a confirmar al instalar | ⏳ |
 | Interacción con Safe | **viem**, sin SDK de Safe | La del core, fija | ⏳ |
 
@@ -57,8 +57,8 @@ Estado: ✅ en uso · ⏳ pendiente de decidir.
 
 | # | Pieza | Elección | Versión | Estado |
 |---|---|---|---|---|
-| 13 | Librería de Telegram | — | — | ⏳ |
-| 14 | LLM y SDK | — (las tools ya tienen el formato de tool use de la API de Claude) | — | ⏳ |
+| 13 | Librería de Telegram | **grammY** (D16.35) | Se fija al instalar | ⏳ |
+| 14 | LLM y SDK | **`@anthropic-ai/sdk`**, opcional, con `claude-haiku-5-5` (D16.35) | Se fija al instalar | ⏳ |
 | 15 | Hosting del bot | — | — | ⏳ |
 
 ## `apps/web`

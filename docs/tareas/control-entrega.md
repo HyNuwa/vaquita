@@ -3,7 +3,7 @@
 **Responsable único:** Maxi ([D12](../proyecto/decisiones.md)). **Última revisión:** miércoles 4/11/2026 ([D16](../proyecto/decisiones.md)).
 **Cierre oficial:** lunes 9/11, 09:00 GMT (06:00 ART). **Envío interno:** domingo 8/11 antes de las 20:00 ART.
 
-Este archivo manda sobre las fechas de cualquier otro plan. La lista de tareas está en [maximiliano.md](maximiliano.md). El estado de cada pieza técnica está en el [plan](../proyecto/plan-fondo-compartido.md).
+Este archivo manda sobre las fechas de cualquier otro plan. La lista de tareas está en [maximiliano.md](maximiliano.md). El estado de cada pieza técnica está en el [plan](../proyecto/plan-fondo-compartido.md). Las [specs](../proyecto/specs/README.md) detallan cómo se implementa cada cosa, y sus pasos humanos.
 
 ## Estado real al 4/11
 
@@ -14,7 +14,7 @@ Este archivo manda sobre las fechas de cualquier otro plan. La lista de tareas e
 | Identidad ERC-8004 | Hecha: Vaqui, `agentId` 10026 | `docs/pruebas/spike.md` |
 | Etiqueta y CIP-64 | Probados en mainnet con la wallet del agente | `docs/pruebas/spike.md` |
 | Etiqueta desde una billetera externa | Probada con MetaMask móvil; falta Valora | `docs/pruebas/spike.md` |
-| Safe y Roles | Direcciones con código en Celo; sin verificar bytecode ni probar | [Plan §2](../proyecto/plan-fondo-compartido.md#2-contratos-oficiales) |
+| Safe y Roles | Viabilidad vista en un fork con un script suelto; hashes comparados. Sin código del producto ni mainnet | [`fondo.md`](../pruebas/fondo.md) |
 | Wallet operativa de Vaqui | Sin crear | D16.25 |
 | Módulo `fondo/`, web del fondo, bot y proceso de Vaqui | Sin empezar | Plan §9 |
 | Base de datos | Sin elegir proveedor | D16.30 |

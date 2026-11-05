@@ -1,6 +1,6 @@
 # Plan técnico del fondo compartido
 
-**Decisión:** [D16](decisiones.md). **Producto:** [spec.md](spec.md). **Fechas:** [control-entrega.md](../tareas/control-entrega.md).
+**Decisión:** [D16](decisiones.md). **Producto:** [spec.md](spec.md). **Para implementar:** [specs/](specs/README.md), que mandan sobre este plan en el detalle. **Evidencia:** [fondo.md](../pruebas/fondo.md). **Fechas:** [control-entrega.md](../tareas/control-entrega.md).
 
 **Estados:** ✅ **Implementado** (hay código) · 🧪 **Verificado en fork** · ⛓️ **Verificado en mainnet** · ⏳ **Pendiente**. Una pieza solo cambia de estado con evidencia.
 
@@ -36,12 +36,12 @@ No se escribe un contrato de custodia. Las direcciones van a `packages/core/src/
 
 | Pieza | Dirección | Fuente | Estado |
 |---|---|---|---|
-| Roles 2.1.1 (mastercopy) | `0xF2964CE6161ce0e75964Fe7927cE114cb0B283D5` | [Seguridad de Zodiac](https://docs.zodiac.eco/developers/security) | ⏳ Tiene código en Celo (4/11); falta comparar el bytecode |
+| Roles 2.1.1 (mastercopy) | `0xF2964CE6161ce0e75964Fe7927cE114cb0B283D5` | [Seguridad de Zodiac](https://docs.zodiac.eco/developers/security) | ⏳ Hashes comparados el 4/11: [fondo.md](../pruebas/fondo.md). Sigue pendiente la verificación completa |
 | Fábrica de módulos 1.2.0 | `0x000000000000aDdB49795b0f9bA5BC298cDda236` | [`@gnosis-guild/zodiac` 5.0.1](https://unpkg.com/@gnosis-guild/zodiac@5.0.1/dist/cjs/contracts.js) | ⏳ Igual |
 | SafeL2 1.4.1 | `0x29fcB43b46531BcA003ddC8FCB67FFE91900C762` | [safe-deployments](https://github.com/safe-global/safe-deployments) | ⏳ Igual |
 | SafeProxyFactory 1.4.1 | `0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67` | safe-deployments | ⏳ Igual |
 | CompatibilityFallbackHandler 1.4.1 | `0xfd0732Dc9E303f09fCEf3a7388Ad10A83459Ec99` | safe-deployments | ⏳ Igual |
-| MultiSendCallOnly 1.4.1 | A tomar de safe-deployments | safe-deployments | ⏳ Sin consultar |
+| MultiSendCallOnly 1.4.1 | `0x9641d764fc13c8B624c04430C7356C1C7C8102e2` | safe-deployments | ⏳ Igual |
 
 **Nunca usar:** Roles 2.1.0 (`0x9646fDAD06d3e24444381f44362a3B0eB343D337`) ni Delay 1.1.0 (`0x01F8cabB808D7dE0dF4202D4B60C8310d2f1339b`). El core rechaza ambas, con un test. Delay 1.1.1 no se usa en esta versión (D16.23).
 
@@ -81,7 +81,7 @@ Flujo con un Safe real, a comprobar:
 
 **Puntos a probar:**
 - El sufijo de la etiqueta no rompe `execTransaction`, y se verifica por separado en cada transacción.
-- **Si la llamada interna falla, Safe puede emitir `ExecutionFailure` en una transacción exitosa y consumir el `nonce`.** La web no puede tomar "transacción exitosa" como "gasto hecho". `firmar.ts` confirma el envío; el resultado sale del evento.
+- **Si la llamada interna falla, con estos valores en cero la transacción revierte con `GS013` y no consume el `nonce`** (visto en fork). `ExecutionFailure` solo aparece con `safeTxGas` o `gasPrice` distintos de cero: la web no lo arma, pero alguien podría enviarlo por fuera, así que el lector lo contempla. `firmar.ts` confirma el envío; el resultado sale del evento.
 - Una aprobación queda en cadena para siempre: solo un reemplazo con el mismo `nonce` la invalida.
 - Una transacción de reemplazo vacía invalida la propuesta anterior.
 
@@ -102,9 +102,9 @@ Flujo con un Safe real, a comprobar:
 | Fecha del pago | Scheduler | **Fuera de cadena, no es garantía** | ⏳ |
 | Pausa | Nuestro servicio | **Fuera de cadena, no es garantía** | ⏳ |
 
-**A verificar:** cómo se expresa el tope por transferencia junto con `WithinAllowance`, y si la frecuencia se puede limitar en cadena en 2.1.1 (`CallWithinAllowance`). Si no se puede, "frecuencia" significa presupuesto cada 30 días, no cantidad de pagos.
+**Visto en fork:** el tope es un `LessThan` junto con `WithinAllowance` dentro de un `And`. "Frecuencia" significa presupuesto cada 30 días y tope por pago, no cantidad de pagos (D16.34). Condición exacta en [S2](specs/02-core-fondo.md).
 
-**Peor caso de una clave robada:** hasta $ 20.000 justo antes de la renovación y $ 20.000 justo después, en tandas de hasta $ 5.000, solo hacia destinatarios autorizados: **$ 40.000 por grupo**. Con una wallet para todos, el total es la suma de los grupos. Hay que confirmarlo con una prueba.
+**Peor caso de una clave robada:** hasta $ 20.000 justo antes de la renovación y $ 20.000 justo después, en tandas de hasta $ 5.000, solo hacia destinatarios autorizados: **$ 40.000 por grupo**, visto en fork. Con una wallet para todos, el total es la suma de los grupos.
 
 **Cambiar destinatarios o límites:** transacción Safe aprobada por dos responsables.
 
@@ -177,7 +177,7 @@ Solo después de la verificación del §2, con fondos del equipo y montos chicos
 | `approveHash` y `execTransaction`, con etiqueta en ambas | ⏳ | ⏳ |
 | Una sola firma no alcanza | ⏳ | ⏳ |
 | Cancelación con reemplazo del mismo `nonce` | ⏳ | ⏳ |
-| Llamada interna fallida (`ExecutionFailure`) | ⏳ | — |
+| Llamada interna fallida (`GS013`) | ⏳ | — |
 | Pago de Vaqui permitido, con CIP-64 y etiqueta | ⏳ | ⏳ |
 | Devolución | ⏳ | ⏳ |
 | Cambio de responsable | ⏳ | ⏳ |
@@ -210,7 +210,7 @@ La renovación se prueba en fork adelantando el tiempo: en mainnet habría que e
 
 | Pieza | Qué hace | Estado |
 |---|---|---|
-| `chain/tagged-sender.ts` | Envía con etiqueta y CIP-64 | ⛓️ Probado con pagos y contratos. ⏳ Falta admitir `execTransactionWithRole`, con su tope de gas |
+| `chain/tagged-sender.ts` | Envía con etiqueta y CIP-64 | ⛓️ Probado con pagos y contratos. ⏳ `execTransactionWithRole` entra en el tope de pagos según lo medido en fork; falta probarlo en mainnet |
 | `attribution/` y `tx:verificar` | Etiqueta y verificación | ⛓️ |
 | `apps/web/src/lib/firmar.ts` | Firma de la persona, y sus estados | ✅ Con MetaMask móvil ⛓️ en el caso feliz; fallos, Valora y `ExecutionFailure` ⏳ |
 | `identity/` | ERC-8004 | ⛓️ Vaqui, `agentId` 10026 |
@@ -228,7 +228,7 @@ La renovación se prueba en fork adelantando el tiempo: en mainnet habría que e
 | `apps/web` | Recorridos de la [spec](spec.md#5-recorridos) | ⏳ Hoy solo `/prueba-firma` |
 | `apps/bot` | Telegram | ⏳ |
 
-**Librerías:** viem para Safe. El SDK de Roles solo para generar y revisar la configuración de permisos. Versiones fijas, anotadas en [stack.md](stack.md).
+**Librerías:** viem para Safe y Roles, con el ABI de 2.1.1 fijo y sin el SDK de Roles (D16.34). Versiones fijas, anotadas en [stack.md](stack.md).
 
 ## 10. Pendientes externos
 

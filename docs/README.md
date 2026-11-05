@@ -22,6 +22,8 @@ Se puede abrir como bóveda de Obsidian (abrir la carpeta `docs/` como vault). L
 | [`CONTEXT.md`](../CONTEXT.md) | **Glosario:** los términos del producto |
 | [proyecto/contexto.md](proyecto/contexto.md) | **Fuente de verdad (4/11, D16):** fondo compartido, reglas duras, direcciones y estado |
 | [proyecto/spec.md](proyecto/spec.md) | **Spec del producto (D16):** recorridos, garantías, saldos, privacidad y riesgos |
+| [proyecto/specs/](proyecto/specs/README.md) | **Specs de implementación:** orden, criterios de aceptación, pasos humanos y comando para `/goal` |
+| [pruebas/fondo.md](pruebas/fondo.md) | Evidencia del fondo: qué se vio en fork, qué en mainnet y cuánto cuesta |
 | [proyecto/plan-fondo-compartido.md](proyecto/plan-fondo-compartido.md) | **Plan técnico (D16):** Safe, Roles, datos, lector y pruebas, con lo implementado, lo verificado y lo pendiente |
 | [usuarios/](usuarios/README.md) | Guion de entrevistas y resultados anonimizados |
 | [proyecto/spec-compra-colectiva.md](proyecto/spec-compra-colectiva.md) | **Antecedente (D15):** spec de la compra colectiva, en pausa |

@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-04 · docs(docs): add implementation specs for shared fund
+- **Qué hice:** specs ejecutables de S1 a S8, con criterios de aceptación, pasos humanos y comando para `/goal`. Probé la viabilidad en un fork con un script suelto: sirvió para corregir `GS013`, descartar CIP-64 en anvil y el SDK de Roles. Nada corrió en mainnet.
+- **Archivos clave:** `docs/proyecto/specs/`, `docs/pruebas/fondo.md`, `docs/pruebas/spike-fondo-fork.cjs`, `docs/proyecto/decisiones.md` (D16.34 a D16.37).
+- **Próximo paso:** mergear y lanzar `/goal`. La revisión independiente de las specs no llegó a correr.
+
 ## 2026-11-04 · docs(docs): pivot product to shared fund with verifiable rules
 - **Qué hice:** registré D16 tras tres rondas de decisiones: fondo compartido con Safe 2 de 3, Zodiac Roles 2.1.1 y Vaqui con límites en cadena. Compra colectiva y x402 en pausa. Reescribí spec, contexto, reglas y puertas; sumé el plan técnico con estados, el glosario y el guion de entrevistas.
 - **Archivos clave:** `docs/proyecto/decisiones.md`, `docs/proyecto/spec.md`, `docs/proyecto/plan-fondo-compartido.md`, `docs/tareas/control-entrega.md`, `AGENTS.md`, `CONTEXT.md`.

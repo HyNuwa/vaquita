@@ -3,12 +3,12 @@
 **Última actualización:** 2026-11-04
 
 ## En qué estoy
-El producto cambió ([D16](../../proyecto/decisiones.md)): La Vaquita pasa a ser un fondo compartido con reglas, sobre Safe y Zodiac Roles, con Vaqui ejecutando dentro de límites en cadena. La compra colectiva queda en pausa, con su código y su evidencia. Las decisiones están cerradas y la documentación, reescrita. Nada del fondo está implementado todavía.
+El producto cambió ([D16](../../proyecto/decisiones.md)): La Vaquita pasa a ser un fondo compartido con reglas, sobre Safe y Zodiac Roles, con Vaqui ejecutando dentro de límites en cadena. La compra colectiva queda en pausa, con su código y su evidencia. Las decisiones están cerradas y la documentación, reescrita. Nada del fondo está implementado todavía: hay [specs de implementación](../../proyecto/specs/README.md) y una prueba de viabilidad en fork, con un script suelto ([evidencia](../../pruebas/fondo.md)).
 
 Control: [`control-entrega.md`](../../tareas/control-entrega.md). Producto: [`spec.md`](../../proyecto/spec.md). Plan y estado de cada pieza: [`plan-fondo-compartido.md`](../../proyecto/plan-fondo-compartido.md).
 
 ## Próximo paso
-P2, miércoles 4/11: verificación oficial de Safe y Roles en Celo, wallet operativa de Vaqui y permisos de Roles con sus pruebas negativas en un fork local.
+Mergear el PR de las specs y lanzar `/goal` con el comando de [specs/README.md](../../proyecto/specs/README.md). En paralelo, los [pasos humanos](../../proyecto/specs/09-pasos-humanos.md) A1 a A6.
 
 ## Bloqueos
 - Falta confirmar si Esteban y Daniel aceptan ser responsables. Si no, el piloto es una simulación (D16.20).

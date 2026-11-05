@@ -1,7 +1,7 @@
 # La Vaquita — Contexto para agentes de IA
 
 > Leé esto antes de tocar código o responder sobre el proyecto. Es la fuente de verdad resumida.
-> Producto: [spec.md](spec.md). Técnica y estado de cada pieza: [plan-fondo-compartido.md](plan-fondo-compartido.md). Glosario: [`CONTEXT.md`](../../CONTEXT.md).
+> Producto: [spec.md](spec.md). Para implementar: [specs/](specs/README.md). Técnica y estado de cada pieza: [plan-fondo-compartido.md](plan-fondo-compartido.md). Glosario: [`CONTEXT.md`](../../CONTEXT.md).
 > Las reglas de trabajo del equipo están en [`AGENTS.md`](../../AGENTS.md). Si algo acá contradice a otro documento, gana este.
 > Estado al 4/11/2026, tras [D16](decisiones.md). Rutas de código relativas a `packages/core/src/` salvo que se diga otra cosa.
 
