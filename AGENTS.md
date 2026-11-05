@@ -2,7 +2,7 @@
 
 Mandatory rules for every AI coding agent (Claude Code, Codex, Cursor, Devin, GitHub Copilot, Gemini, Windsurf, etc.) and every human working on this repository. If anything here conflicts with your defaults, these rules win.
 
-La Vaquita (working name, see D6 in `docs/proyecto/decisiones.md`) is an AI agent that turns communities into collective buyers: members post a shared need, the agent gets providers to compete with quotes, and the purchase executes atomically in digital pesos (wARS by Ripio) on Celo mainnet without the platform ever holding the money (decision D11, 2026-10-25; the junta engine stays in the repo but is paused). Maximiliano owns all delivery work, with Esteban and Daniel as optional collaborators (decision D12), for the **Agents on Open Rails** hackathon (Celo × Ripio), Track 1. **Deadline: Monday 2026-11-09, 09:00 GMT (06:00 ART).** Product context: [`docs/proyecto/contexto.md`](docs/proyecto/contexto.md) — read it before touching code.
+La Vaquita is a platform where groups and communities manage shared money through verifiable rules, without depending on one person (decision D16, 2026-11-04). A Safe holds each group's fund in digital pesos (wARS by Ripio) on Celo mainnet, three responsables approve with two signatures, and the agent Vaqui automates payments within limits enforced on-chain by Zodiac Roles. The collective purchase (D11) and the junta engine stay in the repo but are paused. Maximiliano owns all delivery work, with Esteban and Daniel as optional collaborators (decision D12), for the **Agents on Open Rails** hackathon (Celo × Ripio), Track 1. **Deadline: Monday 2026-11-09, 09:00 GMT (06:00 ART).** Product context: [`docs/proyecto/contexto.md`](docs/proyecto/contexto.md) — read it before touching code.
 
 ## 0. Repository layout (monorepo)
 
@@ -10,14 +10,15 @@ One repo, npm workspaces. Code, docs and rules change together in one commit and
 
 | Path | Package | Content |
 |---|---|---|
-| `packages/core/` | `@vaquita/core` | Tx pipeline, policy, payments, identity, ramp, collective-purchase rules (`compra/`), junta engine (paused). **The only package that talks to Celo.** |
-| `contracts/` | — | `CompraColectiva` and its factory (Solidity + Foundry). Opens only after the D7/D11 spike passes |
+| `packages/core/` | `@vaquita/core` | Tx pipeline, policy, payments, identity, ramp, shared fund (`fondo/`), and the paused `compra/` and `junta/`. **The only package that talks to Celo.** |
+| `contracts/` | — | `CompraColectiva` and its factory (Solidity + Foundry), paused by D16. The fund uses official Safe and Zodiac contracts, not custom custody |
 | `apps/bot/` | `@vaquita/bot` | Telegram bot + LLM loop with tool use |
-| `apps/web/` | `@vaquita/web` | Campaign page per community. Members commit or cancel by signing, in their own wallet, a transaction the core built |
+| `apps/web/` | `@vaquita/web` | Group fund page. People contribute and approve by signing, in their own wallet, a transaction the core built |
 | `docs/` | — | Team second brain, in Spanish |
 | `.githooks/`, `.github/` | — | Git hooks, CI and PR template |
 | `.agents/skills/` | — | Agent skills, one copy for every tool |
 
+- Domain language lives in [`CONTEXT.md`](CONTEXT.md). Use its terms.
 - Apps import from the core by subpath: `import { pay } from "@vaquita/core/payments/pay"`. Apps never import `viem` wallet clients or build transactions themselves.
 - `.env` and `data/` (the spend ledger) live **only at the repo root** and are shared by every app and script (`packages/core/src/config/paths.ts`). Never create a second ledger: the daily budget would be spendable twice.
 - **Skills** live only in `.agents/skills/`. `.claude/skills`, `.devin/skills` and `.windsurf/skills` are local links that `npm install` creates (`.agents/link-skills.mjs`); they are gitignored and CI fails if files are committed there. Add or edit skills in `.agents/skills/`.
@@ -26,7 +27,7 @@ One repo, npm workspaces. Code, docs and rules change together in one commit and
 ## 1. Language
 
 - **English:** commit messages, branch names, PR titles and descriptions, issues, identifiers in new code, README and config files.
-- **Spanish:** everything in `docs/`, and **all user-facing text** (bot messages, web page, error messages shown to users) in Rioplatense Spanish. LLM tool names are Spanish too (`pagar`, `estado`, `cobrar`) because the agent operates in Spanish.
+- **Spanish:** everything in `docs/`, and **all user-facing text** (bot messages, web page, error messages shown to users) in Rioplatense Spanish. LLM tool names are Spanish too (`estado`, `preparar_propuesta`) because the agent operates in Spanish.
 - **Code comments** follow the file you are in: the scaffold in `packages/core` is commented in Spanish; keep it that way there. Don't mass-translate.
 - If the user talks to you in Spanish, reply in Spanish.
 
@@ -103,11 +104,13 @@ Full context in [`docs/proyecto/contexto.md`](docs/proyecto/contexto.md) section
 
 1. **Celo mainnet only** (chainId 42220). Testnet only in local tests.
 2. **Real Ripio wFIAT.** Token addresses come from `packages/core/src/config/tokens.ts`. **Never** invent or type an address from memory.
-3. **Every tx we send carries the ERC-8021 tag** (`ATTRIBUTION_CODE`). Without it the tx is not broadcast. Exception (D13.3): x402 settlements are sent by the facilitator, so they carry no tag and we declare the PayTo wallet.
-4. **ERC-8004 identity** registered from the agent wallet before 2026-11-09.
-5. **Gas in stablecoin** via fee abstraction (CIP-64, `feeCurrency` = USDC adapter) for the agent wallet. wARS is not a fee currency. Buyers pay from their own wallet (D15.4).
-6. **The LLM proposes, the code decides.** Caps, budgets, recipients, campaign rules (quota, buyer selection, per-buyer cap, when to execute), pot amounts, turn order and late-payment rules are deterministic code. The LLM never picks the provider: the community votes. The LLM never sees addresses, only aliases.
+3. **Every tx we send carries the ERC-8021 tag** (`ATTRIBUTION_CODE`). Without it the tx is not broadcast. x402 is paused (D16.17); if it comes back, its settlements are sent by the facilitator, carry no tag, and we declare the PayTo wallet (D13.3).
+4. **ERC-8004 identity** registered from the agent wallet before 2026-11-09. Done: Vaqui, `agentId` 10026. Fund operations leave from a separate operating wallet (D16.25).
+5. **Gas in stablecoin** via fee abstraction (CIP-64, `feeCurrency` = USDC adapter) for the agent wallet. wARS is not a fee currency. People pay from their own wallet (D15.4).
+6. **The LLM proposes, the code decides.** Caps, budgets, recipients, scheduled payments and fund rules are deterministic code, and the agent's limits are enforced on-chain by Zodiac Roles (D16.29). The LLM analyzes and explains; it never picks a recipient or an amount, never pays through a tool, and never sees addresses or keys.
 7. **Dry-run by default.** Real money only with `LIVE_PAYMENTS=si-muevo-plata-real`.
-8. **Keys only in `.env`**, never in the repo, in logs or in docs. The `pre-commit` hook and CI scan every diff for keys and tokens. If a key is ever pushed, treat it as leaked: move the funds and rotate it; deleting the commit is not enough.
-9. **Tests before mainnet.** Every tx goes through `packages/core/src/chain/tagged-sender.ts`; never call `sendTransaction` or `writeContract` directly (CI blocks it outside `packages/core/src/chain/`). Only exception (D15.5, enabled in the CI guard): buyer signatures in `apps/web/src/lib/firmar.ts`, sending the transaction the core built. Tests never touch the network.
-10. **UX for non-crypto users.** Amounts in local currency (`$ 1.234,50`); no "wei", "gas", "calldata" or addresses in user messages.
+8. **Keys only in `.env` or runtime secrets**, never in the repo, in the frontend, in logs or in docs. The `pre-commit` hook and CI scan every diff for keys and tokens. If a key is ever pushed, treat it as leaked: move the funds and rotate it; deleting the commit is not enough.
+9. **Tests before mainnet.** Every tx goes through `packages/core/src/chain/tagged-sender.ts`; never call `sendTransaction` or `writeContract` directly (CI blocks it outside `packages/core/src/chain/`). Only exception (D15.5, enabled in the CI guard): the signatures of people in `apps/web/src/lib/firmar.ts`, sending the transaction the core built. CI tests never touch the network; mainnet-fork and controlled mainnet tests stay outside CI (D16.33).
+10. **UX for non-crypto users.** Amounts in local currency (`$ 1.234,50`); no "wei", "gas", "calldata", "Safe" or addresses in user messages.
+11. **Only patched Zodiac versions.** Roles 2.1.0 and Delay 1.1.0 are forbidden. Before connecting funds, verify bytecode, mastercopy, Safe configuration and effective permissions (D16.24).
+12. **Claims match the implementation.** Never present an off-chain limit as an on-chain guarantee. What we can and cannot say is in `docs/proyecto/spec.md` section 6.

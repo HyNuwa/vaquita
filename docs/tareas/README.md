@@ -2,7 +2,7 @@
 
 **Desde el 1/11, todas las tareas son de Maxi** ([D12](../proyecto/decisiones.md)). Fechas, puertas y recortes: [control-entrega.md](control-entrega.md). Lista completa: [maximiliano.md](maximiliano.md).
 
-Plan de producto vigente: [compra colectiva por intención](../proyecto/plan-compra-colectiva.md), según [D11](../proyecto/decisiones.md) y [D13](../proyecto/decisiones.md). El cronograma de juntas sigue en pausa.
+Producto vigente: [fondo compartido](../proyecto/spec.md), con su [plan técnico](../proyecto/plan-fondo-compartido.md), según [D16](../proyecto/decisiones.md). La compra colectiva y las juntas quedan en pausa.
 
 ## Quién coordina
 
@@ -15,8 +15,8 @@ Los PR no necesitan aprobación: cada uno mergea el suyo con la CI en verde. Lo 
 | Área | Paths | Responsable |
 |---|---|---|
 | **Cadena y pagos** | `packages/core/src/chain/`, `identity/`, `payments/`, `config/`, `packages/core/scripts/` | Maxi |
-| **Contratos de compra** | `contracts/` (condicionado al spike, D11.4) | Maxi |
-| **Compra colectiva** | `packages/core/src/compra/` (a crear) | Maxi |
+| **Fondo compartido** | `packages/core/src/fondo/` (a crear) | Maxi |
+| **Compra colectiva (en pausa)** | `contracts/`, `packages/core/src/compra/` | Maxi |
 | **Motor de la junta (en pausa)** y política | `packages/core/src/junta/`, `policy/` | Maxi |
 | **Bot y agente** | `apps/bot/`, `packages/core/src/agent/` | Maxi |
 | **Web, producto y entrega** | `apps/web/`, `packages/core/src/ramp/`, `docs/entrega/`, `docs/usuarios/` | Maxi |

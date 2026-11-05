@@ -24,9 +24,19 @@ Estado: ✅ en uso · ⏳ pendiente de decidir.
 | 9 | Cliente de Celo | **viem** (tx CIP-64) | 2.57 | ✅ |
 | 10 | Atribución ERC-8021 | **@celo/attribution-tags** | 0.5.0 (fija) | ✅ |
 | 11 | Variables de entorno | **dotenv**, un solo `.env` en la raíz | 18.0 | ✅ |
-| 12 | Persistencia del motor (vaquitas, rondas, aportes) | — | — | ⏳ Hoy el ledger es un JSON en `data/` |
+| 12 | Persistencia del fondo | **PostgreSQL administrado** con `pg`; PGlite en tests (D16.30 y D16.35) | Se fijan al instalar. Neon, a verificar | ⏳ El ledger de gasto sigue en `data/` |
 
-## `contracts/`
+## Fondo compartido (D16)
+
+| Pieza | Elección | Versión | Estado |
+|---|---|---|---|
+| Control compartido | **Safe** (`SafeL2`, fábrica y `CompatibilityFallbackHandler`), contratos oficiales | 1.4.1 | ⏳ Sin probar. Direcciones en el [plan](plan-fondo-compartido.md#2-contratos-oficiales) |
+| Permisos del agente | **Zodiac Roles** | **2.1.1**; 2.1.0 prohibida | ⏳ Sin probar |
+| Configuración de permisos | **viem** con el ABI de 2.1.1, sin SDK (D16.34) | La del core | ⏳ |
+| Comprobación de módulos | **`@gnosis-guild/zodiac`** (`sanityCheckZodiacModuleAddress`) | 5.0.1, a confirmar al instalar | ⏳ |
+| Interacción con Safe | **viem**, sin SDK de Safe | La del core, fija | ⏳ |
+
+## `contracts/` (en pausa por D16)
 
 | Pieza | Elección | Versión | Estado |
 |---|---|---|---|
@@ -39,7 +49,7 @@ Estado: ✅ en uso · ⏳ pendiente de decidir.
 
 | Pieza | Elección | Versión | Estado |
 |---|---|---|---|
-| Vendedor y comprador x402 | **`@x402/*`** (`core`, `evm`, middleware del servidor y `fetch`) | v2; se fija al instalar | ⏳ Detrás de `X402_ENABLED`, sujeto a D8 |
+| Vendedor y comprador x402 | **`@x402/*`** (`core`, `evm`, middleware del servidor y `fetch`) | v2; se fija al instalar | ⏸️ En pausa por D16.17 |
 
 `@celo/buy` no se instala salvo una decisión nueva (D13.5).
 
@@ -47,8 +57,8 @@ Estado: ✅ en uso · ⏳ pendiente de decidir.
 
 | # | Pieza | Elección | Versión | Estado |
 |---|---|---|---|---|
-| 13 | Librería de Telegram | — | — | ⏳ |
-| 14 | LLM y SDK | — (las tools ya tienen el formato de tool use de la API de Claude) | — | ⏳ |
+| 13 | Librería de Telegram | **grammY** (D16.35) | Se fija al instalar | ⏳ |
+| 14 | LLM y SDK | **`@anthropic-ai/sdk`**, opcional, con `claude-haiku-5-5` (D16.35) | Se fija al instalar | ⏳ |
 | 15 | Hosting del bot | — | — | ⏳ |
 
 ## `apps/web`
@@ -57,6 +67,6 @@ Estado: ✅ en uso · ⏳ pendiente de decidir.
 |---|---|---|---|---|
 | 16 | Framework | **Next.js** (D15.8) | 15.5.28 | ✅ |
 | 17 | Hosting | **Vercel** (D5); tiene que servir `agent.json` por HTTPS para ERC-8004 | — | ⏳ Sin desplegar |
-| 18 | Billetera del comprador | **RainbowKit, wagmi, viem y WalletConnect**; Valora primero, MetaMask de respaldo (D15.2) | RainbowKit 2.2.11, wagmi 2.19.5, viem 2.57.7 | ✅ Probada con MetaMask móvil |
+| 18 | Billetera de las personas | **RainbowKit, wagmi, viem y WalletConnect**; Valora primero, MetaMask de respaldo (D15.2) | RainbowKit 2.2.11, wagmi 2.19.5, viem 2.57.7 | ✅ Probada con MetaMask móvil |
 | 19 | TypeScript de la web | **5.9**, solo en `apps/web`: Next 15 rechaza TypeScript 7 | 5.9.3 | ✅ El resto del repo sigue en 7 |
 | 20 | QR de RainbowKit | **`qr` fijo y `cuer`**, con `overrides` en la raíz: `qr` 0.6 o mayor rechaza el borde en 0 que pide `cuer` y rompe el QR | qr 0.5.5, cuer 0.0.3 | ✅ |

@@ -4,6 +4,80 @@ Una entrada por decisión, la más nueva arriba. Formato: fecha · decisión · 
 
 Las decisiones de producto previas al repo (canal Telegram, wARS, junta justa, custodia, onboarding) están en [contexto.md](contexto.md#6-decisiones-de-producto-tomadas).
 
+## 2026-11-04 · D16: el producto pasa a ser un fondo compartido con reglas · Maximiliano
+**Por qué:** el producto estaba apuntado de forma amplia y nadie había pedido comprar en grupo: E1 venció sin evidencia y no hay datos de ahorro. La [investigación del 4/11](../miembros/maximiliano/relevamientos/2026-11-04-fondos-compartidos.md) indica que los grupos con una relación financiera continua tienen más potencial que las colectas ocasionales. Es una señal, no una validación: la demanda en Argentina con wARS sigue sin probarse.
+
+**Tesis:** La Vaquita permite que grupos y comunidades administren dinero compartido mediante reglas transparentes, sin depender de una sola persona. Safe establece el control compartido, Zodiac limita lo que puede hacer el agente y Vaqui automatiza operaciones autorizadas.
+
+Detalle: [spec.md](spec.md) y [plan-fondo-compartido.md](plan-fondo-compartido.md). Glosario: [`CONTEXT.md`](../../CONTEXT.md).
+
+### Producto
+
+| # | Decisión | Condición o consecuencia |
+|---|---|---|
+| D16.1 · Producto | **Fondo compartido del grupo.** La compra colectiva queda en pausa, sin borrar código ni contratos. Puede volver como módulo de pagos colectivos condicionados | Fuera: Splitwise completo, juntas, compras grupales, crédito, reputación, gobernanza general y rendimiento DeFi |
+| D16.2 · Primer grupo | Comunidades dev o web3 con aportes periódicos, como **piloto** | **No es el nicho comercial definitivo:** ese se decide con evidencia, no por facilidad técnica |
+| D16.3 · Alcance | Crear un grupo, registrar integrantes y responsables, aportar wARS, ver saldo e historial, proponer y aprobar gastos, configurar límites del agente, cambiar responsables y revocar al agente | Cuotas opcionales y pagos programados incluidos (D16.7 y D16.8) |
+| D16.4 · Aprobación | Tres responsables, dos firmas. Dos pueden reemplazar al tercero | **Se puede decir** que ningún responsable controla el fondo solo. **No se puede decir** que los integrantes están protegidos contra dos responsables de acuerdo: la transparencia permite detectar, no impedir |
+| D16.5 · Agente | Vaqui paga solo a destinatarios autorizados y dentro de límites en cadena. Si una operación los excede, prepara una propuesta. Nunca es responsable ni dueño del fondo. El LLM analiza y explica; no elige destinatarios ni accede a claves | Autonomía útil, verificable y revocable |
+| D16.6 · Nombres | Producto: La Vaquita. Agente: Vaqui, con su identidad ERC-8004. Interfaz: grupo, fondo del grupo, integrantes y responsables | Safe, tesorería y Zodiac son arquitectura, no términos para la persona |
+| D16.7 · Cuotas | Opcionales. Se calculan los aportes esperados, se muestra quién está al día y se envían recordatorios. Sin cargos automáticos, multas ni expulsiones | Una cuota pendiente no es plata disponible |
+| D16.8 · Pagos programados | Destinatario, token, importe, fecha, periodicidad y estado. Crearlos o modificarlos requiere la aprobación verificable de dos responsables. Vaqui solo ejecuta los aprobados | La fecha la aplica el scheduler: **no se presenta como garantía en cadena** |
+| D16.9 · Salida | Antes de aportar, cada integrante acepta que es un aporte al grupo, no un ahorro individual. Sin retiro automático: puede irse y pedir una devolución, que se aprueba como cualquier gasto | El historial en cadena sigue; la aplicación deja de asociar públicamente su nombre |
+| D16.10 · Disolución | Se detienen los pagos programados, se revoca a Vaqui en cadena, se identifican obligaciones, se prepara el reparto y dos responsables lo aprueban | El reparto proporcional es una sugerencia. No se afirma un reparto garantizado. Reglas pactadas antes de aportar: a investigar para el producto definitivo |
+| D16.11 · Recuperación | Sin llave de rescate de La Vaquita. Perder dos wallets responsables puede trabar el fondo para siempre, y se avisa al crear el grupo | Mecanismos adicionales: a evaluar |
+| D16.12 · Pausa y revocación | La pausa solo detiene nuestro servicio; la revocación quita el permiso en cadena. **No se presentan como equivalentes** | Una clave robada debe tener un alcance económico chico |
+| D16.13 · Emisor de wARS | No se esquivan las restricciones de Ripio. Ante un rechazo: se muestra el fallo, se identifica el estado, se avisa al grupo y se frenan los reintentos si no es transitorio | Vaqui no gasta gas repitiendo lo que el token rechaza |
+| D16.14 · Entrada y salida de pesos | Ripio Ramp para entrar. La comisión se muestra antes de firmar. El destinatario cobra en su wallet y retira con un mecanismo compatible | Hipótesis pendiente de prueba punta a punta. Sin promesas de pago a QR ni conversión instantánea |
+| D16.15 · Privacidad | Datos personales, comprobantes y descripciones quedan fuera de cadena, con acceso por firma de wallet. Vínculo con Telegram por desafío único y con vencimiento. Lo público se limita a lo indispensable | Una dirección no es anónima: no se publican alias que permitan relacionar a una persona con sus movimientos |
+| D16.16 · Tres saldos | Saldo total en cadena, aportes identificados y fondos sin atribución. La cadena es la fuente de verdad | Lo no identificado no se asigna ni cuenta como cuota |
+| D16.17 · Ingresos | Sin monetización en la primera versión y sin comisiones artificiales para el pitch. Hipótesis futura: suscripción por grupo, a validar quién paga y por qué | x402 en pausa (D13.3 y D13.4). El agente no cobra |
+
+### Piloto y riesgo
+
+| # | Decisión | Condición o consecuencia |
+|---|---|---|
+| D16.18 · Etapa | Es un prototipo de hackathon. Las dudas sobre una formalización futura no bloquean experimentar. Antes de operar comercialmente se hace una evaluación regulatoria y de seguridad más profunda | Se comunica como prototipo experimental. Las garantías que se comunican tienen que coincidir con lo implementado |
+| D16.19 · Fondos del piloto | Primero, solo fondos propios del equipo y montos chicos, hasta que funcione el recorrido de aporte, gasto y devolución | Después, pocas personas invitadas con su propia wallet, hasta **$ 5.000** cada una, sin registro abierto. Antes tienen que saber que es un prototipo, quién controla el fondo, que el aporte no es automáticamente reembolsable y cuáles son los riesgos |
+| D16.20 · Responsables del piloto | Tres personas independientes: Maxi, Esteban y Daniel, si aceptan | Si no, es una simulación y se documenta como tal, sin afirmar control distribuido entre personas reales |
+| D16.21 · Límites | wARS, $ 5.000 por aporte desde la interfaz y un objetivo de $ 100.000 por grupo | Ambos son operativos, **no** restricciones en cadena: se pueden eludir transfiriendo directo |
+| D16.22 · Validación | Cinco entrevistas con organizadores reales y un piloto funcional. Resultados positivos y negativos en `docs/usuarios/`, anonimizados | Sin datos personales ni direcciones vinculadas a identidades sin consentimiento |
+| D16.23 · Próxima mejora | Investigar una demora verificable para operaciones extraordinarias, con cancelación real | Un Delay aplicado al agente no limita las transacciones que firman los responsables en el Safe: hay que comprobar qué cubre |
+
+### Técnica
+
+| # | Decisión | Condición o consecuencia |
+|---|---|---|
+| D16.24 · Custodia | **Safe 1.4.1 L2 con Zodiac Roles 2.1.1.** Sin contrato propio de custodia | Roles 2.1.0 y Delay 1.1.0 **no se usan** (incidente de junio de 2026). Antes de conectar fondos: bytecode, mastercopy real de cada módulo y [checker oficial](https://docs.zodiac.eco/developers/security). No alcanza con que haya código en una dirección. Si las pruebas fallan, se vuelve a decidir |
+| D16.25 · Wallet de Vaqui | Una wallet operativa **exclusiva**, separada de la identidad ERC-8004 (`0x1F1C…4170`). Su clave solo en secretos del entorno de ejecución | Una sola para el piloto; antes de sumar grupos se revisa el riesgo agregado y aislar claves por tesorería. Falta verificar cómo la toma la inscripción del hackathon |
+| D16.26 · Crear un grupo | 1) Crear el Safe 2 de 3. 2) Desplegar y verificar Roles 2.1.1. 3) Habilitar Roles y configurar permisos con una operación aprobada por dos responsables | El creador puede pagar el despliegue, pero **no activa solo permisos financieros**. No se aceptan aportes hasta comprobar la configuración |
+| D16.27 · Aprobaciones | `approveHash` para la primera y `execTransaction` del segundo responsable, con firmas preaprobadas | Las dos llevan ERC-8021 y se verifican por separado, con un Safe real |
+| D16.28 · Propuestas | Una pendiente por grupo: **es un límite de nuestro backend, no de Safe**. Cancelar es ejecutar un reemplazo con el mismo `nonce`, aprobado por el umbral | Borrar un registro no cancela una autorización en cadena. Siempre se comprueba el `nonce` actual antes de proponer o ejecutar |
+| D16.29 · Permisos de Vaqui | Solo `transfer` de wARS a destinatarios definidos, con **$ 5.000 por transferencia y $ 20.000 cada 30 días en cadena** y aplicados en conjunto. Sin `delegatecall`, `approve`, llamadas genéricas ni contratos arbitrarios | Peor caso documentado: hasta dos presupuestos seguidos al cruzar la renovación, a verificar con pruebas. `config/policy.ts` sigue como segunda protección y no reemplaza a Roles |
+| D16.30 · Datos | PostgreSQL administrado, con el plan gratuito a verificar | Escrituras idempotentes y un solo ejecutor por pago. Saldo y transferencias se verifican contra la cadena |
+| D16.31 · Lector | Indexador propio con cursor persistente: eventos de Safe, ejecuciones por Roles, transferencias de wARS y cambios de responsables y permisos | Deduplicación, recuperación tras caídas y reorganizaciones. No se asume que todos los aportes pasan por la aplicación |
+| D16.32 · Código | Módulo `packages/core/src/fondo/`. `compra/` queda en pausa. Versiones fijas de Safe, Zodiac y viem. Direcciones oficiales centralizadas y validadas por red | Se siguen usando `tagged-sender.ts` y `firmar.ts` cuando sean compatibles |
+| D16.33 · Pruebas | CI sin red, fork local de mainnet y pruebas controladas en mainnet. Todas las negativas se simulan y al menos un rechazo controlado se envía a mainnet | Detalle en el [plan](plan-fondo-compartido.md#8-pruebas). Cada pieza se marca como implementada, verificada en fork, verificada en mainnet o pendiente |
+| D16.34 · Sin SDK de Roles | Se usa viem con el ABI de Roles 2.1.1 fijo. Reemplaza lo dicho sobre el SDK para generar permisos | La rama principal de Zodiac ya es v3 y el SDK arrastra ethers y dependencias de CoW. Los permisos se comprueban con eventos y simulación, porque 2.1.1 no los expone. La frecuencia no se limita en cadena: es presupuesto cada 30 días y tope por pago |
+| D16.35 · Infraestructura | `pg` sobre PostgreSQL, con PGlite en tests sin red y Neon como primera opción, sin depender del proveedor. Telegram con grammY. LLM opcional, con plantillas si no hay clave. E2E con Playwright contra fork, fuera de la CI | El plan gratuito de Neon está sin verificar. Sin presupuesto para servicios pagos |
+| D16.36 · Alta de responsables | Cada responsable acepta con su enlace y su billetera; nadie escribe direcciones ajenas. Una firma de pago programado solo vale de una cuenta común | Evita cargar una dirección mal y prueba que controla la wallet. Una billetera de contrato no puede aprobar pagos programados: limitación declarada |
+| D16.37 · Ejecución autónoma | Las [specs](specs/README.md) se pueden implementar con `/goal` hasta el fork. Mainnet, claves, cuentas y personas quedan para Maxi | La ejecución autónoma nunca define `LIVE_PAYMENTS`. Las reglas de plata no cambian para que una prueba pase |
+
+### Qué reemplaza
+
+| Decisión anterior | Qué pasa |
+|---|---|
+| D11 (compra colectiva) y D13.6 | Reemplazadas como producto. El contrato queda en pausa |
+| D11.3 (sin custodia) | **Reemplazada.** El fondo queda guardado en un Safe controlado por los responsables, y La Vaquita no tiene llave |
+| D11.5 (aportes de personas ajenas) | Reemplazada por D16.19. Se mantiene el tope de $ 5.000 |
+| D11.8 y D11.9 (comisión del proveedor y E1) | Reemplazadas por D16.17 y D16.22 |
+| D13.1 y D13.2 (loop y bitácora) | **Siguen**, aplicadas al fondo. La bitácora pública se limita según D16.15 |
+| D13.3 y D13.4 (x402) | En pausa: dejó de tener función en el producto |
+| D14 (contrato) | Vale solo para `CompraColectiva`, en pausa |
+| D15.1 | Reemplazada. D15.2, D15.3, D15.5, D15.7 y D15.8 **siguen**, y el "comprador" pasa a ser integrante o responsable. D15.4 sigue para quien firma |
+| D15.10 (wallet del agente) | Se reduce a la identidad ERC-8004. Las operaciones del fondo salen de la wallet de D16.25 |
+| D6 (nombre) | Cerrada para esta etapa por D16.6 |
+
 ## 2026-11-03 · D15: billetera externa para la entrega y compra colectiva sin cambios · Maximiliano
 **Por qué:** la prioridad es que una persona pueda usar la compra colectiva de principio a fin. Evaluamos wallets embebidas: thirdweb ofrece [gas patrocinado con EIP-7702 en Celo](https://portal.thirdweb.com/changelog/sponsored-eip-7702-transactions-now-on-celo), pero sus [planes](https://thirdweb.com/pricing) arrancan en US$ 99 por mes y no hay presupuesto. Seguimos la arquitectura de [Alcancía](https://github.com/artugrande/alcancia) como referencia técnica, adaptada a nuestra compra colectiva. Detalle en [spec.md](spec.md).
 
