@@ -4,6 +4,15 @@
 
 **Estados:** ✅ **Implementado** (hay código) · 🧪 **Verificado en fork** · ⛓️ **Verificado en mainnet** · ⏳ **Pendiente**. Una pieza solo cambia de estado con evidencia.
 
+## Enmienda Web3-first (posterior a la Ronda 3)
+
+Rigen la [enmienda de D16](decisiones.md#enmienda-de-alineación-web3-first-posterior-a-la-ronda-3), [spec.md](spec.md) y las [specs de implementación](specs/README.md), de mayor autoridad. Esta precisión conserva el plan como antecedente; no acredita implementación, pruebas ni cambios de estado.
+
+- **Núcleo independiente:** wallet + RPC y dirección Safe o manifiesto público revalidado permiten consultar, construir propuestas, aprobar y ejecutar con 2 de 3 sin SQL, sesión ni backend de La Vaquita. Los constructores y la verificación del core no dependen de servicios auxiliares. Se conservan propuestas portables y se revalidan contenido, hash, `nonce` y responsables actuales contra Celo; la recuperación mínima es una interfaz compatible con Safe ([S2](specs/02-core-fondo.md), [S6](specs/06-web.md)).
+- **Backend auxiliar opcional:** el esquema y PostgreSQL de §1/§6 corresponden a nombres, invitaciones, pertenencia social, cuotas, avisos, programación y cachés. No autorizan gastos ni sustituyen la cadena. Sin servicio se deshabilitan esas funciones, no la operación Safe; los metadatos privados no exportados no se recuperan desde Celo ([S3](specs/03-datos-y-api.md)).
+- **Pagos automáticos condicionados:** el resumen histórico de §6 se completa con `OpsStore` duradero, bloqueo exclusivo vigente, ocurrencias únicas y persistencia de hash, bytes firmados y nonce de cuenta **antes de transmitir**. Sin almacenamiento seguro, al perder el bloqueo/conexión o fallar esa escritura, no se transmiten pagos nuevos. La recuperación consulta la cadena y, cuando corresponde, retransmite los mismos bytes, nunca firma de nuevo a ciegas. PostgreSQL es el adaptador inicial, no una condición para controlar Safe ([S5](specs/05-vaqui.md)).
+- **Garantías sin cambios:** fechas, caducidad y máximo de ejecuciones EIP-712 son controles del servicio, no de Safe/Roles; cancelar la programación no revoca el permiso en cadena. Siguen vigentes custodia, límites y tabla de garantías de `spec.md` §6.
+
 ## 1. Arquitectura
 
 ```text
@@ -74,7 +83,7 @@ El creador no llega a controlar Roles, porque nace con el Safe como dueño. Una 
 
 Flujo con un Safe real, a comprobar:
 
-1. El backend lee `nonce()` y arma la transacción Safe con `safeTxGas`, `baseGas`, `gasPrice` y `refundReceiver` en cero.
+1. El core lee `nonce()` por RPC y arma la transacción Safe con `safeTxGas`, `baseGas`, `gasPrice` y `refundReceiver` en cero. La formulación original ubicaba este paso en el backend: este puede reutilizarlo como servicio auxiliar, pero no es obligatorio; el modo independiente lo ejecuta sin API ni SQL (S2/S6).
 2. **Responsable 1:** `approveHash(hash)`, con etiqueta.
 3. **Responsable 2:** `execTransaction(...)`, con etiqueta. Las firmas son preaprobadas (`v = 1`, `r` = dueño, `s = 0`), ordenadas por dirección ascendente.
 4. El lector confirma `ExecutionSuccess`.

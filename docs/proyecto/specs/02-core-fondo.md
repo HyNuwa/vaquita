@@ -11,14 +11,16 @@ Todo en `packages/core/src/fondo/`. **Montos en `bigint` con 18 decimales**, nun
 | `transacciones.ts` | Sí | `TxPersona = { to, data }`, siempre etiquetada, y un constructor por operación |
 | `safe.ts` | Sí | Hash, firmas preaprobadas, MultiSend y predicción de direcciones |
 | `roles.ts` | Sí | Condiciones y lote de reglas |
-| `lectura.ts` | No | `FondoReader`, interfaz de lecturas con cliente público de viem. Los tests la reemplazan por un fake |
-| `verificar.ts` | No | Verificación completa de un grupo |
+| `lectura.ts` | Sí | `FondoReader` y helpers RPC con cliente público de viem inyectado, sin configuración del servidor. Los tests lo reemplazan por un fake |
+| `verificar.ts` | Sí | Verificación completa de un grupo con `FondoReader` inyectado, sin acceso al entorno ni persistencia |
 | `errores.ts` | Sí | Decodificación y clasificación |
 | `saldos.ts`, `cuotas.ts`, `reparto.ts` | Sí | Reglas puras |
 
 Exportar `TxPersona` desde `fondo/transacciones.ts` y hacer que `apps/web/src/lib/firmar.ts` lo importe de ahí. `compra/` no se toca.
 
 **Dependencia permitida:** los constructores, la lectura de Safe, `verificarGrupo` y el flujo de firmas no importan `pg`, `DATABASE_URL`, sesiones ni ninguna API de La Vaquita. Son funciones puras o llamadas RPC desde un cliente con wallet. Las APIs auxiliares pueden reutilizarlas, nunca sustituir su validación.
+
+**Frontera navegador/servidor:** `lectura.ts` y `verificar.ts` son parte del núcleo apto para navegador; reciben cliente RPC y parámetros explícitos. Los adaptadores que cargan entorno, filesystem, SQL o sesiones permanecen del lado servidor y dependen del núcleo, nunca al revés. Hablar con Celo sigue encapsulado en `packages/core`; la web consume estos helpers y entrega las transacciones construidas por el core a la wallet únicamente mediante la excepción de `apps/web/src/lib/firmar.ts`. No se habilita otro camino de envío ni se expone la clave operativa.
 
 ## Constantes
 
@@ -213,7 +215,7 @@ Desde la wallet operativa, sobre un grupo verificado. Cada test comprueba la **s
 | S2-15 | Todo constructor devuelve etiqueta válida, y lanza con un código inválido |
 | S2-16 | `clasificarError` con cada fila de la tabla |
 | S2-17 | Reglas puras, incluidas la invariante de `reparto` con pruebas aleatorias y el cruce de mes en hora argentina |
-| S2-18 | Importar los módulos "navegador" no carga `dotenv` ni `node:fs` |
+| S2-18 | Importar los módulos "navegador", incluidos `lectura.ts` y `verificar.ts` y sus dependencias transitivas, no carga `dotenv`, filesystem (`fs`/`node:fs`, incluidas sus variantes de promesas), `pg`, adaptadores de servidor ni sesiones; no requiere `DATABASE_URL` ni APIs de La Vaquita |
 | S2-19 | Con RPC y dirección Safe (sin `DATABASE_URL` ni APIs), se leen saldo, responsables, umbral, módulos y permisos y se construye una propuesta firmable |
 | S2-20 | Manifiesto exportado/importado: detecta red, bytecode, módulo o responsables divergentes; no confía en campos del JSON sin revalidar en Celo |
 | S2-21 | Dos responsables aprueban/ejecutan una transacción con la aplicación y la base desconectadas; los hashes y saldos se verifican por RPC |

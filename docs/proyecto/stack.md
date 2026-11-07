@@ -24,9 +24,11 @@ Estado: ✅ en uso · ⏳ pendiente de decidir.
 | 9 | Cliente de Celo | **viem** (tx CIP-64) | 2.57 | ✅ |
 | 10 | Atribución ERC-8021 | **@celo/attribution-tags** | 0.5.0 (fija) | ✅ |
 | 11 | Variables de entorno | **dotenv**, un solo `.env` en la raíz | 18.0 | ✅ |
-| 12 | Persistencia del fondo | **PostgreSQL administrado** con `pg`; PGlite en tests (D16.30 y D16.35) | Se fijan al instalar. Neon, a verificar | ⏳ El ledger de gasto sigue en `data/` |
+| 12 | Persistencia auxiliar del fondo | **PostgreSQL administrado** con `pg`; PGlite en tests (D16.30 y D16.35, precisadas por la enmienda Web3-first) | Se fijan al instalar. Neon, a verificar | ⏳ Opcional para el modo independiente; `OpsStore` duradero obligatorio para pagos automáticos. El ledger de gasto sigue en `data/` |
 
 ## Fondo compartido (D16)
+
+**Separación de dependencias:** el núcleo Safe/wallet/RPC y sus constructores/verificación no importan `pg`, sesiones ni APIs de La Vaquita. El modo independiente usa dirección Safe o manifiesto público revalidado y propuestas portables. Nombres, invitaciones, cuotas, Telegram y programación dependen de servicios auxiliares externos. Sin persistencia duradera, bloqueo exclusivo vigente y escritura de los bytes firmados antes del envío, `OpsStore` no habilita pagos nuevos; los responsables conservan el control por Celo. Son requisitos de diseño de [S2](specs/02-core-fondo.md), [S3](specs/03-datos-y-api.md) y [S5](specs/05-vaqui.md), no infraestructura ya instalada ni probada.
 
 | Pieza | Elección | Versión | Estado |
 |---|---|---|---|

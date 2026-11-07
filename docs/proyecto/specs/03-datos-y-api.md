@@ -267,7 +267,7 @@ Next.js Route Handlers en `apps/web/src/app/api/`. Entradas con zod `.strict()`.
 | S3-1 | Las migraciones corren desde cero y un segundo intento no hace nada |
 | S3-2 | No se pueden tener dos propuestas `pendiente` en un grupo, incluso en concurrencia. Sí pueden convivir una propuesta y su cancelación, con el mismo `nonce` |
 | S3-3 | SIWE: nonce reutilizado, vencido, otro dominio y otra red rechazados |
-| S3-4 | Cookie alterada rechazada; sin secreto, no arranca |
+| S3-4 | Cookie alterada rechazada; en producción, sin `SESSION_SECRET` de al menos 32 bytes, las rutas de sesión auxiliares quedan deshabilitadas y no crean ni aceptan sesiones. La web pública y el modo independiente sí arrancan |
 | S3-5 | Invitación usada dos veces o vencida rechazada; en la base no está el token |
 | S3-6 | Matriz de autorización: cada ruta con público, otro grupo, integrante y responsable |
 | S3-7 | Responsable en la base y no en la cadena: rechazado |

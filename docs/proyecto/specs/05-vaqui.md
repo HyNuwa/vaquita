@@ -85,12 +85,16 @@ Serializado: un envío a la vez por wallet.
 
 ### Al arrancar, para cada `enviando`
 
+**La recuperación no autoriza transmitir por sí sola.** Toda transmisión real, incluida cualquier retransmisión al arrancar o en ciclos posteriores, exige `LIVE_PAYMENTS=si-muevo-plata-real`, `OpsStore` duradero disponible y bloqueo exclusivo con conexión viva. Antes de retransmitir se vuelven a comprobar los controles de "Antes de cada pago" y la persistencia de `tx_hash`, `tx_firmada` y `nonce_cuenta`, sin crear otra ocurrencia, reservar dos veces ni firmar nuevos bytes. Si falta una condición, no se transmite.
+
+**Reinicio en ensayo o solo lector:** únicamente consulta la cadena y registra lo observado cuando el almacenamiento lo permite; nunca llama a `broadcast`/`sendRaw`. Si no hay recibo, conserva la ocurrencia `enviando`, sus bytes, hash, nonce y reserva para una recuperación posterior segura. No la convierte en `ensayo`, no la devuelve a `pendiente` ni libera la reserva por el mero cambio de modo. Si ya existe recibo, puede registrar el resultado sin enviar nada. Esto distingue la recuperación de un envío previo del ensayo de una ocurrencia nueva del paso 4.
+
 | Lectura en cadena | Acción |
 |---|---|
 | Hay recibo | Resolver según el paso 5 |
-| Sin recibo, y el nonce de la cuenta es igual a `nonce_cuenta` | Retransmitir **los mismos bytes** de `tx_firmada`. Nunca firmar otra |
+| Sin recibo, y el nonce de la cuenta es igual a `nonce_cuenta` | Solo en modo real y con todas las condiciones de recuperación anteriores satisfechas, retransmitir **los mismos bytes** de `tx_firmada`. Si no, conservar el envío sin transmitir. Nunca firmar otra |
 | Sin recibo, y el nonce es mayor | `incierta`. Se detienen los pagos del grupo y se avisa al equipo. Ninguna acción automática |
-| Sin `tx_firmada` | No se llegó a firmar: vuelve a `pendiente` y se libera la reserva |
+| Sin `tx_firmada` | En recuperación real con almacenamiento y bloqueo vigentes, vuelve a `pendiente` y se libera la reserva; cualquier nuevo intento pasa por todos los controles normales. En ensayo/solo lector, solo registra la ausencia y conserva el estado |
 
 El mismo control corre cada minuto para los `enviando` con más de 5 minutos.
 
@@ -110,10 +114,10 @@ Códigos: `PAGO_PROGRAMADO`, `PAGO_ENSAYADO`, `EXCEDE_LIMITES`, `SIN_SALDO`, `SI
 |---|---|---|
 | S5-1 | CI | Firmas: un responsable dos veces, un exdueño, datos alterados en la base, versión vieja y firma de otro Safe rechazadas |
 | S5-2 | CI | Dos ejecuciones concurrentes sobre la misma ocurrencia envían una sola |
-| S5-3 | CI | Caída tras guardar el hash y antes de transmitir: retransmite los mismos bytes, y nunca firma otra |
+| S5-3 | CI | Caída tras persistir bytes, hash y nonce antes de transmitir: reinicio en ensayo, sin recibo y con nonce igual, no llama a `broadcast`/`sendRaw` ni firma; conserva bytes, hash, nonce, ocurrencia `enviando` y reserva. Un reinicio posterior en modo real, con controles vigentes, recupera los mismos bytes sin duplicar firma ni reserva |
 | S5-4 | CI | Caída tras transmitir: resuelve por recibo, sin reenviar |
 | S5-5 | CI | Nonce avanzado sin recibo: `incierta`, y se detiene |
-| S5-6 | CI | Sin la frase exacta, `sendRaw` no se llama nunca |
+| S5-6 | CI | Sin la frase exacta, `broadcast`/`sendRaw` no se llaman nunca en envíos reales, incluidas recuperación al arrancar y retransmisión periódica; solo lector tampoco transmite |
 | S5-7 | CI | wARS restringido: una sola llamada, sin reintentos |
 | S5-8 | CI | Mes corto, cruce de medianoche en hora argentina |
 | S5-9 | CI | Excede límites con y sin propuesta pendiente |
@@ -126,7 +130,7 @@ Códigos: `PAGO_PROGRAMADO`, `PAGO_ENSAYADO`, `EXCEDE_LIMITES`, `SIN_SALDO`, `SI
 | S5-16 | Fork | Pago anticipado por el programador: no sale |
 | S5-17 | CI | Un `prepareTaggedTx` con un `execTransactionWithRole` real, con reader falso: firma CIP-64, etiqueta y destino Roles |
 | S5-18 | CI | Autorización vencida, `maxEjecuciones` alcanzado, paquete modificado o dos firmas no válidas: no transmite; exportación e importación conservan bytes y hash firmados |
-| S5-19 | CI | Apagar `OpsStore`, perder el lock o fallar la persistencia de `tx_firmada` bloquea nuevos pagos y no bloquea el acceso manual a Safe |
+| S5-19 | CI | Apagar `OpsStore`, perder el lock/conexión o fallar la persistencia de `tx_firmada` bloquea envíos nuevos y retransmisiones de recuperación, sin nuevas firmas ni pérdida de los datos ya persistidos; no bloquea el acceso manual a Safe |
 | S5-20 | Fork | Dos firmas EIP-712 verificables no impiden que la clave de Vaqui haga un pago anticipado dentro de Roles; el texto de garantías lo declara |
 | S5-21 | CI | Reinicio sin base auxiliar: estado de solo lectura y aviso; nunca reconstruye a ciegas ocurrencias ya ejecutadas ni vuelve a firmar |
 

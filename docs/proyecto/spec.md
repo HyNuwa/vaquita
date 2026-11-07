@@ -30,6 +30,16 @@ Esta hipótesis sale de la [investigación del 4/11](../miembros/maximiliano/rel
 
 **Fuera:** Splitwise completo, juntas, compras grupales, crédito, reputación, gobernanza general, rendimiento DeFi y monetización.
 
+### Arquitectura Web3-first y recuperación
+
+El núcleo financiero funciona con wallet + RPC en Celo, sin `DATABASE_URL`, sesiones, Telegram ni servidor de La Vaquita. Safe determina responsables, umbral y módulos; Roles impone los permisos y cupos de Vaqui; wARS y los eventos acreditan movimientos. Ninguna fila SQL ni API autoriza gastos o cambia esos límites.
+
+Los responsables pueden abrir el fondo por su dirección o importar un **manifiesto público portable**, verificar su configuración, construir propuestas, aprobar y ejecutar con 2 de 3. El archivo no contiene claves ni datos privados y no es autoridad: se revalidan red, bytecode, responsables actuales, umbral, módulos y permisos contra Celo. La ejecución manual mediante una interfaz compatible con Safe es el mecanismo mínimo de recuperación si La Vaquita no está disponible.
+
+Los **servicios auxiliares opcionales** guardan nombres, invitaciones, pertenencia social, cuotas, descripciones, Telegram, avisos y programación. PostgreSQL es su adaptador inicial, no una dependencia del protocolo financiero. Sin almacenamiento, esas funciones se deshabilitan explícitamente, sin datos inventados, y los responsables siguen operando el fondo. Sin conexión a Celo no se habilitan firmas basadas en estado antiguo ni se inventan saldos.
+
+Esta precisión alinea D16 y las [specs de implementación](specs/README.md) posteriores a la Ronda 3; no cambia el estado de implementación ni acredita pruebas.
+
 ## 4. Roles
 
 | Rol | Puede | No puede |
@@ -42,13 +52,13 @@ Esta hipótesis sale de la [investigación del 4/11](../miembros/maximiliano/rel
 ## 5. Recorridos
 
 ### Crear un grupo
-1. Quien crea el grupo indica a los tres responsables y paga el despliegue.
+1. Quien crea el grupo reúne a los tres responsables y paga el despliegue. En el alta social, cada uno acepta con su enlace y su billetera, sin cargar direcciones ajenas. En modo independiente se ingresan tres direcciones distintas y se validan las exclusiones de S2 (dirección cero, wallet operativa y wallet de identidad); se predicen los despliegues y se exporta el manifiesto público. Validar direcciones y configuración no prueba control de esas wallets ni que pertenezcan a personas independientes; aceptar una invitación con firma prueba control en ese momento, no independencia humana. Se mantienen las condiciones del piloto de D16.20.
 2. Antes de firmar, se avisa que perder dos wallets responsables puede trabar el fondo para siempre.
 3. Dos responsables aprueban las reglas iniciales: los permisos, el presupuesto y los destinatarios de Vaqui.
 4. Se comprueba la configuración. **Hasta entonces, la web no acepta aportes.**
 
 ### Aportar
-1. El integrante abre la invitación y entra con su billetera.
+1. En el servicio social, el integrante abre la invitación y entra con su billetera. En modo independiente se accede por dirección o manifiesto validado; no se inventa pertenencia social ni se atribuyen aportes a personas sin esa fuente externa. Una invitación no restringe las transferencias directas al fondo.
 2. Si le faltan pesos, usa "Cargar pesos" (Ripio).
 3. Acepta que es un **aporte al grupo, no un ahorro individual**, que no hay retiro automático, quién controla el fondo y que es un prototipo.
 4. Ve el monto y la comisión estimada, y firma.
@@ -60,12 +70,14 @@ Tope desde la interfaz: $ 5.000 por aporte.
 2. Un responsable aprueba y otro aprueba y ejecuta. Cada uno firma y paga su comisión.
 3. Vaqui avisa al grupo.
 
-Hay una propuesta pendiente por grupo. Para cancelarla, dos responsables ejecutan un reemplazo; borrarla de la pantalla no alcanza.
+Hay una propuesta pendiente por grupo **como límite de nuestro backend, no de Safe**. Para cancelarla, dos responsables ejecutan un reemplazo con el mismo `nonce`; borrarla de la pantalla no alcanza. En modo independiente se construye y comparte un paquete portable con `to/value/data/operation/nonce/hash`; al importarlo se recalcula el hash y se comprueban el `nonce` y los responsables actuales contra Celo. Un evento `ApproveHash` solo revela un hash, no permite reconstruir el contenido de una propuesta pendiente sin conservar ese paquete.
 
 ### Pago programado
-1. Dos responsables aprueban destinatario, token, importe, fecha, periodicidad y estado.
-2. En la fecha, Vaqui lo ejecuta sin que nadie intervenga.
+1. Dos responsables actuales aprueban con firmas EIP-712 destinatario, token, importe, fecha, periodicidad, estado, versión, `validaHasta` y `maxEjecuciones` (1 a 12; una sola vez usa 1). Solo cuentas comunes: las billeteras de contrato no pueden aprobar programaciones en esta versión. El dominio, mensaje exacto y firmas se conservan en un paquete portable.
+2. En la fecha, Vaqui lo ejecuta sin intervención si siguen siendo válidas las dos firmas, la versión, el vencimiento, el máximo y los permisos efectivos en Celo. Exige `OpsStore` duradero, bloqueo exclusivo vigente, ocurrencias únicas y persistencia de los bytes firmados antes de transmitir. Sin almacenamiento seguro, si pierde el bloqueo/conexión o falla esa escritura, no transmite pagos nuevos; queda como lector/asesor. Recuperar un envío usa los mismos bytes, nunca una firma nueva a ciegas.
 3. Si el pago excede sus límites, prepara una propuesta.
+
+**Estos controles del servicio no son garantías en cadena.** Safe/Roles no interpretan las firmas EIP-712 de programación: fecha, caducidad y máximo de ejecuciones no restringen por sí mismos a quien tiene la clave de Vaqui. Cancelar, pausar, borrar el paquete o aumentar su versión solo instruye a nuestro programador; no revoca permisos en Celo. Para quitarlos, dos responsables deben revocar el rol en cadena.
 
 ### Cuota
 El grupo puede fijar una cuota periódica. La web calcula lo esperado y muestra quién está al día, y Vaqui recuerda. Sin cargos automáticos, multas ni expulsiones. Una cuota pendiente no es plata disponible.
@@ -102,6 +114,9 @@ Lo que comunicamos tiene que coincidir con esta tabla.
 | Los movimientos son verificables | **Sí** | Cadena pública |
 | Los integrantes están protegidos si dos responsables actúan de mala fe | **No.** La transparencia permite detectarlo, no impedirlo | — |
 | Vaqui no puede pagar antes de la fecha | **No.** La fecha es de nuestro scheduler; con una clave robada se podría pagar antes, dentro del presupuesto | — |
+| El vencimiento o máximo de ejecuciones firmado limita a Vaqui en cadena | **No.** Los valida nuestro servicio; Safe/Roles no interpretan ese paquete EIP-712 | — |
+| Cancelar una programación o borrar su paquete revoca a Vaqui | **No.** Solo quitar su permiso en cadena lo revoca | — |
+| Los responsables pueden operar sin SQL, sesión ni backend de La Vaquita | **Sí**, una vez probado; requiere wallet, RPC y dirección Safe o manifiesto revalidado. No recupera metadatos privados no exportados | Safe y modo independiente S2/S6; recuperación manual con interfaz compatible |
 | Un reparto está garantizado | **No.** Dos responsables pueden cambiarlo | — |
 | El fondo no puede pasar $ 100.000 ni recibir más de $ 5.000 | **No.** Son límites operativos: se puede transferir directo | — |
 | Una pausa protege frente a una clave robada | **No.** Solo la revocación quita el permiso | — |
@@ -135,7 +150,8 @@ Reglas:
 ## 9. Privacidad
 
 - **En cadena:** montos y direcciones, públicos e imborrables. Una dirección no es anónima.
-- **Fuera de cadena:** datos personales, descripciones y comprobantes. Se accede firmando con la wallet.
+- **Fuera de cadena:** datos personales, descripciones y comprobantes. Se accede firmando con la wallet mediante el servicio auxiliar; la sesión no es requisito para consultar datos públicos ni operar Safe. La pertenencia social no concede permisos financieros.
+- **Exportación y pérdida del servicio:** el manifiesto público no lleva nombres, Telegram ni comprobantes. Propuestas pendientes y paquetes EIP-712 se conservan por separado; las exportaciones privadas requieren autorización y ofrecen cifrado local. Sin copia externa no se promete recuperar nombres, invitaciones, cuotas ni calendarios desde Celo. Importar exige revalidar firmas, vencimiento, responsables actuales y estado en cadena; el archivo no acredita revocaciones.
 - **Telegram:** se vincula con un desafío único y con vencimiento, para que un mensaje reutilizado no vincule una wallet ajena.
 - **Bitácora pública:** acción, motivo genérico y hash. Sin nombres ni alias que permitan relacionar a una persona con sus movimientos.
 

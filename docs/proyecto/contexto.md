@@ -2,7 +2,7 @@
 
 > Leé esto antes de tocar código o responder sobre el proyecto. Es la fuente de verdad resumida.
 > Producto: [spec.md](spec.md). Para implementar: [specs/](specs/README.md). Técnica y estado de cada pieza: [plan-fondo-compartido.md](plan-fondo-compartido.md). Glosario: [`CONTEXT.md`](../../CONTEXT.md).
-> Las reglas de trabajo del equipo están en [`AGENTS.md`](../../AGENTS.md). Si algo acá contradice a otro documento, gana este.
+> Las reglas de trabajo del equipo están en [`AGENTS.md`](../../AGENTS.md). Orden de autoridad: `AGENTS.md` > D16 > `spec.md` > specs de implementación > plan técnico. Este resumen no reemplaza esas fuentes.
 > Estado al 4/11/2026, tras [D16](decisiones.md). Rutas de código relativas a `packages/core/src/` salvo que se diga otra cosa.
 
 ## 1. Qué es
@@ -70,7 +70,10 @@ Completas en [spec.md](spec.md) y [D16](decisiones.md). Las que más condicionan
 - **Aprobar:** dos de tres responsables. Dos pueden reemplazar al tercero. Una propuesta pendiente por grupo, como límite de nuestro backend.
 - **Cancelar una propuesta:** reemplazo en cadena con el mismo `nonce`. Borrar un registro no cancela nada.
 - **Vaqui:** solo `transfer` de wARS a destinatarios definidos, con $ 5.000 por transferencia y $ 20.000 cada 30 días **en cadena**. Peor caso declarado: hasta dos presupuestos seguidos al cruzar la renovación.
-- **Pagos programados:** los aprueban dos responsables. La fecha la aplica el scheduler y no es una garantía en cadena.
+- **Pagos programados:** los aprueban dos responsables actuales mediante un paquete EIP-712 portable. Fecha, `validaHasta` y `maxEjecuciones` los valida el servicio, no Safe/Roles. Cancelar, pausar o cambiar la versión no revoca el permiso en cadena.
+- **Web3-first (enmienda D16 posterior a la Ronda 3):** wallet + RPC y dirección Safe o manifiesto público revalidado permiten consultar, proponer, aprobar y ejecutar con 2 de 3 sin SQL, sesión ni backend. Las propuestas pendientes requieren conservar su contenido portable; `ApproveHash` no lo reconstruye. La recuperación mínima es una interfaz compatible con Safe.
+- **Servicios auxiliares opcionales:** nombres, invitaciones, pertenencia social, cuotas, avisos y programación requieren persistencia externa; no autorizan gastos ni se reconstruyen desde Celo sin copia. PostgreSQL es un adaptador, no una condición para controlar el fondo.
+- **Automatización:** sin `OpsStore` duradero, bloqueo exclusivo vigente o persistencia de los bytes firmados antes de transmitir, Vaqui no envía pagos nuevos. Perder ese servicio no bloquea a los responsables.
 - **Saldos:** total en cadena, aportes identificados y fondos sin atribución. La cadena es la fuente de verdad.
 - **Cuotas:** son una expectativa. Sin cargos, multas ni expulsiones.
 - **Salida y disolución:** sin retiro automático. El reparto proporcional es una sugerencia.
