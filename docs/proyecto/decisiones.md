@@ -62,6 +62,7 @@ Detalle: [spec.md](spec.md) y [plan-fondo-compartido.md](plan-fondo-compartido.m
 | D16.35 · Infraestructura | `pg` sobre PostgreSQL, con PGlite en tests sin red y Neon como primera opción, sin depender del proveedor. Telegram con grammY. LLM opcional, con plantillas si no hay clave. E2E con Playwright contra fork, fuera de la CI | El plan gratuito de Neon está sin verificar. Sin presupuesto para servicios pagos |
 | D16.36 · Alta de responsables | Cada responsable acepta con su enlace y su billetera; nadie escribe direcciones ajenas. Una firma de pago programado solo vale de una cuenta común | Evita cargar una dirección mal y prueba que controla la wallet. Una billetera de contrato no puede aprobar pagos programados: limitación declarada |
 | D16.37 · Ejecución autónoma | Las [specs](specs/README.md) se pueden implementar con `/goal` hasta el fork. Mainnet, claves, cuentas y personas quedan para Maxi | La ejecución autónoma nunca define `LIVE_PAYMENTS`. Las reglas de plata no cambian para que una prueba pase |
+| D16.38 · Reparto de la ejecución | Claude dirige y hace lo crítico: contratos, core, lector, pagos, acceso y firmas. Codex hace lo demás, solo si no hay `.env` en la raíz del repo. La revisión final la hace un subagente de Claude nuevo | Codex puede leer todo el disco y tiene red, según una prueba del 2026-11-04. Nunca hace commits, y sus resultados se comprueban de nuevo. Si falla, lo hace Claude |
 
 ### Qué reemplaza
 

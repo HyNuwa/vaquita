@@ -11,9 +11,10 @@ Deja todo listo para los [pasos humanos](09-pasos-humanos.md), sin transmitir na
 3. `npm run fondo:fork`
 4. `npm run build -w @vaquita/web`
 5. `npm run e2e`
-6. Búsqueda en el árbol con `.githooks/lib/scan-secrets.sh`: sin claves.
-7. Revisa [avance.md](avance.md): ninguna casilla `- [ ]` en las secciones S1 a S8.
-8. Comprueba que `LIVE_PAYMENTS` no esté definida en el proceso.
+6. `npm run fondo:independiente` (fork + web sin base/API auxiliar: recorridos I1–I4)
+7. Búsqueda en el árbol con `.githooks/lib/scan-secrets.sh`: sin claves.
+8. Revisa [avance.md](avance.md): ninguna casilla `- [ ]` en las secciones S1 a S8.
+9. Comprueba que `LIVE_PAYMENTS` no esté definida en el proceso.
 
 Si todo pasa, imprime exactamente `GATE OK <commit>`, con el conteo de tests. Si falla, imprime `GATE FALLA <paso>`.
 
@@ -26,6 +27,8 @@ Solo se escriben y se prueban en fork o en modo ensayo. Quien los lanza en mainn
 | `npm run fondo:wallet-operativa` | Genera la clave y la agrega a `.env` si la variable no existe. **Imprime solo la dirección.** Falla si ya existe |
 | `npm run fondo:grupo-prueba` | Crea un grupo de prueba, en ensayo por defecto |
 | `npm run fondo:verificar -- <grupoId>` | Corre `verificarGrupo` contra mainnet, solo lectura, y agrega el resultado a `docs/pruebas/fondo.md` |
+| `npm run fondo:estado -- <safe|manifiesto.json>` | Reconstruye el estado financiero público por RPC, sin base de datos ni escrituras |
+| `npm run fondo:independiente` | Ejecuta I1–I4 contra fork sin `DATABASE_URL`, sesión ni API auxiliar |
 | `npm run fondo:negativa-real -- <grupoId>` | Envía **una** negativa real (N1) con `tagged-sender`. Sin la frase, solo simula. El estimador fallaría antes de firmar, así que fija el gas a partir de un pago permitido, y un tope que no exceda los USD 0,05 |
 | `npm run fondo:costos` | Saca los costos reales de las transacciones de un grupo |
 | `npm run tx:verificar -- <hash>` | Existe |
@@ -38,7 +41,8 @@ Solo se escriben y se prueban en fork o en modo ensayo. Quien los lanza en mainn
 - `plan-fondo-compartido.md`: estados actualizados, sólo con evidencia. Nada pasa a ⛓️.
 - `docs/pruebas/fondo.md`: resultados en fork y costos medidos.
 - Guion de la demo y borrador del texto de la entrega en `docs/proyecto/specs/guion-demo.md`, con lo real, lo simulado y lo que falta. Sin afirmaciones fuera de la [tabla de garantías](../spec.md#6-qué-garantizamos-y-qué-no).
-- `Dockerfile` de `apps/bot`, sin secretos, con volumen para `data/`. Sin desplegarlo.
+- `Dockerfile` de `apps/bot`, sin secretos, con almacenamiento operativo duradero y `OpsStore` configurado para pagos reales. No ejecutar un pagador con filesystem efímero. Sin desplegarlo.
+- Manifiesto público de un grupo de prueba, documentando cómo abrir su Safe sin La Vaquita. No incluir datos privados ni secretos.
 
 ## Criterios de aceptación
 
@@ -48,5 +52,7 @@ Solo se escriben y se prueban en fork o en modo ensayo. Quien los lanza en mainn
 | S8-2 | Scripts que envían: sin la frase no transmiten, con un test |
 | S8-3 | `gasFijo` se rechaza en cualquier otra llamada |
 | S8-4 | `npm run fondo:gate` imprime `GATE OK` |
-| S8-5 | Revisión aparte de todo el fondo, con hallazgos y su resolución en un PR. Se aclara que no es una auditoría |
+| S8-5 | Revisión final de todo el fondo por un subagente de Claude nuevo, sin el contexto de la implementación, con hallazgos y su resolución en un PR. Se aclara que no es una auditoría |
 | S8-6 | `avance.md` tiene los bloqueos y las decisiones tomadas |
+| S8-7 | El gate falla si no pasan I1–I4, si el modo independiente requiere `DATABASE_URL` o si editar una fila auxiliar habilita permisos financieros |
+| S8-8 | La documentación distingue saldos/reglas on-chain de datos privados/programación externa y explica recuperación vía Safe/manifiesto |

@@ -2,6 +2,8 @@
 
 `apps/bot`, con **grammY** fija y, solo si hay clave, **`@anthropic-ai/sdk`** fijo y modelo `claude-haiku-5-5`, configurable en `ANTHROPIC_MODEL`. Anotar en `stack.md`. Long polling. Sin `TELEGRAM_BOT_TOKEN`, el proceso corre igual sin bot. **Sin `ANTHROPIC_API_KEY`, el bot funciona con plantillas:** el LLM no es requisito de nada.
 
+**Web3-first:** Telegram es un servicio de conveniencia, nunca una autoridad financiera. Si falta el almacenamiento auxiliar, no se pueden vincular cuentas ni enviar notificaciones privadas de forma segura; esas funciones se deshabilitan explícitamente y Safe continúa disponible en Celo. El bot no inventa saldos o permisos desde una caché desactualizada.
+
 ## Vincular una cuenta
 
 1. `/vincular` en un privado genera un desafío: uso único, 10 minutos, con `telegram_id`.
@@ -24,7 +26,7 @@
 
 ## Avisos
 
-Salen de la tabla `avisos`, por mensaje privado a cada integrante vinculado. Reintentan sin duplicar. Texto de plantilla con nombres y montos, sin direcciones ni jerga.
+Salen del almacenamiento auxiliar de `avisos`, por mensaje privado a cada integrante vinculado. Reintentan sin duplicar. Texto de plantilla con nombres y montos, sin direcciones ni jerga. Sin persistencia durable no se envía: reintentar ciegamente podría duplicar avisos, y para pagos programados está prohibido aún más.
 
 | Evento | Quién recibe |
 |---|---|
@@ -65,4 +67,5 @@ Solo para preguntas en texto libre: "¿cuánto hay?", "¿qué es esta propuesta?
 | S7-7 | Inyección en una descripción de propuesta: no cambia herramientas ni resultados |
 | S7-8 | Ninguna herramienta importa `chain/`, `tagged-sender` o escribe en la base, comprobado con un test sobre los imports |
 | S7-9 | Sin `ANTHROPIC_API_KEY`, responde con plantillas |
-| S7-10 | Sin `TELEGRAM_BOT_TOKEN`, lector y programador siguen funcionando |
+| S7-10 | Sin `TELEGRAM_BOT_TOKEN`, lector y programador siguen funcionando si tienen sus dependencias operativas |
+| S7-11 | Sin almacenamiento auxiliar, Telegram y recordatorios privados fallan de forma cerrada; la lectura y operación de Safe desde web independiente siguen funcionando |

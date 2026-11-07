@@ -1,6 +1,8 @@
 # S4 · Lector
 
-`packages/core/src/fondo/lector.ts`. Corre dentro del proceso de S5. **La cadena manda:** el lector es el único que pasa propuestas a `ejecutada`, `cancelada` o `desactualizada`.
+`packages/core/src/fondo/lector.ts`. Corre dentro del proceso de S5. **La cadena manda:** dentro del servicio auxiliar, el lector es el único que actualiza la caché de propuestas a `ejecutada`, `cancelada` o `desactualizada`. El **estado financiero real nunca reside en esas filas**: puede consultarse por RPC sin desplegar el lector.
+
+**Dos accesos separados:** `leerEstadoEnCadena(safe, roles, bloqueInicio?)` de S2 se ejecuta sin base de datos para el modo independiente y calcula saldo, titulares, umbral, módulos, permisos verificados y movimientos; `lector.ts` indexa esos hechos para los servicios auxiliares. Si el indexador se cae, se informa que la vista enriquecida está desactualizada, no que el Safe perdió fondos.
 
 ## Ciclo
 
@@ -12,7 +14,7 @@ Por defecto cada 15 segundos, por cada grupo con `safe`, excepto `disuelto`:
 4. En **una sola transacción de base**: insertar con `ON CONFLICT DO NOTHING`, recalcular estados y actualizar el cursor.
 5. Encolar avisos con clave idempotente.
 
-Primer ciclo de un grupo: desde `grupos.bloque_inicio`, el bloque de creación del Safe.
+Primer ciclo de un grupo: desde `grupos.bloque_inicio`, el bloque de creación del Safe. **Sin base:** a partir del bloque incluido en un manifiesto validado, o localizando la creación por el evento de la fábrica; si solo se tiene la dirección Safe, se permiten lecturas actuales inmediatamente y se explica que un historial completo puede requerir descubrir el bloque inicial y paginar eventos. No se prometen metadatos privados.
 
 ## Eventos
 
@@ -52,6 +54,8 @@ Las firmas exactas de estos eventos se toman del ABI verificado de cada contrato
 
 `npm run fondo:reconstruir -- <grupoId>` borra los movimientos y el cursor del grupo, y vuelve a leer desde `bloque_inicio`. Los datos fuera de cadena no se reconstruyen, y por eso no se borran.
 
+**Reconstrucción independiente:** `npm run fondo:estado -- <safe|manifiesto.json>` (solo lectura) obtiene de Celo saldos actuales, titulares y configuración, y recorre eventos desde un bloque comprobado si se conoce. No requiere `DATABASE_URL`; produce un JSON público exportable y hashes de evidencia. Un manifest sin bloque de creación no asegura un historial exhaustivo. Al reconstruir caché, los cambios de responsables fuera de la web y las transferencias directas se detectan de la misma manera que en el ciclo normal.
+
 ## Criterios de aceptación
 
 | ID | Nivel | Debe pasar |
@@ -67,3 +71,6 @@ Las firmas exactas de estos eventos se toman del ABI verificado de cada contrato
 | S4-9 | Fork | Agregar un dueño por fuera de la web da `alerta`, y Vaqui deja de pagar |
 | S4-10 | Fork | Reconstrucción: mismos saldos que antes |
 | S4-11 | Lectura | Medir rangos reales en `forno` y anotarlo en `docs/pruebas/fondo.md`. Ajustar el valor por defecto si hace falta |
+| S4-12 | CI/Fork | Sin PostgreSQL ni lector, `leerEstadoEnCadena` recupera saldos, responsables, permisos y movimientos de una dirección Safe/manifiesto validado |
+| S4-13 | CI/Fork | Eliminar íntegramente el índice y reconstruir desde un bloque probado reproduce los datos financieros, sin afirmar recuperar nombres o calendarios |
+| S4-14 | CI | Un cursor o movimiento adulterado no autoriza operaciones ni reemplaza lecturas de balance/roles en Celo |

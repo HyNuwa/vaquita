@@ -69,6 +69,10 @@ allowances(bytes32) view returns (uint128 refill,uint128 maxRefill,uint64 period
 4. Ninguna dirección prohibida en la configuración.
 5. Imprime la tabla. Sale con 1 si algo no coincide.
 
+## Separación del núcleo Web3
+
+Los adaptadores de lectura y despliegue de contratos no utilizan PostgreSQL, sesiones ni el backend de La Vaquita. Las direcciones y los `codeHash` se verifican desde RPC incluso cuando la aplicación funciona en modo independiente. El manifiesto público y la recuperación se implementan en S2; esta parte no cambia custodia, versiones ni permisos de seguridad.
+
 ## Criterios de aceptación
 
 | ID | Nivel | Debe pasar |

@@ -17,10 +17,10 @@ Antes de escribir pantallas, cargar las skills `impeccable` y `mobile-native`. C
 | Ruta | Quién | Contenido |
 |---|---|---|
 | `/` | Público | Qué es, qué no es, "Es un prototipo", y "Crear un grupo" |
-| `/grupos` | Sesión | Sus grupos |
-| `/grupos/nuevo` | Sesión | Asistente de creación |
-| `/i/[token]` | Público | Invitación |
-| `/g/[id]` | Integrante | Fondo del grupo |
+| `/grupos` | Sesión auxiliar | Sus grupos; sin sesión, ofrece importar manifiesto/abrir Safe |
+| `/grupos/nuevo` | Sesión auxiliar o modo independiente | Asistente social o creación directa con 3 direcciones de responsables |
+| `/i/[token]` | Público | Invitación auxiliar cuando el servicio está disponible |
+| `/g/[id]` | Integrante | Fondo del grupo; enlace a modo independiente si falla el servicio |
 | `/g/[id]/aportar` | Integrante | Aporte |
 | `/g/[id]/gastos/nuevo` | Responsable | Proponer un gasto |
 | `/g/[id]/propuestas/[pid]` | Integrante | Detalle; aprobar si es responsable |
@@ -28,10 +28,11 @@ Antes de escribir pantallas, cargar las skills `impeccable` y `mobile-native`. C
 | `/g/[id]/ajustes` | Integrante | Vaqui, destinatarios, responsables, cuota, salir y disolver |
 | `/vaqui` | Público | Bitácora y quién es Vaqui |
 | `/riesgos` | Público | Tabla de riesgos de la spec §11 |
+| `/fondo/abrir` | Wallet o público para lectura | Abrir Safe por dirección o importar manifiesto, sin base ni sesión; responsables pueden proponer/aprobar/ejecutar desde su wallet |
 
 ## Componentes de firma
 
-**`PasoDeFirma`** se usa en toda transacción. Muestra, antes de abrir la billetera: qué se hace en una frase, monto, destinatario y comisión estimada. Usa `firmarYEsperar` de `lib/firmar.ts` y consulta `GET /api/tx/:hash`: **una transacción confirmada no es un gasto hecho hasta ver el evento.**
+**`PasoDeFirma`** se usa en toda transacción. Muestra, antes de abrir la billetera: qué se hace en una frase, monto, destinatario y comisión estimada. Usa `firmarYEsperar` de `lib/firmar.ts`; lee recibo y eventos **directamente por RPC**, con `GET /api/tx/:hash` como acelerador opcional. **Una transacción confirmada no es un gasto hecho hasta ver el evento.** La desconexión del backend no impide firmar ni enviar operaciones Safe.
 
 | Estado | Texto |
 |---|---|
@@ -51,7 +52,7 @@ Antes de escribir pantallas, cargar las skills `impeccable` y `mobile-native`. C
 
 ## Crear un grupo
 
-Asistente de una pantalla por paso, que se puede retomar: siempre consulta `creacion/siguiente`.
+Asistente de una pantalla por paso, que se puede retomar: en el modo colaborativo consulta `creacion/siguiente`. **En modo independiente**, acepta tres direcciones verificadas de responsables (sin invitaciones), predice despliegues mediante S2, firma la creación y entrega inmediatamente un manifiesto descargable. Después dos responsables aprueban la configuración por Celo. No se permite aportar hasta verificar Safe y Roles. Si la base está caída, el asistente independiente no requiere `creacion/siguiente`.
 
 1. **Datos:** nombre y destinatario inicial, con alias y dirección. Texto: "Vaqui solo va a poder pagarle a quien autoricen."
 2. **Responsables:** "Un grupo tiene tres responsables. Dos juntos pueden mover el fondo; uno solo, no." El creador elige si es responsable. Se generan los enlaces, con "Copiar" y "Compartir".
@@ -60,7 +61,7 @@ Asistente de una pantalla por paso, que se puede retomar: siempre consulta `crea
 5. **Crear:** dos `PasoDeFirma` del creador: crear el fondo y preparar los permisos de Vaqui.
 6. **Reglas:** "Dos responsables tienen que aprobar qué puede hacer Vaqui": destinatarios, "$ 5.000 por pago", "$ 20.000 cada 30 días". Con la advertencia: "Al cruzar la renovación, Vaqui podría gastar hasta $ 40.000 en poco tiempo." El creador no puede saltear este paso.
 7. **Verificación:** lista de controles en lenguaje simple. Si falla, muestra cuál y **no acepta aportes**.
-8. **Activo:** enlace de invitación para integrantes.
+8. **Activo:** enlace de invitación para integrantes cuando exista el servicio social; en modo independiente, dirección del Safe, enlace para aportar y descarga de manifiesto público. **Ninguna invitación restringe las transferencias directas al Safe.**
 
 ## Fondo del grupo: `/g/[id]`
 
@@ -75,7 +76,7 @@ Orden de arriba hacia abajo:
 7. **Historial:** movimientos con comprobante. Los que no pasaron por la web también. Las alertas se destacan.
 8. **Responsables e integrantes.**
 
-Si `simulacion` es `true`: franja fija "Grupo de prueba: los tres responsables no son personas independientes." Si pasa el objetivo: "Este grupo pasó los $ 100.000 de referencia."
+Si `simulacion` es `true`: franja fija "Grupo de prueba: los tres responsables no son personas independientes." Si no hay dato verificable de independencia en modo independiente, no afirmar que los responsables son personas distintas: mostrar "Verificá que cada billetera pertenezca a una persona diferente". Si pasa el objetivo: "Este grupo pasó los $ 100.000 de referencia."
 
 ## Aportar
 
@@ -113,11 +114,15 @@ Si `simulacion` es `true`: franja fija "Grupo de prueba: los tres responsables n
 
 Cada pantalla tiene carga, vacío y error con salida. Billetera en otra red: la cambia `firmarYEsperar`; si falla: "Cambiá a Celo en tu billetera." Sin sesión: "Entrar con mi billetera". Sin billetera en el celular: enlaces a Valora y MetaMask.
 
-Sin conexión a la base: se muestra el saldo desde la cadena, con "Algunos datos no están disponibles."
+**Sin backend ni base:** `/fondo/abrir` funciona con wallet + RPC + dirección Safe/manifiesto y muestra saldo, movimientos públicos, responsables, umbral y configuración verificada. Permite construir una propuesta con `to/value/data/operation/nonce`, descargarla/compartirla para que dos responsables firmen, llamar a `approveHash` y ejecutar `execTransaction`; también debe poder abrirse el Safe en una interfaz compatible de terceros. Los datos privados, invitaciones, cuotas y programaciones se marcan "No disponibles sin el servicio". No se muestra un falso estado `aprobado` proveniente de caché.
+
+**Portabilidad:** descarga del manifiesto público de S2 y exportación de paquetes de propuestas/pagos EIP-712 desde el modo con almacenamiento auxiliar. Importar una propuesta obliga a recalcular `getTransactionHash`, nonce y signers en Celo. Una aprobación hash sin datos de la propuesta no basta para recuperarla.
+
+Si se pierde la conexión a Celo, **no** se inventan balances ni se habilita una firma basada en estado antiguo. Una falla de PostgreSQL por sí sola no bloquea las operaciones financieras del Safe.
 
 ## E2E
 
-`npm run e2e`, con Playwright fijo en la raíz, Chromium, viewport 360×740 y `isMobile`. Fuera de la CI. Levanta anvil, PostgreSQL local con `docker-compose.dev.yml`, Next en modo producción y el proceso de Vaqui con `E2E_FORK=1`. Si Docker no está corriendo, se anota en Bloqueos.
+`npm run e2e`, con Playwright fijo en la raíz, Chromium, viewport 360×740 y `isMobile`. Fuera de la CI. Para E1–E12 levanta anvil, PostgreSQL local con `docker-compose.dev.yml`, Next en modo producción y el proceso de Vaqui con `E2E_FORK=1`. Si Docker no está corriendo, se anota en Bloqueos. **Además**, `npm run fondo:independiente` levanta el fork y la web sin `DATABASE_URL`/`SESSION_SECRET`, deshabilita el servidor auxiliar y prueba los recorridos I1–I4; no necesita Docker ni un índice SQL.
 
 **Billetera de prueba:** conector `mock` de wagmi activado solo con `E2E_FORK=1`, con RPC local. `lib/wagmi.ts` no lo incluye en el paquete salvo con ese valor, y **`next build` falla si `E2E_FORK=1` coincide con `VERCEL` o `NODE_ENV=production` sin `E2E_PERMITIDO=1`**. Cuentas con `anvil_impersonateAccount`, generadas en la corrida.
 
@@ -136,6 +141,15 @@ Sin conexión a la base: se muestra el saldo desde la cadena, con "Algunos datos
 | E11 | Disolver y repartir |
 | E12 | Rechazo de firma, error de red y comisión insuficiente |
 
+**Recorridos Web3-first (sin base/API auxiliar):**
+
+| ID | Recorrido |
+|---|---|
+| I1 | Importar manifiesto o abrir Safe por dirección; leer saldo, dueños, umbral, módulos y permisos directamente de Celo |
+| I2 | Crear grupo sin invitaciones/SQL; exportar manifiesto y volver a abrirlo; verificar red y configuración |
+| I3 | Dos responsables crean una propuesta, uno usa `approveHash`, otro `execTransaction`, y el fondo se mueve sin API; nonce y hash se validan |
+| I4 | Base o API auxiliar desconectadas: la web no muestra cuotas/nombres inventados ni permite a Vaqui pagar sin su almacenamiento; los responsables siguen operando Safe |
+
 ## Criterios de aceptación
 
 | ID | Nivel | Debe pasar |
@@ -147,3 +161,6 @@ Sin conexión a la base: se muestra el saldo desde la cadena, con "Algunos datos
 | S6-5 | Local | Captura móvil de cada pantalla en `docs/pruebas/capturas/`, sin direcciones reales, revisada con la skill `impeccable` |
 | S6-6 | Local | Sin desplazamiento horizontal a 360 px, y foco visible con teclado |
 | S6-7 | CI | Producción no incluye el conector `mock` |
+| S6-8 | Local | `npm run fondo:independiente`: I1 a I4, sin PostgreSQL ni sesión |
+| S6-9 | CI | El bundle del modo independiente no importa `pg`, credenciales de backend ni endpoints como requisito para firmas Safe |
+| S6-10 | Local | Un manifiesto/propuesta manipulados se rechazan tras comprobar cadena, nonce, hash y responsables reales |

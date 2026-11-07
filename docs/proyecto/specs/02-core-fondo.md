@@ -18,6 +18,8 @@ Todo en `packages/core/src/fondo/`. **Montos en `bigint` con 18 decimales**, nun
 
 Exportar `TxPersona` desde `fondo/transacciones.ts` y hacer que `apps/web/src/lib/firmar.ts` lo importe de ahí. `compra/` no se toca.
 
+**Dependencia permitida:** los constructores, la lectura de Safe, `verificarGrupo` y el flujo de firmas no importan `pg`, `DATABASE_URL`, sesiones ni ninguna API de La Vaquita. Son funciones puras o llamadas RPC desde un cliente con wallet. Las APIs auxiliares pueden reutilizarlas, nunca sustituir su validación.
+
 ## Constantes
 
 ```ts
@@ -47,6 +49,14 @@ CLAVE_PRESUPUESTO = keccak256(toHex("vaqui-mensual"))
 - Roles: CREATE2 con el mismo tipo de `salt` y `0x602d8060093d393df3363d3d373d3d3d363d73` + mastercopy + `5af43d82803e903d91602b57fd5bf3`.
 
 Si ya hay código en la dirección, ese paso está hecho y no se firma de nuevo.
+
+## Manifiesto público de recuperación (nuevo)
+
+`fondo/manifiesto.ts` exporta/importa un JSON portable con versión de esquema, `chainId=42220`, `grupoId` (identificador técnico, no nombre), `safe`, `roles`, `wARS`, `walletOperativa` pública, direcciones de contratos de referencia, `saltNonce`, bloque de despliegue y hashes de las transacciones de creación/configuración si existen. **No almacena claves, nombres, Telegram ni comprobantes.**
+
+Al importar, **no se confía en el archivo**: comprobar red, bytecode, `getOwners()`, umbral, módulos y configuración actual de Roles mediante `verificarGrupo`. Los firmantes actuales se leen de la cadena, nunca del manifiesto. Si cambia un responsable, una dirección o un permiso, la lectura on-chain prevalece. También se puede abrir un Safe proporcionando **solo la dirección**, aunque sin manifiesto no sea posible recuperar el nombre del grupo ni el vínculo con un `grupoId` social.
+
+`fondo/operacion-independiente.ts` permite construir y simular transacciones Safe, `approveHash` y `execTransaction` con wallet + RPC, **sin API ni SQL**. Si un cliente no soporta esa vía, la especificación documenta y prueba la ejecución manual mediante una interfaz compatible con Safe. La pérdida del backend puede interrumpir automatizaciones, pero no debe bloquear la administración de fondos.
 
 ## Condición de Vaqui
 
@@ -126,6 +136,8 @@ Cuerpos de transacción Safe, en `safe.ts`:
 
 2.1.1 no tiene una función para leer permisos, así que los permisos efectivos se comprueban con **eventos más simulación**, sin confiar en lo enviado. Una falla en cualquier control deja el grupo sin pasar a `activo`.
 
+**Desacople obligatorio:** la verificación recibe `{chainId, safe, roles, bloqueInicio?}` o un manifiesto validado. No requiere una fila `grupos`. Un resultado almacenado en SQL es solo caché con bloque de referencia; si hay discrepancias, la lectura reciente de Celo manda. Las verificaciones relativas a fondos se ejecutan también sin backend.
+
 La simulación positiva no se exige si el Safe no tiene saldo o el presupuesto está agotado: en ese caso se comprueba que el rechazo sea por el motivo esperado de cada negativa.
 
 ## Errores
@@ -202,3 +214,6 @@ Desde la wallet operativa, sobre un grupo verificado. Cada test comprueba la **s
 | S2-16 | `clasificarError` con cada fila de la tabla |
 | S2-17 | Reglas puras, incluidas la invariante de `reparto` con pruebas aleatorias y el cruce de mes en hora argentina |
 | S2-18 | Importar los módulos "navegador" no carga `dotenv` ni `node:fs` |
+| S2-19 | Con RPC y dirección Safe (sin `DATABASE_URL` ni APIs), se leen saldo, responsables, umbral, módulos y permisos y se construye una propuesta firmable |
+| S2-20 | Manifiesto exportado/importado: detecta red, bytecode, módulo o responsables divergentes; no confía en campos del JSON sin revalidar en Celo |
+| S2-21 | Dos responsables aprueban/ejecutan una transacción con la aplicación y la base desconectadas; los hashes y saldos se verifican por RPC |
