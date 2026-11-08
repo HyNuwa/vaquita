@@ -2,6 +2,16 @@
 
 **Última actualización:** 2026-11-04
 
+## Publicación de S1 · 2026-11-08
+
+Preparación autorizada de tracker nuevo y CI para bases `feat/fund-s1-*`, sin
+reescribir los commits revisados ni mergear a staging. GREEN aprobado: 2 tests de routing, check base de 280 tests y typechecks;
+verificación independiente aprobada. Issue #23 creada y confirmada con
+`status:approved`; etiquetas autorizadas creadas. Revisión nativa del ajuste,
+PRs y comprobación de CI remota pendientes.
+Seguimiento: `odd/tasks/fund-s1-publication.md`. La base de este tracker conserva
+el estado histórico inferior; los PRs hijos aportan la evidencia de implementación.
+
 ## En qué estoy
 El producto cambió ([D16](../../proyecto/decisiones.md)): La Vaquita pasa a ser un fondo compartido con reglas, sobre Safe y Zodiac Roles, con Vaqui ejecutando dentro de límites en cadena. La compra colectiva queda en pausa, con su código y su evidencia. Las decisiones están cerradas y la documentación, reescrita. Nada del fondo está implementado todavía: hay [specs de implementación](../../proyecto/specs/README.md) y una prueba de viabilidad en fork, con un script suelto ([evidencia](../../pruebas/fondo.md)).
 
