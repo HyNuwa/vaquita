@@ -76,15 +76,27 @@ export async function startAnvil(options: AnvilOptions = {}) {
 
   async function rpc<T>(method: string, params: unknown[] = []): Promise<T> {
     if (exited) throw new Error("Anvil terminó antes de estar listo.");
+    // El fondeo de tokens puede consultar almacenamiento del upstream del fork.
+    // No ampliar el plazo de readiness ni el de otras operaciones locales.
+    const timeoutMs = method === "anvil_dealERC20" ? 30000 : Math.min(options.startupTimeoutMs ?? 30000, 1000);
+    try {
     const response = await (options.fetchFn ?? fetch)(rpcUrl, {
       method: "POST", headers: { "content-type": "application/json" }, redirect: "error",
       body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
-      signal: AbortSignal.timeout(Math.min(options.startupTimeoutMs ?? 30000, 1000)),
+      signal: AbortSignal.timeout(timeoutMs),
     });
     if (!response.ok) throw new Error("El fork no respondió correctamente.");
     const body = await response.json() as { result?: T; error?: unknown };
     if (body.error || !("result" in body)) throw new Error("El fork rechazó la consulta local.");
     return body.result as T;
+    } catch (error) {
+      // Nunca encadenar mensajes externos: pueden incluir URL o parámetros.
+      const timeout = error instanceof Error && error.name === "TimeoutError";
+      const cause = new Error(timeout ? "La consulta local agotó su tiempo." : "La consulta local falló.");
+      cause.name = timeout ? "TimeoutError" : "RpcError";
+      const safeMethod = /^[a-zA-Z0-9_]{1,64}$/.test(method) ? method : "desconocido";
+      throw new Error(`Falló la consulta local ${safeMethod} (límite ${timeoutMs} ms).`, { cause });
+    }
   }
 
   try {

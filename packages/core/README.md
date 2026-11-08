@@ -76,7 +76,25 @@ Anvil or an upstream connection:
 npm exec -w @vaquita/core -- vitest run test/anvil.test.ts
 ```
 
-This lifecycle helper alone does not prove Safe/Roles deployment; the separate
-fork fixture, suite and root command are still pending.
+Run the separate integration suite explicitly from the repository root:
+
+```sh
+npm run fondo:fork
+```
+
+It requires Anvil and read-only access to the upstream Celo RPC. The normal
+`npm test` suite excludes `test-fork/`; CI does not execute the fork command.
+The core typecheck includes both configurations and the fork tests.
+`test/helpers/fondo-fixture.ts` checks all six reference code hashes before
+funding fresh accounts through local administrative RPC. It deploys Safe and
+Roles through the guarded sender; the suite checks owners, threshold, module
+owner/avatar/target and exact proxy runtime, then exercises local token funding
+and time advancement. No production configuration or stored signing key is loaded.
+A passing run proves only that local fork state, never mainnet deployment.
+Local token funding (`anvil_dealERC20`) has a 30-second request deadline because
+it may query forked storage. Readiness and other administrative calls retain
+their existing short deadline; no failed request is automatically repeated.
+Diagnostics show controlled phase labels and sanitized local RPC errors, never
+external error messages or request parameters.
 
 Design and rules: [`docs/investigacion/10-scaffold-stable-agent.md`](../../docs/investigacion/10-scaffold-stable-agent.md).
