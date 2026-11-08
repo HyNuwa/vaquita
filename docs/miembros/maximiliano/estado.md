@@ -46,4 +46,6 @@ Issue #23 aprobada. Tracker #24 en borrador y cinco unidades #25–#29 publicada
 
 Autorización posterior recibida: revisar e integrar S1 hasta staging, sin main. Revisión Standards: 0 infracciones duras y 2 observaciones menores conocidas; revisión Spec: 0 hallazgos, 8 criterios cubiertos. Evidencia de ambas y resolución registrada en PRs #24–#29. Integración en curso desde la hoja hacia el tracker, con SHA y CI vigentes antes de cada merge y preservación de árboles/ancestros.
 
-Próximo paso: integrar #29→#28→#27→#26→#25 y finalmente #24 a staging, observar CI. Todavía no hubo merges de esta cadena; no se inició S2 ni hubo nuevos forks, RPC o pagos. Checker Zodiac sigue pendiente humano por la excepción acordada; no se presenta como PASS ni auditoría.
+Hijos #29→#28→#27→#26→#25 integrados con merges preservando originales y CI nueva aprobada en cada padre. Tracker 4613546 verificado independientemente: árbol completo idéntico al candidato revisado 3527248 y todos los originales ancestros.
+
+Próximo paso: CI de evidencia, marcar listo #24 e integrar el tracker completo a staging, luego observar su CI. Merge a staging todavía pendiente; no se tocó main ni se inició S2, no hubo nuevos forks, RPC o pagos. Checker Zodiac sigue pendiente humano por la excepción acordada; no se presenta como PASS ni auditoría.

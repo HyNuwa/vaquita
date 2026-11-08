@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): record S1 child integration evidence
+- **Qué hice:** integré #29→#28→#27→#26→#25 mediante merges fijados por SHA, sin reescribir ni borrar ramas. En cada paso se comprobaron árbol completo, dos padres y ancestros, y pasó la nueva CI del padre. Verificación independiente: tracker 4613546 idéntico al árbol revisado 3527248, todos los originales preservados, sin bloqueantes.
+- **Archivos clave:** `odd/tasks/fund-s1-publication.md`, tracker y PRs #25–#29, bitácora y estado.
+- **Próximo paso:** CI de este registro, marcar listo e integrar #24 a staging y observar CI de staging. Se conserva el fallo del primer observador por registro tardío de checks, sin reiniciar pruebas. Sin main, S2 ni nuevos forks/RPC.
+
 ## 2026-11-08 · docs(docs): record authorized S1 integration review
 - **Qué hice:** registré la autorización humana para revisar e integrar la cadena hasta staging, no main. Dos revisiones independientes sobre 9b487e2–85049f9: Standards sin infracciones duras y dos observaciones menores conocidas; Spec sin hallazgos, ocho criterios cubiertos con la excepción humana del checker. Resultados y resolución registrados y confirmados en los seis PRs, sin cambios de código ni nuevas pruebas en vivo.
 - **Archivos clave:** `odd/tasks/fund-s1-publication.md`, PRs #24–#29, bitácora y estado personal.
