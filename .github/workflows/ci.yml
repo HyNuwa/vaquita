@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request:
-    branches: [staging, main]
+    branches: [staging, main, 'feat/fund-s1-*']
   push:
     branches: [staging, main]
 
@@ -24,6 +24,9 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      - name: S1 chain CI routing
+        run: node --test .github/scripts/ci-s1.test.mjs
 
       - name: Typecheck
         run: npm run typecheck

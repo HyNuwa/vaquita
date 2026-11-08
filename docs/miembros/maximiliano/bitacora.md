@@ -2,6 +2,89 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): record S1 child integration evidence
+- **Qué hice:** integré #29→#28→#27→#26→#25 mediante merges fijados por SHA, sin reescribir ni borrar ramas. En cada paso se comprobaron árbol completo, dos padres y ancestros, y pasó la nueva CI del padre. Verificación independiente: tracker 4613546 idéntico al árbol revisado 3527248, todos los originales preservados, sin bloqueantes.
+- **Archivos clave:** `odd/tasks/fund-s1-publication.md`, tracker y PRs #25–#29, bitácora y estado.
+- **Próximo paso:** CI de este registro, marcar listo e integrar #24 a staging y observar CI de staging. Se conserva el fallo del primer observador por registro tardío de checks, sin reiniciar pruebas. Sin main, S2 ni nuevos forks/RPC.
+
+## 2026-11-08 · docs(docs): record authorized S1 integration review
+- **Qué hice:** registré la autorización humana para revisar e integrar la cadena hasta staging, no main. Dos revisiones independientes sobre 9b487e2–85049f9: Standards sin infracciones duras y dos observaciones menores conocidas; Spec sin hallazgos, ocho criterios cubiertos con la excepción humana del checker. Resultados y resolución registrados y confirmados en los seis PRs, sin cambios de código ni nuevas pruebas en vivo.
+- **Archivos clave:** `odd/tasks/fund-s1-publication.md`, PRs #24–#29, bitácora y estado personal.
+- **Próximo paso:** CI del registro y merges con SHA fijado desde #29 hacia #24, comprobando CI y árboles en cada paso; tracker a staging al final. Sin squash, rebase, borrado de ramas, force push ni S2.
+
+## 2026-11-08 · docs(docs): record S1 publication and CI evidence
+- **Qué hice:** publiqué la issue aprobada #23, tracker #24 en borrador y las cinco unidades #25–#29 encadenadas por ramas feature. Todos tuvieron CI real en verde; cada integración pasó check local y routing tests. Verificación independiente: commits/árboles originales y evidencias preservados, sin reescribir historia. Revisión nativa del ajuste CI aprobada y cerrada. El registro del cierre documental requiere observar nuevamente la CI de #29 antes de entregar.
+- **Archivos clave:** `odd/tasks/fund-s1-publication.md`, ramas `feat/fund-s1-pub-*`, bitácora y estado.
+- **Próximo paso:** decisión humana de integración; no se mergeó a staging/main, no se repitió fork ni RPC, no se inició S2. Checker Zodiac pendiente humano. El rechazo inicial del hook y el diagnóstico sed con ramas se conservan; guardas por SHA completos pasaron sin modificar el script.
+
+## 2026-11-08 · chore(repo): prepare S1 check publication branch
+- **Qué hice:** integré la unidad original 821bda6 en la rama nueva de publicación, conservando su commit y la CI ya revisada. Las entradas de bitácora solapadas se conservaron de ambos lados; no cambió el código productivo respecto de la unidad original.
+- **Archivos clave:** rama feat/fund-s1-pub-check, evidencia y pruebas originales, bitácora y estado.
+- **Próximo paso:** verificar el árbol exacto y checks, publicar el PR hacia su padre; sin merge a staging.
+
+
+## 2026-11-08 · chore(repo): prepare S1 fixture publication branch
+- **Qué hice:** integré la unidad original 16141c7 en la rama nueva de publicación, conservando su commit y la CI ya revisada. Las entradas de bitácora solapadas se conservaron de ambos lados; no cambió el código productivo respecto de la unidad original.
+- **Archivos clave:** rama feat/fund-s1-pub-fixture, evidencia y pruebas originales, bitácora y estado.
+- **Próximo paso:** verificar el árbol exacto y checks, publicar el PR hacia su padre; sin merge a staging.
+
+
+## 2026-11-08 · chore(repo): prepare S1 harness publication branch
+- **Qué hice:** integré la unidad original f6ab375 en la rama nueva de publicación, conservando su commit y la CI ya revisada. Las entradas de bitácora solapadas se conservaron de ambos lados; no cambió el código productivo respecto de la unidad original.
+- **Archivos clave:** rama feat/fund-s1-pub-harness, evidencia y pruebas originales, bitácora y estado.
+- **Próximo paso:** verificar el árbol exacto y checks, publicar el PR hacia su padre; sin merge a staging.
+
+
+## 2026-11-08 · chore(repo): prepare S1 sender publication branch
+- **Qué hice:** integré la unidad original d070eaa en la rama nueva de publicación, conservando su commit y la CI ya revisada. Las entradas de bitácora solapadas se conservaron de ambos lados; no cambió el código productivo respecto de la unidad original.
+- **Archivos clave:** rama feat/fund-s1-pub-sender, evidencia y pruebas originales, bitácora y estado.
+- **Próximo paso:** verificar el árbol exacto y checks, publicar el PR hacia su padre; sin merge a staging.
+
+
+## 2026-11-08 · chore(repo): prepare S1 config publication branch
+- **Qué hice:** integré T1 sin reescribir su commit, sobre la base CI del tracker. Resolví únicamente el solapamiento de bitácora conservando ambas entradas; el estado conservó ambas intenciones automáticamente. El contenido productivo debe coincidir exactamente con T1.
+- **Archivos clave:** rama `feat/fund-s1-pub-config`, configuración/ABI y tests originales, bitácora y estado.
+- **Próximo paso:** checks de integración y PR hacia el tracker; no mergear a staging.
+
+## 2026-11-08 · docs(docs): record approved S1 tracker preparation
+- **Qué hice:** registré la revisión nativa de e228e6d aprobada y cerrada (legibilidad y confiabilidad), sobre los tests locales e independientes ya aprobados. El primer intento de commit documental fue rechazado por no stagear esta bitácora junto con el archivo de tareas; no se ejecutó el push ni se omitió el hook.
+- **Archivos clave:** `odd/tasks/fund-s1-publication.md` y estado personal.
+- **Próximo paso:** publicar tracker y unidades preservadas, observar CI; sin merges a staging.
+
+## 2026-11-08 · ci(ci): enable checks for S1 feature PR bases
+- **Qué hice:** preparé un tracker nuevo desde staging para publicar S1 sin reescribir las unidades ya revisadas. CI admite PRs cuya base sea `feat/fund-s1-*`; conserva los pushes de staging/main y permisos de solo lectura. Pruebas de configuración: RED 1 fallo/1 éxito; GREEN 2 tests, check base de 280 tests y ambos typechecks. Verificación independiente aprobada con los mismos comandos; CI remota todavía pendiente.
+- **Archivos clave:** `.github/workflows/ci.yml`, `.github/scripts/ci-s1.test.mjs`, `odd/tasks/fund-s1-publication.md`.
+- **Próximo paso:** verificar y revisar el ajuste, publicar issue/etiquetas autorizadas y PRs de S1; no mergear a staging. Sin nuevos forks ni pagos.
+## 2026-11-08 · docs(docs): record verified S1 delivery chain
+- **Qué hice:** cerré la evidencia local de los ocho criterios S1 con verificación final independiente (377 tests y ambos typechecks, exit 0). T4 `6314087` tiene revisión nativa aprobada y cerrada. Documenté la cadena de cinco unidades revisadas y los límites de atribución de las corridas de fork/RPC, sin repetirlas ni reabrir receipts.
+- **Archivos clave:** `docs/proyecto/specs/avance.md`, `docs/pruebas/fondo.md`, `odd/tasks/fund-s1-contracts-fork.md` y estado personal.
+- **Próximo paso:** decidir la publicación de la cadena hacia `staging` y observar su CI. El checker Zodiac continúa como paso humano pendiente autorizado; no es un PASS. No se publicó código ni se enviaron transacciones en mainnet.
+
+## 2026-11-08 · feat(scripts): verify fund contract hashes without keys
+- **Qué hice:** agregué `fondo:contratos`: chainId 42220, seis hashes, rechazo de direcciones prohibidas y tabla con exit 1 ante fallos. La lectura pública terminó con exit 0 y seis coincidencias. Pasaron 14 tests nuevos, check de 377 tests y ambos typechecks; verificador independiente pasó 14 tests, typecheck y dos escenarios del CLI contra loopback.
+- **Archivos clave:** `packages/core/scripts/verificar-contratos.ts`, `packages/core/test/verificar-contratos.test.ts`, `package.json`, README del core, `docs/proyecto/stack.md`, `docs/pruebas/fondo.md`.
+- **Próximo paso:** revisión nativa de T4 y cierre de S1. Zodiac 5.0.1 se retiró por decisión explícita ante alertas de seguridad transitivas; el checker queda pendiente humano y se avisa al completar la tabla, incluso con exit 0. No hay dependencia/lock nuevo, claves, envíos ni otro fork. T3b ya tiene revisión nativa aprobada y cerrada.
+
+## 2026-11-08 · test(core): verify fund deployments on isolated fork
+- **Qué hice:** fixture con cuentas generadas, hashes previos al envío y suite separada `fondo:fork`. Pasaron Safe 2 de 3, dueño/avatar/target de Roles, proxy exacto, fondos de prueba y tiempo en Anvil local. Dos corridas fallaron por timeout; después del diagnóstico, amplié solo `anvil_dealERC20` a 30 s. Pasan 363 tests y ambos typechecks. Verificación independiente: 17 tests, typecheck y probes; el fork exitoso se inspeccionó con evidencia de mi corrida, no se repitió.
+- **Archivos clave:** `packages/core/test/helpers/fondo-fixture.ts`, `packages/core/test-fork/fondo.test.ts`, configuración de Vitest/typecheck, `package.json`, helpers de diagnóstico y `docs/pruebas/fondo.md`.
+- **Próximo paso:** revisión nativa de T3b y verificador de contratos T4. T3 lifecycle ya tiene revisión aprobada y cerrada; no hay publicación de código ni despliegues en mainnet.
+
+## 2026-11-07 · test(core): add bounded Anvil lifecycle harness
+- **Qué hice:** primera parte de T3: resolución de Anvil, puerto local libre, espera de red 42220 y cierre del proceso propio aun si falla el arranque o la prueba. Observé RED por módulo faltante y GREEN con 13 tests; el check completo pasó 359 tests y ambos typechecks. Una verificación independiente confirmó esos 13 tests, el typecheck y tres grupos de probes con procesos y red falsos. Anvil 1.8.7 respondió al chequeo de versión, pero todavía no se ejecutó el nuevo fork.
+- **Archivos clave:** `packages/core/test/helpers/anvil.ts`, `packages/core/test/anvil.test.ts`, `packages/core/README.md` y `odd/tasks/fund-s1-contracts-fork.md`.
+- **Próximo paso:** revisión nativa de esta unidad; después fixture, suite y comando de fork (T3b). La revisión nativa de T2 quedó aprobada y cerrada; no es una auditoría ni evidencia de despliegue.
+
+## 2026-11-07 · feat(core): add isolated fork sender and guarded selector
+- **Qué hice:** segunda unidad de S1: sender etiquetado exclusivo de RPC local, sin redirecciones ni CIP-64, y selector explícito que rechaza el modo fork si falta la bandera o existe `LIVE_PAYMENTS`. Conservé el sender normal y sus guardas. Pasaron 38 tests focalizados y el check completo de 346 tests; una verificación independiente directa pasó esos 38 tests, el typecheck y tres grupos de probes sin efectos. Dos intentos previos fallaron en preparación, con cero tests; no se presentan como aprobados.
+- **Archivos clave:** `packages/core/src/chain/fork-sender.ts`, `packages/core/src/fondo/enviador.ts`, sus tests, `packages/core/README.md` y `odd/tasks/fund-s1-contracts-fork.md`.
+- **Próximo paso:** revisión nativa de esta unidad y arnés de despliegue en fork; sin claves reales, envíos a mainnet ni publicación de código. T1 ya tiene revisión nativa aprobada y cerrada; T2 todavía no.
+
+## 2026-11-07 · feat(core): add verified fund contract configuration and ABI
+- **Qué hice:** primera unidad de S1: configuración pura de las seis referencias Safe/Zodiac, bloqueo de versiones prohibidas y ABI de Roles 2.1.1. Los 28 tests nuevos y el check completo (308 tests) pasan; una verificación independiente confirmó las guardas y los ABI. Esto no acredita bytecode actual ni despliegues en fork.
+- **Archivos clave:** `packages/core/src/config/fondo-contratos.ts`, `packages/core/src/fondo/abis.ts`, sus tests y `odd/tasks/fund-s1-contracts-fork.md`.
+- **Próximo paso:** revisión nativa de esta unidad y sender exclusivo de fork con selector seguro; sin claves reales ni envíos a mainnet.
+
 ## 2026-11-04 · docs(docs): add implementation specs for shared fund
 - **Qué hice:** specs ejecutables de S1 a S8, con criterios de aceptación, pasos humanos y comando para `/goal`. Probé la viabilidad en un fork con un script suelto: sirvió para corregir `GS013`, descartar CIP-64 en anvil y el SDK de Roles. Nada corrió en mainnet.
 - **Archivos clave:** `docs/proyecto/specs/`, `docs/pruebas/fondo.md`, `docs/pruebas/spike-fondo-fork.cjs`, `docs/proyecto/decisiones.md` (D16.34 a D16.37).
