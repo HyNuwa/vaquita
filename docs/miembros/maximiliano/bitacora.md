@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): record approved S1 tracker preparation
+- **Qué hice:** registré la revisión nativa de e228e6d aprobada y cerrada (legibilidad y confiabilidad), sobre los tests locales e independientes ya aprobados. El primer intento de commit documental fue rechazado por no stagear esta bitácora junto con el archivo de tareas; no se ejecutó el push ni se omitió el hook.
+- **Archivos clave:** `odd/tasks/fund-s1-publication.md` y estado personal.
+- **Próximo paso:** publicar tracker y unidades preservadas, observar CI; sin merges a staging.
+
 ## 2026-11-08 · ci(ci): enable checks for S1 feature PR bases
 - **Qué hice:** preparé un tracker nuevo desde staging para publicar S1 sin reescribir las unidades ya revisadas. CI admite PRs cuya base sea `feat/fund-s1-*`; conserva los pushes de staging/main y permisos de solo lectura. Pruebas de configuración: RED 1 fallo/1 éxito; GREEN 2 tests, check base de 280 tests y ambos typechecks. Verificación independiente aprobada con los mismos comandos; CI remota todavía pendiente.
 - **Archivos clave:** `.github/workflows/ci.yml`, `.github/scripts/ci-s1.test.mjs`, `odd/tasks/fund-s1-publication.md`.

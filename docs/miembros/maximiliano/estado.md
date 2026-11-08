@@ -7,7 +7,7 @@
 Preparación autorizada de tracker nuevo y CI para bases `feat/fund-s1-*`, sin
 reescribir los commits revisados ni mergear a staging. GREEN aprobado: 2 tests de routing, check base de 280 tests y typechecks;
 verificación independiente aprobada. Issue #23 creada y confirmada con
-`status:approved`; etiquetas autorizadas creadas. Revisión nativa del ajuste,
+`status:approved`; etiquetas autorizadas creadas. Revisión nativa del ajuste aprobada y cerrada (e228e6d).
 PRs y comprobación de CI remota pendientes.
 Seguimiento: `odd/tasks/fund-s1-publication.md`. La base de este tracker conserva
 el estado histórico inferior; los PRs hijos aportan la evidencia de implementación.
