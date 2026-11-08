@@ -35,6 +35,29 @@ quedó corregido una vez con `as const`; no se borra esa evidencia. El recheck
 independiente limitado aprobó el caso vacío (1 test y probe exacto, ambos exit 0);
 se conservan los PASS previos y el probe fallido. S2-11 sigue sin vector de fork.
 
+### Progreso local T3 · 2026-11-08
+Constructores puros `aportar`, `aprobarHash` y `ejecutarPropuesta` implementados
+con código explícito, etiqueta exterior y `TxPersona` de dos campos. Ejecución
+reutiliza los ceros de T2 sin modificar cuerpo ni firmas; aporte transfiere wARS
+sin aplicar topes del agente. Web: solo import y anotación de tipo, compra intacta.
+RED: suite de constructores sin tests por módulo ausente, 2 fallos de frontera y
+4 tests de compra aprobados. GREEN: 29 focalizados; suite completa 408/23 archivos
+y typechecks core/web aprobados. Recorrido estático de imports del core y probe
+público aprobados para constantes/Safe/constructores; no es bundle navegador ni
+prueba de los futuros lector/verificador (S2-18 completo pendiente).
+T2 conserva su verificación independiente aprobada. Disposición nativa bloqueada
+por declaración de archivos no rastreados; no es PASS y no existe START/lineage.
+T3 pasó verificación independiente: 29 tests focalizados, 2 probes públicos y
+typecheck core en estado aislado con imports resueltos al candidato. Un probe
+opcional de igualdad del JS no pudo ejecutarse por `TypeError: Cannot read
+properties of undefined (reading 'ES2022')`; no se reintentó ni se afirma PASS.
+La comparación estructural confirma solo los dos cambios de tipo en la web.
+Check final del autor: 35 focalizados, 408 tests/23 archivos y ambos typechecks,
+exit 0; diffcheck y actualización AST del grafo aprobados.
+Falta disposición humana por la evaluación nativa bloqueada; no se repite ni se
+ocultan archivos para sortearla. S2-11 sigue pendiente por falta de vector de fork
+y checker Zodiac pendiente humano.
+
 ## Resumen histórico de implementación de S1
 Este resumen conserva la evidencia local anterior a la publicación; el estado
 vigente de entrega y el nuevo alcance figuran arriba.
@@ -44,9 +67,10 @@ El producto cambió ([D16](../../proyecto/decisiones.md)): La Vaquita pasa a ser
 Control: [`control-entrega.md`](../../tareas/control-entrega.md). Producto: [`spec.md`](../../proyecto/spec.md). Plan y estado de cada pieza: [`plan-fondo-compartido.md`](../../proyecto/plan-fondo-compartido.md).
 
 ## Próximo paso
-Revisar nativamente T2 ya verificado independientemente; después implementar los constructores
-etiquetados de T3, con migración solo del tipo `TxPersona` en la web. Sin despliegues ni
-nuevas pruebas de red. Checker Zodiac y vector de fork S2-11 quedan pendientes
+Resolver con el humano la disposición de la evaluación nativa bloqueada antes
+de cerrar o publicar esta unidad. Código y verificación funcional independiente
+listos; no hay revisión nativa aprobada ni autorización de publicación.
+Sin despliegues ni nuevas pruebas de red. Checker Zodiac y vector de fork S2-11 quedan pendientes
 explícitos; los [pasos humanos](../../proyecto/specs/09-pasos-humanos.md) siguen
 separados.
 

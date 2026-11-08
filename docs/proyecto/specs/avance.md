@@ -40,6 +40,15 @@ Seguimiento completo: `odd/tasks/fund-s1-publication.md`.
 Primera unidad autorizada: primitivas Safe y constructores etiquetados aptos para
 navegador, con pruebas offline y revisión independiente. No incluye el resto de
 S2 ni nuevas corridas de fork/RPC. Seguimiento: `odd/tasks/fund-s2-primitives.md`.
+Implementación local de esa unidad: constantes, hash Safe, firmas preaprobadas,
+MultiSend y los constructores `aportar`, `aprobarHash` y `ejecutarPropuesta`;
+`TxPersona` sustituye solo el tipo usado por la firma web. Check final: 408 tests
+y typechecks core/web aprobados; verificación funcional independiente aprobada.
+La prueba de navegador cubre el recorrido de dependencias del core e imports
+públicos, no un bundle ni los futuros lector/verificador de S2-18. No se marcan
+S2-15 ni S2-18 completos por estos tres constructores. La evaluación nativa está
+bloqueada por la declaración de archivos no rastreados; no hay revisión nativa
+aprobada ni publicación de esta unidad.
 S2-11 necesita un vector fijo con procedencia de fork; no se encontró uno en la
 evidencia revisada. Un vector sintético no cierra ese criterio.
 
