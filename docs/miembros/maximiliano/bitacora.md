@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-07 · test(core): add bounded Anvil lifecycle harness
+- **Qué hice:** primera parte de T3: resolución de Anvil, puerto local libre, espera de red 42220 y cierre del proceso propio aun si falla el arranque o la prueba. Observé RED por módulo faltante y GREEN con 13 tests; el check completo pasó 359 tests y ambos typechecks. Una verificación independiente confirmó esos 13 tests, el typecheck y tres grupos de probes con procesos y red falsos. Anvil 1.8.7 respondió al chequeo de versión, pero todavía no se ejecutó el nuevo fork.
+- **Archivos clave:** `packages/core/test/helpers/anvil.ts`, `packages/core/test/anvil.test.ts`, `packages/core/README.md` y `odd/tasks/fund-s1-contracts-fork.md`.
+- **Próximo paso:** revisión nativa de esta unidad; después fixture, suite y comando de fork (T3b). La revisión nativa de T2 quedó aprobada y cerrada; no es una auditoría ni evidencia de despliegue.
+
 ## 2026-11-07 · feat(core): add isolated fork sender and guarded selector
 - **Qué hice:** segunda unidad de S1: sender etiquetado exclusivo de RPC local, sin redirecciones ni CIP-64, y selector explícito que rechaza el modo fork si falta la bandera o existe `LIVE_PAYMENTS`. Conservé el sender normal y sus guardas. Pasaron 38 tests focalizados y el check completo de 346 tests; una verificación independiente directa pasó esos 38 tests, el typecheck y tres grupos de probes sin efectos. Dos intentos previos fallaron en preparación, con cero tests; no se presentan como aprobados.
 - **Archivos clave:** `packages/core/src/chain/fork-sender.ts`, `packages/core/src/fondo/enviador.ts`, sus tests, `packages/core/README.md` y `odd/tasks/fund-s1-contracts-fork.md`.
