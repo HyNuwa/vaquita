@@ -14,7 +14,10 @@ local de wARS y USDC y el avance del tiempo.
 El check completo pasó 363 tests y los typechecks de core/web. Una verificación
 independiente ejecutó 17 tests focalizados, typecheck del core y probes en memoria;
 inspeccionó las assertions y reutilizó el resultado del fork anterior: **no ejecutó
-otro fork**. La revisión nativa de esta unidad todavía está pendiente.
+otro fork**. T3b quedó en el commit local `16141c7`: revisión nativa de
+resiliencia, legibilidad y confiabilidad aprobada y cerrada mediante acknowledgement.
+La observación informativa sobre el contexto sanitizado del diagnóstico queda
+separada; no abrió una corrección ni reabre la revisión.
 
 Dos corridas previas fallaron por timeout; el diagnóstico localizó el fallo en
 `anvil_dealERC20`. Se cambió exclusivamente su plazo de solicitud de 1 a 30 segundos,
@@ -24,7 +27,35 @@ No se observó Anvil activo después de la corrida exitosa.
 
 Esta evidencia cubre S1-5/S1-6 en fork, no permisos completos, concurrencia,
 CIP-64 ni despliegues en mainnet. El comando independiente `fondo:contratos`,
-el checker Zodiac y el cierre total de S1 siguen pendientes.
+el checker Zodiac y el cierre total de S1 seguían pendientes al cerrar T3b;
+la sección siguiente registra el avance de T4.
+
+## Verificador S1 del repositorio · 2026-11-08 · solo lectura
+
+`npm run fondo:contratos` terminó con **exit 0** (6 s): RPC respondió chainId
+42220 y los seis hashes de código coincidieron con `contratosFondo(42220)`.
+El CLI imprimió una fila por contrato con dirección pública, hash esperado,
+observado y resultado; no carga claves, archivos de entorno, wallet, backend o
+base de datos. Un fallo de lectura, otra red, código ausente o hash diferente
+produce exit 1; no hay reintentos automáticos. Tests nuevos: 14; check completo:
+377 tests y typechecks core/web aprobados. Verificación independiente aprobada:
+14 tests, typecheck y dos escenarios del CLI real con RPC loopback (otra red y
+código ausente), comprobando exit/stdout/stderr y solo métodos de lectura.
+El éxito RPC público usa la evidencia de mi corrida, no una repetición del
+verificador. Revisión nativa de T4 pendiente.
+
+**Bloqueo / paso humano:** `sanityCheckZodiacModuleAddress` no fue ejecutado.
+Zodiac 5.0.1 se instaló sin scripts y luego se retiró por decisión explícita del
+responsable ante alertas de seguridad en su árbol transitivo. Su función es un
+chequeo síncrono de registro/direcciones defectuosas, no una verificación RPC.
+La auditoría completa terminó con exit 1 y reportó 36 vulnerabilidades en todo
+el árbol, no todas atribuibles a la instalación. No se aplicó `audit fix`,
+downgrade ni override. Los 26 paquetes agregados se retiraron offline, sin
+scripts; `packages/core/package.json` y `package-lock.json` quedaron idénticos
+al estado previo. Toda tabla completada avisa en stderr que el checker humano está
+pendiente, incluso con exit 0 por los hashes. Los rechazos tempranos de
+configuración o chainId imprimen únicamente el error correspondiente. Esto no es una auditoría ni prueba
+permisos efectivos; no se repitió el fork de T3b.
 
 ## Contratos en Celo · 2026-11-04 · solo lectura
 

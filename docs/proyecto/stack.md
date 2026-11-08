@@ -35,8 +35,18 @@ Estado: ✅ en uso · ⏳ pendiente de decidir.
 | Control compartido | **Safe** (`SafeL2`, fábrica y `CompatibilityFallbackHandler`), contratos oficiales | 1.4.1 | ⏳ Sin probar. Direcciones en el [plan](plan-fondo-compartido.md#2-contratos-oficiales) |
 | Permisos del agente | **Zodiac Roles** | **2.1.1**; 2.1.0 prohibida | ⏳ Sin probar |
 | Configuración de permisos | **viem** con el ABI de 2.1.1, sin SDK (D16.34) | La del core | ⏳ |
-| Comprobación de módulos | **`@gnosis-guild/zodiac`** (`sanityCheckZodiacModuleAddress`) | 5.0.1, a confirmar al instalar | ⏳ |
+| Comprobación de módulos | **`@gnosis-guild/zodiac`** (`sanityCheckZodiacModuleAddress`) | 5.0.1 inspeccionada y retirada; no instalada | ⏳ Paso humano pendiente por alertas de seguridad transitivas; decisión explícita del 2026-11-08 |
+
 | Interacción con Safe | **viem**, sin SDK de Safe | La del core, fija | ⏳ |
+
+**Actualización S1, 2026-11-08:** la suite del repositorio pasó en Anvil 1.8.7
+(Safe 2 de 3 y Roles dueño/avatar/target/proxy exacto), no en mainnet. No acredita
+todavía permisos efectivos ni límites del agente. `npm run fondo:contratos`
+implementa la lectura de red y los seis hashes sin SDK ni claves. El checker
+Zodiac 5.0.1 se instaló sin scripts, se inspeccionó y se retiró por decisión del
+responsable: la auditoría lo marcó como alto por `eth-provider`/`ws` y
+`zodiac-core`/`ethers`/`ws`. No se aplicaron downgrades ni `audit fix`. La comprobación
+Zodiac queda explícitamente pendiente, no aprobada por la coincidencia de hashes.
 
 ## `contracts/` (en pausa por D16)
 

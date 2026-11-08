@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · feat(scripts): verify fund contract hashes without keys
+- **Qué hice:** agregué `fondo:contratos`: chainId 42220, seis hashes, rechazo de direcciones prohibidas y tabla con exit 1 ante fallos. La lectura pública terminó con exit 0 y seis coincidencias. Pasaron 14 tests nuevos, check de 377 tests y ambos typechecks; verificador independiente pasó 14 tests, typecheck y dos escenarios del CLI contra loopback.
+- **Archivos clave:** `packages/core/scripts/verificar-contratos.ts`, `packages/core/test/verificar-contratos.test.ts`, `package.json`, README del core, `docs/proyecto/stack.md`, `docs/pruebas/fondo.md`.
+- **Próximo paso:** revisión nativa de T4 y cierre de S1. Zodiac 5.0.1 se retiró por decisión explícita ante alertas de seguridad transitivas; el checker queda pendiente humano y se avisa al completar la tabla, incluso con exit 0. No hay dependencia/lock nuevo, claves, envíos ni otro fork. T3b ya tiene revisión nativa aprobada y cerrada.
+
 ## 2026-11-08 · test(core): verify fund deployments on isolated fork
 - **Qué hice:** fixture con cuentas generadas, hashes previos al envío y suite separada `fondo:fork`. Pasaron Safe 2 de 3, dueño/avatar/target de Roles, proxy exacto, fondos de prueba y tiempo en Anvil local. Dos corridas fallaron por timeout; después del diagnóstico, amplié solo `anvil_dealERC20` a 30 s. Pasan 363 tests y ambos typechecks. Verificación independiente: 17 tests, typecheck y probes; el fork exitoso se inspeccionó con evidencia de mi corrida, no se repitió.
 - **Archivos clave:** `packages/core/test/helpers/fondo-fixture.ts`, `packages/core/test-fork/fondo.test.ts`, configuración de Vitest/typecheck, `package.json`, helpers de diagnóstico y `docs/pruebas/fondo.md`.
