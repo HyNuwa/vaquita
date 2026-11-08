@@ -24,6 +24,51 @@ npm test -w @vaquita/core
 npm run typecheck -w @vaquita/core
 ```
 
+## Browser-safe Safe primitives (offline)
+
+`@vaquita/core/fondo/constantes` exports the S2 limits in 18-decimal bigint
+units (plus recipient count and hashed role/budget keys). The UI contribution
+limit and group objective are operational, not on-chain restrictions.
+`@vaquita/core/fondo/safe` exports:
+
+- `TxSafe`: `{ to, value, data, operation: 0 | 1, nonce }`.
+- `hashTransaccionSafe(safe, tx)`: Safe 1.4.1 EIP-712 hash on Celo 42220,
+  binding the Safe, body and nonce. Frozen `SAFE_GAS_FIELDS` fixes `safeTxGas`,
+  `baseGas`, `gasPrice` to zero and `gasToken`, `refundReceiver` to zero addresses;
+  execution builders must reuse this invariant.
+- `firmasPreaprobadas([owner1, owner2])`: exactly two distinct owners, sorted
+  numerically; each entry is 32-byte owner + 32-byte zero + `01` (65 bytes).
+  This encodes approvals; it does not verify current ownership or on-chain approval.
+- `encodeMultiSend(calls)`: **ABI-wrapped `multiSend(bytes)` calldata**, not raw
+  packed entries. Each `{ to, data }` becomes operation 0, value 0, byte length
+  and data. Any outer delegatecall is separate from these inner calls.
+
+`@vaquita/core/fondo/transacciones` exports `TxPersona = { to: Address, data: Hex }`
+and three synchronous, pure builders with an **explicit attribution code**:
+
+- `aportar(safe, monto, code)`: wARS `transfer` to the Safe, not `approve`.
+  Amounts are 18-decimal bigint units; agent caps do not limit human amounts.
+- `aprobarHash(safe, hash, code)`: Safe `approveHash` for the exact supplied hash.
+- `ejecutarPropuesta(safe, txSafe, firmas, code)`: Safe `execTransaction` with
+  the exact body and signatures and the shared frozen `SAFE_GAS_FIELDS` zeros.
+  The nonce belongs to the hash; Safe reads it on-chain, not from an ABI argument.
+
+Each outer transaction validates the live-format code, appends ERC-8021 and asserts
+its tag. Inner Safe data stays byte-for-byte unchanged, even if empty or tagged.
+The web's existing wallet submission helper accepts this additive two-field type;
+existing purchase transactions remain structurally compatible.
+
+These helpers do not load environment, filesystem, SQL or server adapters.
+They do not simulate, compare on-chain hashes, check current owners/approvals or
+submit transactions. Later RPC orchestration must compare the current hash and
+simulate before requesting the second signature. Tests cover the scoped browser
+core import closure and public imports, not a browser bundle or future reader and
+verifier modules; full S2-18 remains pending.
+Tests use synthetic fixtures and an independent reference encoding, never RPC.
+The fixed hash is **not fork evidence**: S2-11 remains pending. This unit does
+not implement prediction, deployment or Roles permissions, verify a deployed fund,
+or establish full S2 completion.
+
 ## Fund sender (local fork tests)
 
 Apps use `enviador` from `@vaquita/core/fondo/enviador`, never import
