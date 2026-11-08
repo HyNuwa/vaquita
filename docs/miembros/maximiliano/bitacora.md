@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): record S2 verification and review blocker
+- **Qué hice:** registré los commits locales `e5f72e7` (primitivas) y `80b9bf7` (constructores y tipo web), ambos con hooks normales y verificación funcional independiente aprobada. Check final observado: 35 focalizados, 408 totales y typechecks core/web, exit 0. Preservé todos los fallos previos y sus límites.
+- **Archivos clave:** `odd/tasks/fund-s2-primitives.md` y estado personal. No se modificó código por este cierre acotado.
+- **Próximo paso:** decisión humana sobre el evaluador nativo bloqueado antes de cerrar o publicar. No hay revisión nativa aprobada, push, PR ni integración de S2; S2-11 y checker Zodiac siguen pendientes. Sin repetir probes/capacidades fallidas, nuevas dependencias ni pruebas de red.
+
 ## 2026-11-08 · feat(core): build tagged fund transactions for people
 - **Qué hice:** implementé solo T3 (S6–S8): `aportar`, `aprobarHash` y `ejecutarPropuesta`, con código explícito y etiqueta exterior validada. Aporte por `transfer` de wARS sin topes del agente; ejecución con cuerpo y firmas intactos y los cinco ceros compartidos con el hash de T2. La web cambia únicamente el import y la anotación a `TxPersona`, compatible con `TxComprador`.
 - **Pruebas:** RED observado: módulo ausente (suite sin tests), 2 tests de frontera fallidos y 4 de compra aprobados. GREEN: 29 tests focalizados; suite completa 408 tests/23 archivos y ambos typechecks aprobados, sin correcciones. Recorrido estático de imports transitivos del core antes del probe público: solo constantes, Safe, constructores, ABI, tokens y tag; no acredita bundle navegador ni el S2-18 completo.

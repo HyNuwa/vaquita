@@ -68,8 +68,12 @@ Control: [`control-entrega.md`](../../tareas/control-entrega.md). Producto: [`sp
 
 ## Próximo paso
 Resolver con el humano la disposición de la evaluación nativa bloqueada antes
-de cerrar o publicar esta unidad. Código y verificación funcional independiente
-listos; no hay revisión nativa aprobada ni autorización de publicación.
+de cerrar o publicar esta unidad. Código local en `e5f72e7` (primitivas) y
+`80b9bf7` (constructores y tipo web), con hooks normales y verificación funcional
+independiente aprobada. No hay revisión nativa aprobada, push/PR ni integración
+de S2. Decisión acotada: investigar y resolver el prerrequisito del evaluador antes
+de revisar, o dejar explícitamente esos dos commits sin revisión nativa. No se
+modifica RDD, se inventa consentimiento ni se reinician presupuestos por ello.
 Sin despliegues ni nuevas pruebas de red. Checker Zodiac y vector de fork S2-11 quedan pendientes
 explícitos; los [pasos humanos](../../proyecto/specs/09-pasos-humanos.md) siguen
 separados.
