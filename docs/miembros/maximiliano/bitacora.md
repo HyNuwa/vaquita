@@ -2,6 +2,62 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): record S2 publication and CI evidence
+- **Qué hice:** publiqué tracker #32 en borrador y los hijos #33–#34 con `Refs #31`, padres exactos y un único tipo por PR, sin merges. CI real observada en verde: 42521590056 (3e12294), 42521660779 (98c7ac7) y 42521825595 (ce5f457). Código original, cinco ancestros, fallos y corrección documental preservados; verificación independiente de CI y de composición aprobadas.
+- **Archivos clave:** `odd/tasks/fund-s2-publication.md`, bitácora y estado propios; este registro es documental y no modifica código ni configuración.
+- **Próximo paso:** push de este registro y observar su nueva CI; persistir recibos finales en las descripciones de los PRs y memoria antes de entregar. Sin mergear PRs ni main/staging, nuevas pruebas de red o evaluación nativa. Se conservan dos fallos de preparación del publicador con cero llamadas API y el fallo cp1252 del verificador; los checks requeridos terminaron aprobados.
+
+## 2026-11-08 · docs(docs): record S2 publication preparation evidence
+- **Qué hice:** cerré la preparación de los wrappers 98c7ac7 y 27996c2 con árboles fuente exactos, CI exacta del tracker y cinco originales preservados. Verificación estructural independiente aprobada, sin nuevos tests funcionales; presupuesto medido de 48/381/348 líneas por padre inmediato. Se conserva un fallo cp1252 al imprimir evidencia y la ejecución acotada del tramo no alcanzado, sin repetir el barrido.
+- **Archivos clave:** `odd/tasks/fund-s2-publication.md`, bitácora y estado propios; solo documentación pasiva, sin cambios del código ya comprobado.
+- **Próximo paso:** push de las tres ramas, tracker en borrador y dos PRs hijos con `Refs #31`, readback exacto y CI remota. No se mergea ningún PR ni se repite evaluación nativa o prueba de red.
+
+## 2026-11-08 · chore(repo): prepare S2 builders publication
+- **Qué hice:** integré localmente el original f4b2bb2 sobre el wrapper 98c7ac7, preservando 80b9bf7, a23efc9 y f4b2bb2 como ancestros, incluido el fallo de evaluación y su posterior corrección documental. El único conflicto fue la bitácora propia; concatené ambas historias, sin cambiar constructores, tipo web ni pruebas originales. Árbol exacto f4/CI exacta del tracker; GREEN de 2 tests de routing, 96 focalizados (incluida compra), 408 completos y ambos typechecks; diffcheck y AST aprobados.
+- **Archivos clave:** rama `feat/fund-s2-pub-builders`, constructores y tests originales, `odd/tasks/fund-s2-publication.md`, bitácora y estado.
+- **Próximo paso:** comprobar árbol completo y estado fuente, checks, presupuesto, commit normal, guardas y verificación estructural independiente; después publicación y CI remota. Sin mergear PRs, nueva prueba de red, dependencia ni evaluación nativa.
+
+## 2026-11-08 · chore(repo): prepare S2 primitives publication
+- **Qué hice:** integré localmente el original e5f72e7 (incluido 132dd1d) sobre el tracker 3e12294, preservando originales y configuración de CI. Resolví solo dos conflictos de documentación propia: bitácoras concatenadas y estado fuente íntegro bajo el foco vigente de publicación, sin inventar comportamiento. Árbol no documental exacto; GREEN de 2 tests de routing, 6 focalizados, 383 completos y ambos typechecks; diffcheck y actualización AST aprobados.
+- **Archivos clave:** rama `feat/fund-s2-pub-safe`, primitivas y pruebas originales, `odd/tasks/fund-s2-publication.md`, bitácora y estado.
+- **Próximo paso:** comprobar árbol/ancestros, suite y guardas por SHA, luego preparar builders y cierre documental corregido. El registro fuente de e5 describe su etapa histórica, no una nueva autorización de revisión nativa. Sin mergear PRs ni nuevos forks/RPC.
+
+## 2026-11-08 · ci(ci): enable S2 chained pull request checks
+- **Qué hice:** preparé tracker nuevo desde staging e issue #31 aprobada por autorización humana explícita; CI suma únicamente las bases `feat/fund-s2-*`, sin cambiar permisos, jobs ni routing existente. RED observado; GREEN de 2 tests de routing, check base de 377 y typechecks; verificación independiente aprobada con 2 tests aislados y workflow exactamente igual a la base salvo esa adición.
+- **Archivos clave:** `.github/workflows/ci.yml`, `.github/scripts/ci-s1.test.mjs`, `odd/tasks/fund-s2-publication.md` y estado personal.
+- **Próximo paso:** conservar los cinco commits originales en dos wrappers de preparación, publicar tracker en borrador y dos hijos con `Refs #31`, observar CI; sin mergear PRs, nuevo fork/RPC ni evaluación nativa. Se conserva el fallo previo de preparación de la issue (cero llamadas API), corregido antes de su creación única confirmada.
+
+## 2026-11-08 · docs(docs): correct S2 assessment hold after diagnosis
+- **Qué hice:** corregí el bloqueo obligatorio que había inferido del fallo de ASSESS. El diagnóstico estático mostró la declaración propia ausente y que INSPECT solo conserva la selección para START; no se probó un reintento. El plan de respaldo exige checks del autor y verificación independiente para este riesgo, ya aprobados. Cerré únicamente la primera unidad local, sin declarar revisión nativa ni S2 completo.
+- **Archivos clave:** `odd/tasks/fund-s2-primitives.md`, `docs/proyecto/specs/avance.md` y estado personal. Las entradas anteriores conservan los fallos y las conclusiones de cada etapa; este registro las corrige donde indicaban un gate adicional.
+- **Verificación y próximo paso:** corrección documental autorizada; solo lectura estructural, diffcheck y hooks normales, sin repetir los 35 tests focalizados/408 totales ni los typechecks previos. No se cambió código, configuración, RDD ni autoridad. S2-11 y checker Zodiac siguen pendientes; publicación y mejora de Gentle Pi requieren alcance separado.
+
+## 2026-11-08 · docs(docs): record S2 verification and review blocker
+- **Qué hice:** registré los commits locales `e5f72e7` (primitivas) y `80b9bf7` (constructores y tipo web), ambos con hooks normales y verificación funcional independiente aprobada. Check final observado: 35 focalizados, 408 totales y typechecks core/web, exit 0. Preservé todos los fallos previos y sus límites.
+- **Archivos clave:** `odd/tasks/fund-s2-primitives.md` y estado personal. No se modificó código por este cierre acotado.
+- **Próximo paso:** decisión humana sobre el evaluador nativo bloqueado antes de cerrar o publicar. No hay revisión nativa aprobada, push, PR ni integración de S2; S2-11 y checker Zodiac siguen pendientes. Sin repetir probes/capacidades fallidas, nuevas dependencias ni pruebas de red.
+
+## 2026-11-08 · feat(core): build tagged fund transactions for people
+- **Qué hice:** implementé solo T3 (S6–S8): `aportar`, `aprobarHash` y `ejecutarPropuesta`, con código explícito y etiqueta exterior validada. Aporte por `transfer` de wARS sin topes del agente; ejecución con cuerpo y firmas intactos y los cinco ceros compartidos con el hash de T2. La web cambia únicamente el import y la anotación a `TxPersona`, compatible con `TxComprador`.
+- **Pruebas:** RED observado: módulo ausente (suite sin tests), 2 tests de frontera fallidos y 4 de compra aprobados. GREEN: 29 tests focalizados; suite completa 408 tests/23 archivos y ambos typechecks aprobados, sin correcciones. Recorrido estático de imports transitivos del core antes del probe público: solo constantes, Safe, constructores, ABI, tokens y tag; no acredita bundle navegador ni el S2-18 completo.
+- **Archivos clave:** `packages/core/src/fondo/transacciones.ts`, tests `fondo-transacciones`/`fondo-browser`, README del core y `apps/web/src/lib/firmar.ts`.
+- **Verificación independiente:** T3 aprobó 29 tests focalizados, 2 probes públicos propios y typecheck core en copia aislada con subpaths resueltos al candidato, no al workspace original. Un probe opcional de igualdad del JS falló con `TypeError: Cannot read properties of undefined (reading 'ES2022')`; no se repitió ni cuenta como PASS. El diff web contiene solo dos cambios de tipo y compra intacta.
+- **Check final del autor:** 35 tests focalizados, 408 tests/23 archivos y typechecks core/web aprobados; diffcheck y actualización AST del grafo aprobados.
+- **Límites y próximo paso:** disposición humana de la evaluación nativa bloqueada por declaración de archivos no rastreados, no PASS ni lineage/START creado. T2 y T3 tienen verificación funcional independiente aprobada; no se reintentó esa capacidad conocida como bloqueada. S2-11 sigue sin vector de fork; checker Zodiac sigue pendiente humano por la excepción acordada. Sin fork/RPC, dependencias nuevas, publicación ni afirmación de S2 completo.
+
+## 2026-11-08 · feat(core): add browser-safe Safe primitives
+- **Qué hice:** implementé solo T2: constantes exactas de S2, hash Safe para Celo 42220 con reembolso en cero, dos firmas preaprobadas distintas en orden numérico y calldata ABI completa de MultiSend con llamadas internas sin valor ni delegatecall. Tests offline: RED por módulos ausentes; GREEN focalizado de 5 tests, con referencia sintética independiente y vector fijo de MultiSend.
+- **Corrección acotada S5 (lote 1):** el verificador independiente encontró `TypeError: x.replace is not a function` al invocar `encodeMultiSend([])`: `concat([])` devolvía un Uint8Array. Reproduje RED por la API pública (1 fallo/5 éxitos), fijé el caso vacío como bytes `0x` sin prohibir listas vacías y conservé el vector no vacío. GREEN: 6 tests focalizados; suite completa 383 tests/21 archivos y ambos typechecks aprobados. Se conserva el fallo inicial TS2345 del test de variantes en la implementación original, corregido una vez con `as const` antes de aprobar el typecheck.
+- **Archivos clave:** `packages/core/src/fondo/constantes.ts`, `safe.ts`, `packages/core/test/fondo-safe.test.ts` y README del core.
+- **Verificación independiente:** hash, firmas y MultiSend no vacío aprobados; el recheck dirigido del caso vacío pasó 1 test y un probe exacto, ambos exit 0, sin otro barrido. Se conserva el probe fallido original. Spot check del autor: 6 tests focalizados aprobados.
+- **Hook:** el primer commit fue rechazado por el digest sintético de 64 hex del test. Se identificó explícitamente como digest, no clave, con la excepción por línea que admite el propio scanner; no cambió el valor ni se desactivó el hook.
+- **Próximo paso:** revisión nativa de T2; después T3 (constructores y tipo web). S2-11 sigue pendiente: el hash sintético no proviene de fork. Sin nuevas dependencias, RPC, mainnet ni publicación; checker Zodiac sigue pendiente humano.
+
+## 2026-11-08 · docs(docs): sync S1 delivery and scope first S2 unit
+- **Qué hice:** corregí el avance y el resumen vigente: S1 integrado en staging por #24 y #30, CI final 42460067821 aprobada. Registré la autorización para la primera unidad offline de S2, sin ampliar el alcance ni reabrir revisiones de S1.
+- **Archivos clave:** `docs/proyecto/specs/avance.md`, estado personal y `odd/tasks/fund-s2-primitives.md`.
+- **Próximo paso:** primitivas Safe con tests y revisión independiente; después constructores y tipo web. El vector de fork S2-11 y checker Zodiac siguen pendientes explícitos. Sin nuevas dependencias, fork/RPC, mainnet ni publicación de S2.
+
 ## 2026-11-08 · docs(docs): close verified S1 staging integration
 - **Qué hice:** integré el tracker #24 a staging después de revisar e integrar los cinco hijos; merge e6884eb con CI de staging 42459205485 aprobada. Se comprobaron árbol completo y padres exactos, commits originales ancestros y main intacto. Cerré el estado de tareas con la evidencia observada; este PR solo persiste documentación.
 - **Archivos clave:** `odd/tasks/fund-s1-publication.md`, PRs #24–#29 y estado personal.
