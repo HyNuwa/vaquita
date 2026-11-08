@@ -13,12 +13,12 @@ Seguimiento: `odd/tasks/fund-s1-publication.md`. La base de este tracker conserv
 el estado histórico inferior; los PRs hijos aportan la evidencia de implementación.
 
 ## En qué estoy
-El producto cambió ([D16](../../proyecto/decisiones.md)): La Vaquita pasa a ser un fondo compartido con reglas, sobre Safe y Zodiac Roles, con Vaqui ejecutando dentro de límites en cadena. La compra colectiva queda en pausa, con su código y su evidencia. Las specs alineadas y revisadas se mergearon en el PR #22 con CI verde. S1 tiene configuración de contratos y ABI con revisión nativa aprobada y cerrada (T1). El sender local y selector seguro (T2) pasan 38 tests focalizados, check completo de 346 tests y verificación independiente directa (38 tests, typecheck y tres grupos de probes); dos intentos anteriores fallaron en preparación con cero tests. T2 aún espera revisión nativa. Faltan arnés, verificador RPC y evidencia de despliegues del producto en fork; el script suelto previo sigue siendo solo una prueba de viabilidad ([evidencia](../../pruebas/fondo.md)).
+El producto cambió ([D16](../../proyecto/decisiones.md)): La Vaquita pasa a ser un fondo compartido con reglas, sobre Safe y Zodiac Roles, con Vaqui ejecutando dentro de límites en cadena. La compra colectiva queda en pausa, con su código y su evidencia. Las specs alineadas y revisadas se mergearon en el PR #22 con CI verde. S1 tiene configuración de contratos y ABI con revisión nativa aprobada y cerrada (T1). El sender local y selector seguro (T2) pasan 38 tests focalizados, check completo de 346 tests y verificación independiente directa (38 tests, typecheck y tres grupos de probes); dos intentos anteriores fallaron en preparación con cero tests. T2 ya tiene revisión nativa aprobada y cerrada. La primera parte de T3 (ciclo de vida de Anvil) pasa 13 tests nuevos, check completo de 359 tests y verificación independiente; todavía espera revisión nativa. Anvil 1.8.7 se confirmó con `--version`, no con el nuevo fork. Faltan fixture, suite de despliegues, verificador RPC y evidencia del producto en fork; el script suelto previo sigue siendo solo una prueba de viabilidad ([evidencia](../../pruebas/fondo.md)).
 
 Control: [`control-entrega.md`](../../tareas/control-entrega.md). Producto: [`spec.md`](../../proyecto/spec.md). Plan y estado de cada pieza: [`plan-fondo-compartido.md`](../../proyecto/plan-fondo-compartido.md).
 
 ## Próximo paso
-Revisar la segunda unidad de S1 (sender y selector), y seguir con arnés y verificador. No hay código de S1 publicado ni despliegues del producto acreditados. Seguimiento: `odd/tasks/fund-s1-contracts-fork.md`, con PRs encadenados sobre una rama integradora. Los [pasos humanos](../../proyecto/specs/09-pasos-humanos.md) siguen separados.
+Revisar el ciclo de vida de Anvil (T3) y seguir con fixture/suite/comando de fork (T3b), después el verificador. No hay código de S1 publicado ni despliegues del producto acreditados. Seguimiento: `odd/tasks/fund-s1-contracts-fork.md`, con PRs encadenados sobre una rama integradora. Los [pasos humanos](../../proyecto/specs/09-pasos-humanos.md) siguen separados.
 
 ## Bloqueos
 - Falta confirmar si Esteban y Daniel aceptan ser responsables. Si no, el piloto es una simulación (D16.20).
@@ -31,3 +31,7 @@ Revisar la segunda unidad de S1 (sender y selector), y seguir con arnés y verif
 
 ### Rama de publicación sender · 2026-11-08
 Unidad original d070eaa preservada; checks de integración y publicación en curso. Sin nuevos forks ni pagos, sin merges a staging.
+
+
+### Rama de publicación harness · 2026-11-08
+Unidad original f6ab375 preservada; checks de integración y publicación en curso. Sin nuevos forks ni pagos, sin merges a staging.

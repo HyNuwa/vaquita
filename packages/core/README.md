@@ -55,4 +55,28 @@ These deterministic tests do not run Anvil or prove contract deployment:
 npm exec -w @vaquita/core -- vitest run test/fork-sender.test.ts test/fondo-enviador.test.ts
 ```
 
+## Fork lifecycle test helper
+
+`test/helpers/anvil.ts` resolves Anvil from `ANVIL_BIN`, then `PATH`, then
+`~/.foundry/bin`. An explicit invalid override fails rather than choosing a
+different executable. It does not load environment files; `LIVE_PAYMENTS` must
+be entirely absent. `CELO_RPC_URL` selects the upstream fork source, defaulting
+to the public Celo RPC. Upstream access is read-only; all administrative calls
+are restricted to the helper's ephemeral loopback endpoint.
+
+`withAnvil(options, async (fork) => { ... })` starts a dedicated child on a free
+loopback port, waits for chain 42220 and closes that child in `finally`.
+Startup failure also triggers cleanup. Shutdown waits for exit, escalates only
+that child from `SIGTERM` to `SIGKILL`, and fails if exit cannot be confirmed.
+The helper does not send transactions; fork fixtures use the selector above.
+Its ordinary tests mock process, port and RPC operations, so they do not need
+Anvil or an upstream connection:
+
+```sh
+npm exec -w @vaquita/core -- vitest run test/anvil.test.ts
+```
+
+This lifecycle helper alone does not prove Safe/Roles deployment; the separate
+fork fixture, suite and root command are still pending.
+
 Design and rules: [`docs/investigacion/10-scaffold-stable-agent.md`](../../docs/investigacion/10-scaffold-stable-agent.md).

@@ -2,6 +2,12 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · chore(repo): prepare S1 harness publication branch
+- **Qué hice:** integré la unidad original f6ab375 en la rama nueva de publicación, conservando su commit y la CI ya revisada. Las entradas de bitácora solapadas se conservaron de ambos lados; no cambió el código productivo respecto de la unidad original.
+- **Archivos clave:** rama feat/fund-s1-pub-harness, evidencia y pruebas originales, bitácora y estado.
+- **Próximo paso:** verificar el árbol exacto y checks, publicar el PR hacia su padre; sin merge a staging.
+
+
 ## 2026-11-08 · chore(repo): prepare S1 sender publication branch
 - **Qué hice:** integré la unidad original d070eaa en la rama nueva de publicación, conservando su commit y la CI ya revisada. Las entradas de bitácora solapadas se conservaron de ambos lados; no cambió el código productivo respecto de la unidad original.
 - **Archivos clave:** rama feat/fund-s1-pub-sender, evidencia y pruebas originales, bitácora y estado.
@@ -22,6 +28,11 @@ Una entrada por commit, la más nueva arriba.
 - **Qué hice:** preparé un tracker nuevo desde staging para publicar S1 sin reescribir las unidades ya revisadas. CI admite PRs cuya base sea `feat/fund-s1-*`; conserva los pushes de staging/main y permisos de solo lectura. Pruebas de configuración: RED 1 fallo/1 éxito; GREEN 2 tests, check base de 280 tests y ambos typechecks. Verificación independiente aprobada con los mismos comandos; CI remota todavía pendiente.
 - **Archivos clave:** `.github/workflows/ci.yml`, `.github/scripts/ci-s1.test.mjs`, `odd/tasks/fund-s1-publication.md`.
 - **Próximo paso:** verificar y revisar el ajuste, publicar issue/etiquetas autorizadas y PRs de S1; no mergear a staging. Sin nuevos forks ni pagos.
+## 2026-11-07 · test(core): add bounded Anvil lifecycle harness
+- **Qué hice:** primera parte de T3: resolución de Anvil, puerto local libre, espera de red 42220 y cierre del proceso propio aun si falla el arranque o la prueba. Observé RED por módulo faltante y GREEN con 13 tests; el check completo pasó 359 tests y ambos typechecks. Una verificación independiente confirmó esos 13 tests, el typecheck y tres grupos de probes con procesos y red falsos. Anvil 1.8.7 respondió al chequeo de versión, pero todavía no se ejecutó el nuevo fork.
+- **Archivos clave:** `packages/core/test/helpers/anvil.ts`, `packages/core/test/anvil.test.ts`, `packages/core/README.md` y `odd/tasks/fund-s1-contracts-fork.md`.
+- **Próximo paso:** revisión nativa de esta unidad; después fixture, suite y comando de fork (T3b). La revisión nativa de T2 quedó aprobada y cerrada; no es una auditoría ni evidencia de despliegue.
+
 ## 2026-11-07 · feat(core): add isolated fork sender and guarded selector
 - **Qué hice:** segunda unidad de S1: sender etiquetado exclusivo de RPC local, sin redirecciones ni CIP-64, y selector explícito que rechaza el modo fork si falta la bandera o existe `LIVE_PAYMENTS`. Conservé el sender normal y sus guardas. Pasaron 38 tests focalizados y el check completo de 346 tests; una verificación independiente directa pasó esos 38 tests, el typecheck y tres grupos de probes sin efectos. Dos intentos previos fallaron en preparación, con cero tests; no se presentan como aprobados.
 - **Archivos clave:** `packages/core/src/chain/fork-sender.ts`, `packages/core/src/fondo/enviador.ts`, sus tests, `packages/core/README.md` y `odd/tasks/fund-s1-contracts-fork.md`.
