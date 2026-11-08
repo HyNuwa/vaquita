@@ -10,9 +10,10 @@ S1 quedó integrado mediante los PRs #24–#29 y el cierre documental #30.
 `main` sigue intacto. El checker Zodiac sigue pendiente humano, no aprobado.
 Seguimiento de esa entrega: `odd/tasks/fund-s1-publication.md`.
 
-Autorizado ahora: corregir el registro de avance y comenzar únicamente las
-primitivas Safe y los constructores etiquetados de S2 con tests offline y revisión
-independiente. Rama `feat/fund-s2-primitives`, seguimiento
+Primera unidad de S2 implementada y cerrada localmente: primitivas Safe y
+constructores etiquetados, con tests offline y revisión funcional independiente.
+La corrección documental posterior fue autorizada expresamente.
+Rama `feat/fund-s2-primitives`, seguimiento
 `odd/tasks/fund-s2-primitives.md`. No se inicia el resto de S2, no se agregan
 dependencias ni se repiten fork/RPC o acciones en mainnet. Falta el vector fijo de
 fork para S2-11; las pruebas sintéticas no lo acreditan.
@@ -23,8 +24,8 @@ reembolso en cero, firmas preaprobadas de dos responsables distintos en orden
 numérico y MultiSend ABI completo con llamadas internas de operación y valor cero.
 RED observado por módulos ausentes; GREEN focalizado: 5 tests offline. El hash
 fijo se calculó con una referencia sintética independiente, no con un fork:
-S2-11 sigue pendiente. T3 y el resto de S2 no están implementados por esta unidad;
-verificación independiente y revisión siguen a cargo del orquestador.
+S2-11 sigue pendiente. T2 no incluye T3 ni el resto de S2; la implementación y
+verificación de T3 se registran por separado abajo.
 
 Corrección acotada S5, lote 1: el probe independiente de `encodeMultiSend([])`
 falló con `TypeError: x.replace is not a function`; RED local reprodujo 1 fallo y
@@ -45,8 +46,9 @@ RED: suite de constructores sin tests por módulo ausente, 2 fallos de frontera 
 y typechecks core/web aprobados. Recorrido estático de imports del core y probe
 público aprobados para constantes/Safe/constructores; no es bundle navegador ni
 prueba de los futuros lector/verificador (S2-18 completo pendiente).
-T2 conserva su verificación independiente aprobada. Disposición nativa bloqueada
-por declaración de archivos no rastreados; no es PASS y no existe START/lineage.
+T2 conserva su verificación independiente aprobada. Se conservan las tres
+fallas de evaluación nativa por declaración de archivos no rastreados; no son
+PASS ni crearon START/lineage.
 T3 pasó verificación independiente: 29 tests focalizados, 2 probes públicos y
 typecheck core en estado aislado con imports resueltos al candidato. Un probe
 opcional de igualdad del JS no pudo ejecutarse por `TypeError: Cannot read
@@ -54,9 +56,14 @@ properties of undefined (reading 'ES2022')`; no se reintentó ni se afirma PASS.
 La comparación estructural confirma solo los dos cambios de tipo en la web.
 Check final del autor: 35 focalizados, 408 tests/23 archivos y ambos typechecks,
 exit 0; diffcheck y actualización AST del grafo aprobados.
-Falta disposición humana por la evaluación nativa bloqueada; no se repite ni se
-ocultan archivos para sortearla. S2-11 sigue pendiente por falta de vector de fork
-y checker Zodiac pendiente humano.
+Diagnóstico estático posterior: ASSESS no adopta la selección de INSPECT y las
+llamadas no llevaban declaración propia; el rango comprometido sí se transmitía.
+El fallo no estableció `reviewDue` ni un gate obligatorio adicional. El plan de
+respaldo para el riesgo de seguridad exige checks del autor y verificación
+independiente, ambos ya aprobados. Se corrige la inferencia de bloqueo, sin
+convertir los fallos en revisión nativa aprobada ni repetir evaluaciones.
+La primera unidad queda cerrada solo en ese alcance local. S2-11 sigue pendiente
+por falta de vector de fork y checker Zodiac pendiente humano.
 
 ## Resumen histórico de implementación de S1
 Este resumen conserva la evidencia local anterior a la publicación; el estado
@@ -67,16 +74,16 @@ El producto cambió ([D16](../../proyecto/decisiones.md)): La Vaquita pasa a ser
 Control: [`control-entrega.md`](../../tareas/control-entrega.md). Producto: [`spec.md`](../../proyecto/spec.md). Plan y estado de cada pieza: [`plan-fondo-compartido.md`](../../proyecto/plan-fondo-compartido.md).
 
 ## Próximo paso
-Resolver con el humano la disposición de la evaluación nativa bloqueada antes
-de cerrar o publicar esta unidad. Código local en `e5f72e7` (primitivas) y
-`80b9bf7` (constructores y tipo web), con hooks normales y verificación funcional
+Decidir por separado la publicación de esta unidad o el siguiente alcance de S2;
+no se ejecutan automáticamente. Código local en `e5f72e7` (primitivas) y `80b9bf7`
+(constructores y tipo web), con hooks normales y verificación funcional
 independiente aprobada. No hay revisión nativa aprobada, push/PR ni integración
-de S2. Decisión acotada: investigar y resolver el prerrequisito del evaluador antes
-de revisar, o dejar explícitamente esos dos commits sin revisión nativa. No se
-modifica RDD, se inventa consentimiento ni se reinician presupuestos por ello.
-Sin despliegues ni nuevas pruebas de red. Checker Zodiac y vector de fork S2-11 quedan pendientes
-explícitos; los [pasos humanos](../../proyecto/specs/09-pasos-humanos.md) siguen
-separados.
+de S2. La mejora del contrato público de ASSESS pertenece a Gentle Pi y queda
+como trabajo separado; no se parchea la instalación global ni se reintenta por
+esta corrección documental. RDD y los presupuestos no cambian.
+Sin despliegues ni nuevas pruebas de red. Checker Zodiac y vector de fork S2-11
+quedan pendientes explícitos; los [pasos humanos](../../proyecto/specs/09-pasos-humanos.md)
+siguen separados.
 
 ## Bloqueos
 - Falta confirmar si Esteban y Daniel aceptan ser responsables. Si no, el piloto es una simulación (D16.20).

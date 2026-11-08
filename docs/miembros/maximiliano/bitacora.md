@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): correct S2 assessment hold after diagnosis
+- **Qué hice:** corregí el bloqueo obligatorio que había inferido del fallo de ASSESS. El diagnóstico estático mostró la declaración propia ausente y que INSPECT solo conserva la selección para START; no se probó un reintento. El plan de respaldo exige checks del autor y verificación independiente para este riesgo, ya aprobados. Cerré únicamente la primera unidad local, sin declarar revisión nativa ni S2 completo.
+- **Archivos clave:** `odd/tasks/fund-s2-primitives.md`, `docs/proyecto/specs/avance.md` y estado personal. Las entradas anteriores conservan los fallos y las conclusiones de cada etapa; este registro las corrige donde indicaban un gate adicional.
+- **Verificación y próximo paso:** corrección documental autorizada; solo lectura estructural, diffcheck y hooks normales, sin repetir los 35 tests focalizados/408 totales ni los typechecks previos. No se cambió código, configuración, RDD ni autoridad. S2-11 y checker Zodiac siguen pendientes; publicación y mejora de Gentle Pi requieren alcance separado.
+
 ## 2026-11-08 · docs(docs): record S2 verification and review blocker
 - **Qué hice:** registré los commits locales `e5f72e7` (primitivas) y `80b9bf7` (constructores y tipo web), ambos con hooks normales y verificación funcional independiente aprobada. Check final observado: 35 focalizados, 408 totales y typechecks core/web, exit 0. Preservé todos los fallos previos y sus límites.
 - **Archivos clave:** `odd/tasks/fund-s2-primitives.md` y estado personal. No se modificó código por este cierre acotado.
