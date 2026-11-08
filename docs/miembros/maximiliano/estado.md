@@ -2,6 +2,13 @@
 
 **Última actualización:** 2026-11-08
 
+## Publicación de la primera unidad S2 · 2026-11-08
+Foco actual: preparar tracker en borrador y dos PRs hijos hacia staging, sin mergear PRs. Issue #31 creada y confirmada con `status:approved` y `type:feature`; referencias no cerrantes. Cambio de CI limitado a admitir bases `feat/fund-s2-*`: RED observado (1 falla esperada/1 pasa), GREEN de 2 tests de routing, check base de 377 tests y typechecks; verificación independiente aprobada (2 tests aislados y comparación exacta con el workflow base). Código financiero original y su rama conservados; no se repiten fork/RPC ni evaluación nativa.
+Próximo paso: commit normal del ajuste de CI y preparar wrappers con árboles/ancestros exactos, luego publicar y observar CI remota. Sin bloqueos de producto nuevos; wrappers y checks remotos todavía pendientes.
+Seguimiento: `odd/tasks/fund-s2-publication.md`; implementación local previa en `odd/tasks/fund-s2-primitives.md` (en la rama fuente).
+
+## Registro histórico de la base S1 (no es el estado actual)
+
 ## Publicación de S1 · 2026-11-08
 
 Preparación autorizada de tracker nuevo y CI para bases `feat/fund-s1-*`, sin

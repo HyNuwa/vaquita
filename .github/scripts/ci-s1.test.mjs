@@ -9,8 +9,8 @@ function branches(event) {
   return line[1].split(',').map(value => value.trim().replace(/^['"]|['"]$/g, ''));
 }
 
-test('PR CI includes only the S1 feature namespace beyond protected bases', () => {
-  assert.deepEqual(branches('pull_request'), ['staging', 'main', 'feat/fund-s1-*']);
+test('PR CI includes only the S1 and S2 feature namespaces beyond protected bases', () => {
+  assert.deepEqual(branches('pull_request'), ['staging', 'main', 'feat/fund-s1-*', 'feat/fund-s2-*']);
 });
 
 test('existing protected-base and push routing remains intact', () => {

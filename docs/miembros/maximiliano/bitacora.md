@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · ci(ci): enable S2 chained pull request checks
+- **Qué hice:** preparé tracker nuevo desde staging e issue #31 aprobada por autorización humana explícita; CI suma únicamente las bases `feat/fund-s2-*`, sin cambiar permisos, jobs ni routing existente. RED observado; GREEN de 2 tests de routing, check base de 377 y typechecks; verificación independiente aprobada con 2 tests aislados y workflow exactamente igual a la base salvo esa adición.
+- **Archivos clave:** `.github/workflows/ci.yml`, `.github/scripts/ci-s1.test.mjs`, `odd/tasks/fund-s2-publication.md` y estado personal.
+- **Próximo paso:** conservar los cinco commits originales en dos wrappers de preparación, publicar tracker en borrador y dos hijos con `Refs #31`, observar CI; sin mergear PRs, nuevo fork/RPC ni evaluación nativa. Se conserva el fallo previo de preparación de la issue (cero llamadas API), corregido antes de su creación única confirmada.
+
 ## 2026-11-08 · docs(docs): close verified S1 staging integration
 - **Qué hice:** integré el tracker #24 a staging después de revisar e integrar los cinco hijos; merge e6884eb con CI de staging 42459205485 aprobada. Se comprobaron árbol completo y padres exactos, commits originales ancestros y main intacto. Cerré el estado de tareas con la evidencia observada; este PR solo persiste documentación.
 - **Archivos clave:** `odd/tasks/fund-s1-publication.md`, PRs #24–#29 y estado personal.
