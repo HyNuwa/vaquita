@@ -14,7 +14,10 @@ local de wARS y USDC y el avance del tiempo.
 El check completo pasó 363 tests y los typechecks de core/web. Una verificación
 independiente ejecutó 17 tests focalizados, typecheck del core y probes en memoria;
 inspeccionó las assertions y reutilizó el resultado del fork anterior: **no ejecutó
-otro fork**. La revisión nativa de esta unidad todavía está pendiente.
+otro fork**. T3b quedó en el commit local `16141c7`: revisión nativa de
+resiliencia, legibilidad y confiabilidad aprobada y cerrada mediante acknowledgement.
+La observación informativa sobre el contexto sanitizado del diagnóstico queda
+separada; no abrió una corrección ni reabre la revisión.
 
 Dos corridas previas fallaron por timeout; el diagnóstico localizó el fallo en
 `anvil_dealERC20`. Se cambió exclusivamente su plazo de solicitud de 1 a 30 segundos,
@@ -24,7 +27,57 @@ No se observó Anvil activo después de la corrida exitosa.
 
 Esta evidencia cubre S1-5/S1-6 en fork, no permisos completos, concurrencia,
 CIP-64 ni despliegues en mainnet. El comando independiente `fondo:contratos`,
-el checker Zodiac y el cierre total de S1 siguen pendientes.
+el checker Zodiac y el cierre total de S1 seguían pendientes al cerrar T3b;
+la sección siguiente registra el avance de T4.
+
+## Verificador S1 del repositorio · 2026-11-08 · solo lectura
+
+`npm run fondo:contratos` terminó con **exit 0** (6 s): RPC respondió chainId
+42220 y los seis hashes de código coincidieron con `contratosFondo(42220)`.
+El CLI imprimió una fila por contrato con dirección pública, hash esperado,
+observado y resultado; no carga claves, archivos de entorno, wallet, backend o
+base de datos. Un fallo de lectura, otra red, código ausente o hash diferente
+produce exit 1; no hay reintentos automáticos. Tests nuevos: 14; check completo:
+377 tests y typechecks core/web aprobados. Verificación independiente aprobada:
+14 tests, typecheck y dos escenarios del CLI real con RPC loopback (otra red y
+código ausente), comprobando exit/stdout/stderr y solo métodos de lectura.
+El éxito RPC público usa la evidencia de mi corrida, no una repetición del
+verificador. T4 quedó en `6314087`: revisión nativa de resiliencia, legibilidad
+y confiabilidad aprobada y cerrada mediante acknowledgement, sin observaciones.
+
+**Bloqueo / paso humano:** `sanityCheckZodiacModuleAddress` no fue ejecutado.
+Zodiac 5.0.1 se instaló sin scripts y luego se retiró por decisión explícita del
+responsable ante alertas de seguridad en su árbol transitivo. Su función es un
+chequeo síncrono de registro/direcciones defectuosas, no una verificación RPC.
+La auditoría completa terminó con exit 1 y reportó 36 vulnerabilidades en todo
+el árbol, no todas atribuibles a la instalación. No se aplicó `audit fix`,
+downgrade ni override. Los 26 paquetes agregados se retiraron offline, sin
+scripts; `packages/core/package.json` y `package-lock.json` quedaron idénticos
+al estado previo. Toda tabla completada avisa en stderr que el checker humano está
+pendiente, incluso con exit 0 por los hashes. Los rechazos tempranos de
+configuración o chainId imprimen únicamente el error correspondiente. Esto no es una auditoría ni prueba
+permisos efectivos; no se repitió el fork de T3b.
+
+## Cierre funcional de S1 · 2026-11-08 · entrega local
+
+La verificación final independiente ejecutó una vez `npm run check`: **exit 0,
+377 tests en 20 archivos y typechecks core/web**. Los criterios S1-1 a S1-4
+quedaron comprobados en esa suite (incluido scanner de imports de apps).
+S1-5/S1-6 reutilizan el fork exitoso de T3b y S1-7 la lectura pública de T4,
+ambos inspeccionados independientemente. S1-8 tiene stack y esta evidencia
+actualizados. No se repitió ninguna de esas dos corridas de red.
+
+Cadena local de unidades revisadas: `50fd2e7` → `d070eaa` → `f6ab375` →
+`16141c7` → `6314087`. Las cinco revisiones nativas terminaron aprobadas y sus
+acknowledgements cerraron la autoridad. Los advisories informativos de T1, T3 y
+T3b quedan como trabajo separado, sin correcciones abiertas ni repetición de
+receipts. El seguimiento conserva fallos de preparación, dos fallos de fork y
+las autorizaciones de continuación; no se reinterpretan como éxitos.
+
+Alcance: S1 local con el checker Zodiac humano pendiente autorizado, no S2–S8,
+auditoría, permisos efectivos, CIP-64 en fork o despliegue de producto en mainnet.
+El código no fue publicado, no se observaron CI remota ni merge a `staging` para
+estas unidades. La evidencia de lectura de mainnet no implica envíos a mainnet.
 
 ## Contratos en Celo · 2026-11-04 · solo lectura
 

@@ -8,7 +8,22 @@ Se actualiza en el mismo PR que hace el trabajo. Una casilla se marca solo cuand
 - D16 y `spec.md` alineados documentalmente con Web3-first en esta corrección; `contexto.md` y `stack.md` precisan sus dependencias. Revisión independiente documental completada según el registro inferior; no equivale a S8-5. Esto no marca criterios funcionales ni de revisión del código como cumplidos.
 
 ## S1 · Contratos y fork
-- [ ] Criterios S1-1 a S1-8
+- [x] Criterios S1-1 a S1-8 — verificados localmente el 2026-11-08; código aún sin publicar.
+
+Unidades locales: T1 `50fd2e7`, T2 `d070eaa`, T3 `f6ab375`, T3b `16141c7`
+y T4 `6314087`, cada una con revisión nativa aprobada y cerrada. Verificación
+final independiente: **377 tests y typechecks core/web**, exit 0. El fork de T3b
+pasó una vez (30,12 s); `fondo:contratos` pasó con chainId 42220 y seis hashes
+coincidentes. Ambos resultados de red son ejecuciones del autor inspeccionadas
+independientemente, no nuevas corridas del verificador. Evidencia y límites:
+[`docs/pruebas/fondo.md`](../../pruebas/fondo.md).
+
+**Excepción autorizada:** `sanityCheckZodiacModuleAddress` sigue pendiente humano.
+El responsable eligió retirar Zodiac 5.0.1 ante alertas transitivas; la dependencia
+y los cambios de lockfile se retiraron sin tocar otras dependencias. No equivale
+a un checker aprobado, auditoría, permisos efectivos completos, pruebas I1–I4 ni
+cierre de S8. Push, PRs, CI remota e integración en `staging` siguen pendientes
+de la decisión de publicación.
 
 ## S2 · Core del fondo
 - [ ] Negativas N1 a N14
@@ -61,3 +76,10 @@ Las que la regla de ambigüedad haya resuelto durante la ejecución: fecha, deci
 ## Bloqueos
 
 Lo que necesita a una persona: pieza, error exacto y qué se hizo mientras tanto.
+
+- **S1, checker Zodiac:** `sanityCheckZodiacModuleAddress` no ejecutado. Zodiac
+  5.0.1 retirado por decisión explícita ante alertas de seguridad transitivas;
+  comprobación obligatoria de red/seis hashes completada sin SDK. El checker
+  queda como paso humano, no se instala otra versión ni se aplica `audit fix`.
+- **Entrega de S1:** unidades locales verificadas y revisadas; publicación de la
+  cadena y CI remota aún no ejecutadas.
