@@ -1,5 +1,7 @@
 # Spike de wARS
 
+> Evidencia de la compra colectiva, en pausa por [D16](../proyecto/decisiones.md). Sigue valiendo para wARS, la etiqueta, CIP-64 y la firma desde el celular. No prueba nada de Safe ni de Roles.
+
 Se reproduce con `npm run spike:lectura`. No transmite nada y firma con una clave descartable.
 
 ## Parte sin fondos · 2026-11-02 · hecha

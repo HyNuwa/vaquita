@@ -1,5 +1,7 @@
 # Plan de compra colectiva por intención
 
+> **Antecedente, en pausa por [D16](decisiones.md).** El código y los contratos quedan en el repo, pero no son el producto ni la demo. El plan vigente es [plan-fondo-compartido.md](plan-fondo-compartido.md).
+
 **Estado:** diseño al 25/10/2026; pendiente de spike, tests y revisión. Especificación: [D11](decisiones.md). Antecedentes: [v4](../investigacion/la-vaquita-2/v4-comunidades-propietarias.md) y [debate, ronda 3](../investigacion/la-vaquita-2/fast-track/debate-ronda-3.md).
 
 ## 1. Qué es y el recorrido de la demo

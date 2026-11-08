@@ -1,12 +1,12 @@
 # La Vaquita
 
-An AI agent for intent-based collective buying in digital pesos (wARS by Ripio) on Celo. Developer communities in Jujuy describe what they need, the agent prepares and compares supplier quotes, and the community votes on an offer for digital goods or services. Each buyer signs an on-chain commitment and authorizes the exact amount. Funds stay in their wallets until an atomic purchase pays the supplier directly; if the minimum is not met, the entire transaction reverts. This is the MVP design under D11, pending the spike, implementation and review.
+A platform where groups and communities manage shared money through verifiable rules, without depending on one person. Each group's fund is held in digital pesos (wARS by Ripio) on Celo. A Safe establishes shared control with two out of three signatures, Zodiac Roles limits what the agent can do on-chain, and the agent Vaqui automates authorized payments.
 
-La Vaquita is the working name, with a commercial naming decision due October 27. The existing rotating savings circle (junta) engine and its tests remain in the repo, paused under D11.7 and outside the main demo; `@vaquita/*` identifiers stay unchanged before November 9.
+This is an experimental prototype, and the design under decision D16 is not implemented yet. The fund is not a savings or investment product. Two responsables acting together can move the whole fund, and Ripio can pause, block and upgrade wARS. The collective purchase (D11) and the rotating savings (junta) engine stay in the repo, paused.
 
 Built for the **Agents on Open Rails** hackathon (Celo × Ripio), Track 1: Stable Agents LatAm.
 
-> Pitch: *"An agent that aggregates demand from LatAm tech communities, gets suppliers to compete, and executes purchases in wARS without holding buyers' funds."* Commitments do not reserve funds; payment does not guarantee delivery. Ripio can pause, block and upgrade wARS. Full context: [`docs/proyecto/contexto.md`](docs/proyecto/contexto.md). Design: [`docs/proyecto/plan-compra-colectiva.md`](docs/proyecto/plan-compra-colectiva.md).
+Product: [`docs/proyecto/spec.md`](docs/proyecto/spec.md). Technical plan and verification status: [`docs/proyecto/plan-fondo-compartido.md`](docs/proyecto/plan-fondo-compartido.md). Context: [`docs/proyecto/contexto.md`](docs/proyecto/contexto.md).
 
 ## Repository layout
 
