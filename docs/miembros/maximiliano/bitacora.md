@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): record S2 publication preparation evidence
+- **Qué hice:** cerré la preparación de los wrappers 98c7ac7 y 27996c2 con árboles fuente exactos, CI exacta del tracker y cinco originales preservados. Verificación estructural independiente aprobada, sin nuevos tests funcionales; presupuesto medido de 48/381/348 líneas por padre inmediato. Se conserva un fallo cp1252 al imprimir evidencia y la ejecución acotada del tramo no alcanzado, sin repetir el barrido.
+- **Archivos clave:** `odd/tasks/fund-s2-publication.md`, bitácora y estado propios; solo documentación pasiva, sin cambios del código ya comprobado.
+- **Próximo paso:** push de las tres ramas, tracker en borrador y dos PRs hijos con `Refs #31`, readback exacto y CI remota. No se mergea ningún PR ni se repite evaluación nativa o prueba de red.
+
 ## 2026-11-08 · chore(repo): prepare S2 builders publication
 - **Qué hice:** integré localmente el original f4b2bb2 sobre el wrapper 98c7ac7, preservando 80b9bf7, a23efc9 y f4b2bb2 como ancestros, incluido el fallo de evaluación y su posterior corrección documental. El único conflicto fue la bitácora propia; concatené ambas historias, sin cambiar constructores, tipo web ni pruebas originales. Árbol exacto f4/CI exacta del tracker; GREEN de 2 tests de routing, 96 focalizados (incluida compra), 408 completos y ambos typechecks; diffcheck y AST aprobados.
 - **Archivos clave:** rama `feat/fund-s2-pub-builders`, constructores y tests originales, `odd/tasks/fund-s2-publication.md`, bitácora y estado.

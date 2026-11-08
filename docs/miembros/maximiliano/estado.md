@@ -3,8 +3,8 @@
 **Última actualización:** 2026-11-08
 
 ## Publicación de la primera unidad S2 · 2026-11-08
-Foco actual: wrapper local de builders y cierre corregido sobre 98c7ac7, issue #31 confirmada y referencias no cerrantes. Tracker 3e12294 y primitivas 98c7ac7 tienen hooks/checks/guardas aprobados; verificación independiente de CI aprobada. Sin mergear PRs, fork/RPC ni reintentar evaluación nativa.
-Wrapper de primitivas: fuente exacta e5, CI del tracker, 2 tests de routing, 6 focalizados, 383 completos y ambos typechecks aprobados; delta final de 381 líneas. Wrapper builders: fuente f4/CI del tracker exactas, 2 tests de routing, 96 focalizados, 408 completos y ambos typechecks aprobados. Próximo paso: commit/guardas/ancestros y verificación estructural independiente, luego publicar la cadena y observar CI remota.
+Foco actual: publicar tracker 3e12294 y wrappers 98c7ac7/27996c2 hacia staging con issue #31 y referencias no cerrantes. Hooks, checks y guardas aprobados en las tres unidades; verificación independiente de CI y preservación estructural aprobadas. Sin mergear PRs, fork/RPC ni reintentar evaluación nativa.
+Wrapper de primitivas: fuente exacta e5, CI del tracker, 2 tests de routing, 6 focalizados, 383 completos y ambos typechecks aprobados; delta final de 381 líneas. Wrapper builders: fuente f4/CI del tracker exactas, 2 tests de routing, 96 focalizados, 408 completos y ambos typechecks aprobados. Verificación estructural independiente aprobada: fuentes exactas, cinco originales ancestros y bitácoras/diagnóstico preservados; presupuestos 48/381/348 líneas. Próximo paso: push/creación/readback de los tres PRs y observar CI remota.
 Seguimiento: `odd/tasks/fund-s2-publication.md`. El registro inferior conserva íntegra la etapa fuente f4b2bb2 y su diagnóstico/cierre corregido; sus referencias a no publicación describen aquel momento histórico. No se declara revisión nativa aprobada ni S2 completo.
 
 ## Estado actual · S1 integrado y primera unidad de S2
