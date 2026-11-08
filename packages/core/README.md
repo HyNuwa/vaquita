@@ -24,6 +24,31 @@ npm test -w @vaquita/core
 npm run typecheck -w @vaquita/core
 ```
 
+## Browser-safe Safe primitives (offline)
+
+`@vaquita/core/fondo/constantes` exports the S2 limits in 18-decimal bigint
+units (plus recipient count and hashed role/budget keys). The UI contribution
+limit and group objective are operational, not on-chain restrictions.
+`@vaquita/core/fondo/safe` exports:
+
+- `TxSafe`: `{ to, value, data, operation: 0 | 1, nonce }`.
+- `hashTransaccionSafe(safe, tx)`: Safe 1.4.1 EIP-712 hash on Celo 42220,
+  binding the Safe, body and nonce. Frozen `SAFE_GAS_FIELDS` fixes `safeTxGas`,
+  `baseGas`, `gasPrice` to zero and `gasToken`, `refundReceiver` to zero addresses;
+  execution builders must reuse this invariant.
+- `firmasPreaprobadas([owner1, owner2])`: exactly two distinct owners, sorted
+  numerically; each entry is 32-byte owner + 32-byte zero + `01` (65 bytes).
+  This encodes approvals; it does not verify current ownership or on-chain approval.
+- `encodeMultiSend(calls)`: **ABI-wrapped `multiSend(bytes)` calldata**, not raw
+  packed entries. Each `{ to, data }` becomes operation 0, value 0, byte length
+  and data. Any outer delegatecall is separate from these inner calls.
+
+These pure helpers do not load environment, filesystem, SQL or server adapters.
+Tests use synthetic fixtures and an independent reference encoding, never RPC.
+The fixed hash is **not fork evidence**: S2-11 remains pending. This unit does
+not implement transaction builders, prediction, deployment or Roles permissions,
+verify a deployed fund, or establish full S2 completion.
+
 ## Fund sender (local fork tests)
 
 Apps use `enviador` from `@vaquita/core/fondo/enviador`, never import
