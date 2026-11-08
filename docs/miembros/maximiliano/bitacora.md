@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): record S1 publication and CI evidence
+- **Qué hice:** publiqué la issue aprobada #23, tracker #24 en borrador y las cinco unidades #25–#29 encadenadas por ramas feature. Todos tuvieron CI real en verde; cada integración pasó check local y routing tests. Verificación independiente: commits/árboles originales y evidencias preservados, sin reescribir historia. Revisión nativa del ajuste CI aprobada y cerrada. El registro del cierre documental requiere observar nuevamente la CI de #29 antes de entregar.
+- **Archivos clave:** `odd/tasks/fund-s1-publication.md`, ramas `feat/fund-s1-pub-*`, bitácora y estado.
+- **Próximo paso:** decisión humana de integración; no se mergeó a staging/main, no se repitió fork ni RPC, no se inició S2. Checker Zodiac pendiente humano. El rechazo inicial del hook y el diagnóstico sed con ramas se conservan; guardas por SHA completos pasaron sin modificar el script.
+
 ## 2026-11-08 · chore(repo): prepare S1 check publication branch
 - **Qué hice:** integré la unidad original 821bda6 en la rama nueva de publicación, conservando su commit y la CI ya revisada. Las entradas de bitácora solapadas se conservaron de ambos lados; no cambió el código productivo respecto de la unidad original.
 - **Archivos clave:** rama feat/fund-s1-pub-check, evidencia y pruebas originales, bitácora y estado.

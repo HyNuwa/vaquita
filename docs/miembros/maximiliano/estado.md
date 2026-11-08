@@ -41,5 +41,7 @@ Unidad original f6ab375 preservada; checks de integración y publicación en cur
 Unidad original 16141c7 preservada; checks de integración y publicación en curso. Sin nuevos forks ni pagos, sin merges a staging.
 
 
-### Rama de publicación check · 2026-11-08
-Unidad original 821bda6 preservada; checks de integración y publicación en curso. Sin nuevos forks ni pagos, sin merges a staging.
+### Publicación S1 · 2026-11-08
+Issue #23 aprobada. Tracker #24 en borrador y cinco unidades #25–#29 publicadas contra su padre inmediato; todas con CI real en verde en la primera observación. Originales y árboles productivos preservados según verificación independiente; check final local 377 tests y ambos typechecks aprobados, más 2 tests de routing. El commit documental final exige observar su nueva CI antes de entregar.
+
+Próximo paso: decisión humana sobre la integración de la cadena. No se mergeó a staging/main, no se inició S2 ni hubo nuevos forks, RPC o pagos. Checker Zodiac sigue pendiente humano por la excepción acordada; no se presenta como PASS ni auditoría.
