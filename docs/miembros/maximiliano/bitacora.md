@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-07 · feat(core): add verified fund contract configuration and ABI
+- **Qué hice:** primera unidad de S1: configuración pura de las seis referencias Safe/Zodiac, bloqueo de versiones prohibidas y ABI de Roles 2.1.1. Los 28 tests nuevos y el check completo (308 tests) pasan; una verificación independiente confirmó las guardas y los ABI. Esto no acredita bytecode actual ni despliegues en fork.
+- **Archivos clave:** `packages/core/src/config/fondo-contratos.ts`, `packages/core/src/fondo/abis.ts`, sus tests y `odd/tasks/fund-s1-contracts-fork.md`.
+- **Próximo paso:** revisión nativa de esta unidad y sender exclusivo de fork con selector seguro; sin claves reales ni envíos a mainnet.
+
 ## 2026-11-04 · docs(docs): add implementation specs for shared fund
 - **Qué hice:** specs ejecutables de S1 a S8, con criterios de aceptación, pasos humanos y comando para `/goal`. Probé la viabilidad en un fork con un script suelto: sirvió para corregir `GS013`, descartar CIP-64 en anvil y el SDK de Roles. Nada corrió en mainnet.
 - **Archivos clave:** `docs/proyecto/specs/`, `docs/pruebas/fondo.md`, `docs/pruebas/spike-fondo-fork.cjs`, `docs/proyecto/decisiones.md` (D16.34 a D16.37).
