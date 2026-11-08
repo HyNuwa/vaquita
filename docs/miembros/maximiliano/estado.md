@@ -1,6 +1,6 @@
 # Estado · Maximiliano
 
-**Última actualización:** 2026-11-04
+**Última actualización:** 2026-11-07
 
 ## Publicación de S1 · 2026-11-08
 
@@ -13,12 +13,12 @@ Seguimiento: `odd/tasks/fund-s1-publication.md`. La base de este tracker conserv
 el estado histórico inferior; los PRs hijos aportan la evidencia de implementación.
 
 ## En qué estoy
-El producto cambió ([D16](../../proyecto/decisiones.md)): La Vaquita pasa a ser un fondo compartido con reglas, sobre Safe y Zodiac Roles, con Vaqui ejecutando dentro de límites en cadena. La compra colectiva queda en pausa, con su código y su evidencia. Las decisiones están cerradas y la documentación, reescrita. Nada del fondo está implementado todavía: hay [specs de implementación](../../proyecto/specs/README.md) y una prueba de viabilidad en fork, con un script suelto ([evidencia](../../pruebas/fondo.md)).
+El producto cambió ([D16](../../proyecto/decisiones.md)): La Vaquita pasa a ser un fondo compartido con reglas, sobre Safe y Zodiac Roles, con Vaqui ejecutando dentro de límites en cadena. La compra colectiva queda en pausa, con su código y su evidencia. Las specs alineadas y revisadas se mergearon en el PR #22 con CI verde. Arrancó S1: configuración de contratos y ABI con 28 tests nuevos, check completo de 308 tests y verificación independiente aprobada. Faltan sender, arnés, verificador RPC y evidencia de despliegues del producto en fork; el script suelto previo sigue siendo solo una prueba de viabilidad ([evidencia](../../pruebas/fondo.md)).
 
 Control: [`control-entrega.md`](../../tareas/control-entrega.md). Producto: [`spec.md`](../../proyecto/spec.md). Plan y estado de cada pieza: [`plan-fondo-compartido.md`](../../proyecto/plan-fondo-compartido.md).
 
 ## Próximo paso
-Mergear el PR de las specs y lanzar `/goal` con el comando de [specs/README.md](../../proyecto/specs/README.md). En paralelo, los [pasos humanos](../../proyecto/specs/09-pasos-humanos.md) A1 a A6.
+Cerrar la revisión de la primera unidad de S1 y seguir con sender local, selector, arnés y verificador. Seguimiento: `odd/tasks/fund-s1-contracts-fork.md`, con PRs encadenados sobre una rama integradora. Los [pasos humanos](../../proyecto/specs/09-pasos-humanos.md) siguen separados.
 
 ## Bloqueos
 - Falta confirmar si Esteban y Daniel aceptan ser responsables. Si no, el piloto es una simulación (D16.20).

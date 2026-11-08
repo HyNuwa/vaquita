@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · chore(repo): prepare S1 config publication branch
+- **Qué hice:** integré T1 sin reescribir su commit, sobre la base CI del tracker. Resolví únicamente el solapamiento de bitácora conservando ambas entradas; el estado conservó ambas intenciones automáticamente. El contenido productivo debe coincidir exactamente con T1.
+- **Archivos clave:** rama `feat/fund-s1-pub-config`, configuración/ABI y tests originales, bitácora y estado.
+- **Próximo paso:** checks de integración y PR hacia el tracker; no mergear a staging.
+
 ## 2026-11-08 · docs(docs): record approved S1 tracker preparation
 - **Qué hice:** registré la revisión nativa de e228e6d aprobada y cerrada (legibilidad y confiabilidad), sobre los tests locales e independientes ya aprobados. El primer intento de commit documental fue rechazado por no stagear esta bitácora junto con el archivo de tareas; no se ejecutó el push ni se omitió el hook.
 - **Archivos clave:** `odd/tasks/fund-s1-publication.md` y estado personal.
@@ -11,6 +16,10 @@ Una entrada por commit, la más nueva arriba.
 - **Qué hice:** preparé un tracker nuevo desde staging para publicar S1 sin reescribir las unidades ya revisadas. CI admite PRs cuya base sea `feat/fund-s1-*`; conserva los pushes de staging/main y permisos de solo lectura. Pruebas de configuración: RED 1 fallo/1 éxito; GREEN 2 tests, check base de 280 tests y ambos typechecks. Verificación independiente aprobada con los mismos comandos; CI remota todavía pendiente.
 - **Archivos clave:** `.github/workflows/ci.yml`, `.github/scripts/ci-s1.test.mjs`, `odd/tasks/fund-s1-publication.md`.
 - **Próximo paso:** verificar y revisar el ajuste, publicar issue/etiquetas autorizadas y PRs de S1; no mergear a staging. Sin nuevos forks ni pagos.
+## 2026-11-07 · feat(core): add verified fund contract configuration and ABI
+- **Qué hice:** primera unidad de S1: configuración pura de las seis referencias Safe/Zodiac, bloqueo de versiones prohibidas y ABI de Roles 2.1.1. Los 28 tests nuevos y el check completo (308 tests) pasan; una verificación independiente confirmó las guardas y los ABI. Esto no acredita bytecode actual ni despliegues en fork.
+- **Archivos clave:** `packages/core/src/config/fondo-contratos.ts`, `packages/core/src/fondo/abis.ts`, sus tests y `odd/tasks/fund-s1-contracts-fork.md`.
+- **Próximo paso:** revisión nativa de esta unidad y sender exclusivo de fork con selector seguro; sin claves reales ni envíos a mainnet.
 
 ## 2026-11-04 · docs(docs): add implementation specs for shared fund
 - **Qué hice:** specs ejecutables de S1 a S8, con criterios de aceptación, pasos humanos y comando para `/goal`. Probé la viabilidad en un fork con un script suelto: sirvió para corregir `GS013`, descartar CIP-64 en anvil y el SDK de Roles. Nada corrió en mainnet.
