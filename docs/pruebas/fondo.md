@@ -42,7 +42,8 @@ produce exit 1; no hay reintentos automáticos. Tests nuevos: 14; check completo
 14 tests, typecheck y dos escenarios del CLI real con RPC loopback (otra red y
 código ausente), comprobando exit/stdout/stderr y solo métodos de lectura.
 El éxito RPC público usa la evidencia de mi corrida, no una repetición del
-verificador. Revisión nativa de T4 pendiente.
+verificador. T4 quedó en `6314087`: revisión nativa de resiliencia, legibilidad
+y confiabilidad aprobada y cerrada mediante acknowledgement, sin observaciones.
 
 **Bloqueo / paso humano:** `sanityCheckZodiacModuleAddress` no fue ejecutado.
 Zodiac 5.0.1 se instaló sin scripts y luego se retiró por decisión explícita del
@@ -56,6 +57,27 @@ al estado previo. Toda tabla completada avisa en stderr que el checker humano es
 pendiente, incluso con exit 0 por los hashes. Los rechazos tempranos de
 configuración o chainId imprimen únicamente el error correspondiente. Esto no es una auditoría ni prueba
 permisos efectivos; no se repitió el fork de T3b.
+
+## Cierre funcional de S1 · 2026-11-08 · entrega local
+
+La verificación final independiente ejecutó una vez `npm run check`: **exit 0,
+377 tests en 20 archivos y typechecks core/web**. Los criterios S1-1 a S1-4
+quedaron comprobados en esa suite (incluido scanner de imports de apps).
+S1-5/S1-6 reutilizan el fork exitoso de T3b y S1-7 la lectura pública de T4,
+ambos inspeccionados independientemente. S1-8 tiene stack y esta evidencia
+actualizados. No se repitió ninguna de esas dos corridas de red.
+
+Cadena local de unidades revisadas: `50fd2e7` → `d070eaa` → `f6ab375` →
+`16141c7` → `6314087`. Las cinco revisiones nativas terminaron aprobadas y sus
+acknowledgements cerraron la autoridad. Los advisories informativos de T1, T3 y
+T3b quedan como trabajo separado, sin correcciones abiertas ni repetición de
+receipts. El seguimiento conserva fallos de preparación, dos fallos de fork y
+las autorizaciones de continuación; no se reinterpretan como éxitos.
+
+Alcance: S1 local con el checker Zodiac humano pendiente autorizado, no S2–S8,
+auditoría, permisos efectivos, CIP-64 en fork o despliegue de producto en mainnet.
+El código no fue publicado, no se observaron CI remota ni merge a `staging` para
+estas unidades. La evidencia de lectura de mainnet no implica envíos a mainnet.
 
 ## Contratos en Celo · 2026-11-04 · solo lectura
 

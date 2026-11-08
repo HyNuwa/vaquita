@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): record verified S1 delivery chain
+- **Qué hice:** cerré la evidencia local de los ocho criterios S1 con verificación final independiente (377 tests y ambos typechecks, exit 0). T4 `6314087` tiene revisión nativa aprobada y cerrada. Documenté la cadena de cinco unidades revisadas y los límites de atribución de las corridas de fork/RPC, sin repetirlas ni reabrir receipts.
+- **Archivos clave:** `docs/proyecto/specs/avance.md`, `docs/pruebas/fondo.md`, `odd/tasks/fund-s1-contracts-fork.md` y estado personal.
+- **Próximo paso:** decidir la publicación de la cadena hacia `staging` y observar su CI. El checker Zodiac continúa como paso humano pendiente autorizado; no es un PASS. No se publicó código ni se enviaron transacciones en mainnet.
+
 ## 2026-11-08 · feat(scripts): verify fund contract hashes without keys
 - **Qué hice:** agregué `fondo:contratos`: chainId 42220, seis hashes, rechazo de direcciones prohibidas y tabla con exit 1 ante fallos. La lectura pública terminó con exit 0 y seis coincidencias. Pasaron 14 tests nuevos, check de 377 tests y ambos typechecks; verificador independiente pasó 14 tests, typecheck y dos escenarios del CLI contra loopback.
 - **Archivos clave:** `packages/core/scripts/verificar-contratos.ts`, `packages/core/test/verificar-contratos.test.ts`, `package.json`, README del core, `docs/proyecto/stack.md`, `docs/pruebas/fondo.md`.
