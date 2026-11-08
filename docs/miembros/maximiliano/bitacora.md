@@ -2,6 +2,12 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · chore(repo): prepare S1 check publication branch
+- **Qué hice:** integré la unidad original 821bda6 en la rama nueva de publicación, conservando su commit y la CI ya revisada. Las entradas de bitácora solapadas se conservaron de ambos lados; no cambió el código productivo respecto de la unidad original.
+- **Archivos clave:** rama feat/fund-s1-pub-check, evidencia y pruebas originales, bitácora y estado.
+- **Próximo paso:** verificar el árbol exacto y checks, publicar el PR hacia su padre; sin merge a staging.
+
+
 ## 2026-11-08 · chore(repo): prepare S1 fixture publication branch
 - **Qué hice:** integré la unidad original 16141c7 en la rama nueva de publicación, conservando su commit y la CI ya revisada. Las entradas de bitácora solapadas se conservaron de ambos lados; no cambió el código productivo respecto de la unidad original.
 - **Archivos clave:** rama feat/fund-s1-pub-fixture, evidencia y pruebas originales, bitácora y estado.
@@ -34,6 +40,16 @@ Una entrada por commit, la más nueva arriba.
 - **Qué hice:** preparé un tracker nuevo desde staging para publicar S1 sin reescribir las unidades ya revisadas. CI admite PRs cuya base sea `feat/fund-s1-*`; conserva los pushes de staging/main y permisos de solo lectura. Pruebas de configuración: RED 1 fallo/1 éxito; GREEN 2 tests, check base de 280 tests y ambos typechecks. Verificación independiente aprobada con los mismos comandos; CI remota todavía pendiente.
 - **Archivos clave:** `.github/workflows/ci.yml`, `.github/scripts/ci-s1.test.mjs`, `odd/tasks/fund-s1-publication.md`.
 - **Próximo paso:** verificar y revisar el ajuste, publicar issue/etiquetas autorizadas y PRs de S1; no mergear a staging. Sin nuevos forks ni pagos.
+## 2026-11-08 · docs(docs): record verified S1 delivery chain
+- **Qué hice:** cerré la evidencia local de los ocho criterios S1 con verificación final independiente (377 tests y ambos typechecks, exit 0). T4 `6314087` tiene revisión nativa aprobada y cerrada. Documenté la cadena de cinco unidades revisadas y los límites de atribución de las corridas de fork/RPC, sin repetirlas ni reabrir receipts.
+- **Archivos clave:** `docs/proyecto/specs/avance.md`, `docs/pruebas/fondo.md`, `odd/tasks/fund-s1-contracts-fork.md` y estado personal.
+- **Próximo paso:** decidir la publicación de la cadena hacia `staging` y observar su CI. El checker Zodiac continúa como paso humano pendiente autorizado; no es un PASS. No se publicó código ni se enviaron transacciones en mainnet.
+
+## 2026-11-08 · feat(scripts): verify fund contract hashes without keys
+- **Qué hice:** agregué `fondo:contratos`: chainId 42220, seis hashes, rechazo de direcciones prohibidas y tabla con exit 1 ante fallos. La lectura pública terminó con exit 0 y seis coincidencias. Pasaron 14 tests nuevos, check de 377 tests y ambos typechecks; verificador independiente pasó 14 tests, typecheck y dos escenarios del CLI contra loopback.
+- **Archivos clave:** `packages/core/scripts/verificar-contratos.ts`, `packages/core/test/verificar-contratos.test.ts`, `package.json`, README del core, `docs/proyecto/stack.md`, `docs/pruebas/fondo.md`.
+- **Próximo paso:** revisión nativa de T4 y cierre de S1. Zodiac 5.0.1 se retiró por decisión explícita ante alertas de seguridad transitivas; el checker queda pendiente humano y se avisa al completar la tabla, incluso con exit 0. No hay dependencia/lock nuevo, claves, envíos ni otro fork. T3b ya tiene revisión nativa aprobada y cerrada.
+
 ## 2026-11-08 · test(core): verify fund deployments on isolated fork
 - **Qué hice:** fixture con cuentas generadas, hashes previos al envío y suite separada `fondo:fork`. Pasaron Safe 2 de 3, dueño/avatar/target de Roles, proxy exacto, fondos de prueba y tiempo en Anvil local. Dos corridas fallaron por timeout; después del diagnóstico, amplié solo `anvil_dealERC20` a 30 s. Pasan 363 tests y ambos typechecks. Verificación independiente: 17 tests, typecheck y probes; el fork exitoso se inspeccionó con evidencia de mi corrida, no se repitió.
 - **Archivos clave:** `packages/core/test/helpers/fondo-fixture.ts`, `packages/core/test-fork/fondo.test.ts`, configuración de Vitest/typecheck, `package.json`, helpers de diagnóstico y `docs/pruebas/fondo.md`.

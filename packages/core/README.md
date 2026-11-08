@@ -97,4 +97,26 @@ their existing short deadline; no failed request is automatically repeated.
 Diagnostics show controlled phase labels and sanitized local RPC errors, never
 external error messages or request parameters.
 
+## Read-only fund contract verification
+
+```sh
+npm run fondo:contratos
+```
+
+Uses the runtime `CELO_RPC_URL` variable or `https://forno.celo.org`; it does not
+load environment files, accounts, databases or signing keys. It checks actual
+chain ID 42220, rejects prohibited configured addresses and prints the expected
+and observed bytecode hash for all six reference contracts. Empty code, a hash
+mismatch or an RPC failure exits with status 1; all mandatory checks passing exits
+with 0. Requests have a 30-second deadline and no automatic retries. RPC errors
+are sanitized rather than printing endpoint credentials or external details.
+
+**Separate pending human check:** `sanityCheckZodiacModuleAddress` is not executed.
+Zodiac 5.0.1 was removed after its dependency audit, by explicit project-owner
+decision. Every completed result table reports this limitation on stderr, including on
+exit 0. Early configuration or chain-ID failures print only their specific error. A successful hash check is not a completed Zodiac checker, an audit, a
+permission check or evidence of a product deployment. No Zodiac import or new
+dependency is required. Ordinary tests use injected read-only clients, not a real
+RPC.
+
 Design and rules: [`docs/investigacion/10-scaffold-stable-agent.md`](../../docs/investigacion/10-scaffold-stable-agent.md).
