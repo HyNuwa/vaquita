@@ -14,6 +14,8 @@
     "test": "npm run test --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "check": "npm run typecheck && npm test",
+    "fondo:contratos": "tsx packages/core/scripts/verificar-contratos.ts",
+    "fondo:fork": "npm exec -w @vaquita/core -- vitest run --config vitest.fork.config.ts",
     "preflight": "tsx packages/core/scripts/preflight.ts",
     "spike:lectura": "tsx packages/core/scripts/spike-wars.ts",
     "spike:contrato": "tsx packages/core/scripts/spike-contrato.ts",
