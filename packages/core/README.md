@@ -55,4 +55,68 @@ These deterministic tests do not run Anvil or prove contract deployment:
 npm exec -w @vaquita/core -- vitest run test/fork-sender.test.ts test/fondo-enviador.test.ts
 ```
 
+## Fork lifecycle test helper
+
+`test/helpers/anvil.ts` resolves Anvil from `ANVIL_BIN`, then `PATH`, then
+`~/.foundry/bin`. An explicit invalid override fails rather than choosing a
+different executable. It does not load environment files; `LIVE_PAYMENTS` must
+be entirely absent. `CELO_RPC_URL` selects the upstream fork source, defaulting
+to the public Celo RPC. Upstream access is read-only; all administrative calls
+are restricted to the helper's ephemeral loopback endpoint.
+
+`withAnvil(options, async (fork) => { ... })` starts a dedicated child on a free
+loopback port, waits for chain 42220 and closes that child in `finally`.
+Startup failure also triggers cleanup. Shutdown waits for exit, escalates only
+that child from `SIGTERM` to `SIGKILL`, and fails if exit cannot be confirmed.
+The helper does not send transactions; fork fixtures use the selector above.
+Its ordinary tests mock process, port and RPC operations, so they do not need
+Anvil or an upstream connection:
+
+```sh
+npm exec -w @vaquita/core -- vitest run test/anvil.test.ts
+```
+
+Run the separate integration suite explicitly from the repository root:
+
+```sh
+npm run fondo:fork
+```
+
+It requires Anvil and read-only access to the upstream Celo RPC. The normal
+`npm test` suite excludes `test-fork/`; CI does not execute the fork command.
+The core typecheck includes both configurations and the fork tests.
+`test/helpers/fondo-fixture.ts` checks all six reference code hashes before
+funding fresh accounts through local administrative RPC. It deploys Safe and
+Roles through the guarded sender; the suite checks owners, threshold, module
+owner/avatar/target and exact proxy runtime, then exercises local token funding
+and time advancement. No production configuration or stored signing key is loaded.
+A passing run proves only that local fork state, never mainnet deployment.
+Local token funding (`anvil_dealERC20`) has a 30-second request deadline because
+it may query forked storage. Readiness and other administrative calls retain
+their existing short deadline; no failed request is automatically repeated.
+Diagnostics show controlled phase labels and sanitized local RPC errors, never
+external error messages or request parameters.
+
+## Read-only fund contract verification
+
+```sh
+npm run fondo:contratos
+```
+
+Uses the runtime `CELO_RPC_URL` variable or `https://forno.celo.org`; it does not
+load environment files, accounts, databases or signing keys. It checks actual
+chain ID 42220, rejects prohibited configured addresses and prints the expected
+and observed bytecode hash for all six reference contracts. Empty code, a hash
+mismatch or an RPC failure exits with status 1; all mandatory checks passing exits
+with 0. Requests have a 30-second deadline and no automatic retries. RPC errors
+are sanitized rather than printing endpoint credentials or external details.
+
+**Separate pending human check:** `sanityCheckZodiacModuleAddress` is not executed.
+Zodiac 5.0.1 was removed after its dependency audit, by explicit project-owner
+decision. Every completed result table reports this limitation on stderr, including on
+exit 0. Early configuration or chain-ID failures print only their specific error. A successful hash check is not a completed Zodiac checker, an audit, a
+permission check or evidence of a product deployment. No Zodiac import or new
+dependency is required. Ordinary tests use injected read-only clients, not a real
+RPC.
+
 Design and rules: [`docs/investigacion/10-scaffold-stable-agent.md`](../../docs/investigacion/10-scaffold-stable-agent.md).
