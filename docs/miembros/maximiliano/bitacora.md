@@ -2,6 +2,12 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · chore(repo): prepare S1 sender publication branch
+- **Qué hice:** integré la unidad original d070eaa en la rama nueva de publicación, conservando su commit y la CI ya revisada. Las entradas de bitácora solapadas se conservaron de ambos lados; no cambió el código productivo respecto de la unidad original.
+- **Archivos clave:** rama feat/fund-s1-pub-sender, evidencia y pruebas originales, bitácora y estado.
+- **Próximo paso:** verificar el árbol exacto y checks, publicar el PR hacia su padre; sin merge a staging.
+
+
 ## 2026-11-08 · chore(repo): prepare S1 config publication branch
 - **Qué hice:** integré T1 sin reescribir su commit, sobre la base CI del tracker. Resolví únicamente el solapamiento de bitácora conservando ambas entradas; el estado conservó ambas intenciones automáticamente. El contenido productivo debe coincidir exactamente con T1.
 - **Archivos clave:** rama `feat/fund-s1-pub-config`, configuración/ABI y tests originales, bitácora y estado.
@@ -16,6 +22,11 @@ Una entrada por commit, la más nueva arriba.
 - **Qué hice:** preparé un tracker nuevo desde staging para publicar S1 sin reescribir las unidades ya revisadas. CI admite PRs cuya base sea `feat/fund-s1-*`; conserva los pushes de staging/main y permisos de solo lectura. Pruebas de configuración: RED 1 fallo/1 éxito; GREEN 2 tests, check base de 280 tests y ambos typechecks. Verificación independiente aprobada con los mismos comandos; CI remota todavía pendiente.
 - **Archivos clave:** `.github/workflows/ci.yml`, `.github/scripts/ci-s1.test.mjs`, `odd/tasks/fund-s1-publication.md`.
 - **Próximo paso:** verificar y revisar el ajuste, publicar issue/etiquetas autorizadas y PRs de S1; no mergear a staging. Sin nuevos forks ni pagos.
+## 2026-11-07 · feat(core): add isolated fork sender and guarded selector
+- **Qué hice:** segunda unidad de S1: sender etiquetado exclusivo de RPC local, sin redirecciones ni CIP-64, y selector explícito que rechaza el modo fork si falta la bandera o existe `LIVE_PAYMENTS`. Conservé el sender normal y sus guardas. Pasaron 38 tests focalizados y el check completo de 346 tests; una verificación independiente directa pasó esos 38 tests, el typecheck y tres grupos de probes sin efectos. Dos intentos previos fallaron en preparación, con cero tests; no se presentan como aprobados.
+- **Archivos clave:** `packages/core/src/chain/fork-sender.ts`, `packages/core/src/fondo/enviador.ts`, sus tests, `packages/core/README.md` y `odd/tasks/fund-s1-contracts-fork.md`.
+- **Próximo paso:** revisión nativa de esta unidad y arnés de despliegue en fork; sin claves reales, envíos a mainnet ni publicación de código. T1 ya tiene revisión nativa aprobada y cerrada; T2 todavía no.
+
 ## 2026-11-07 · feat(core): add verified fund contract configuration and ABI
 - **Qué hice:** primera unidad de S1: configuración pura de las seis referencias Safe/Zodiac, bloqueo de versiones prohibidas y ABI de Roles 2.1.1. Los 28 tests nuevos y el check completo (308 tests) pasan; una verificación independiente confirmó las guardas y los ABI. Esto no acredita bytecode actual ni despliegues en fork.
 - **Archivos clave:** `packages/core/src/config/fondo-contratos.ts`, `packages/core/src/fondo/abis.ts`, sus tests y `odd/tasks/fund-s1-contracts-fork.md`.

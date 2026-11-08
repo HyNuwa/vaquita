@@ -24,4 +24,35 @@ npm test -w @vaquita/core
 npm run typecheck -w @vaquita/core
 ```
 
+## Fund sender (local fork tests)
+
+Apps use `enviador` from `@vaquita/core/fondo/enviador`, never import
+`chain/fork-sender` directly. `enviador({ deps: senderDeps })` defaults to the
+existing tagged sender, preserving CIP-64, policy caps and dry-run/live behavior.
+Both routes expose `prepare(call)` and `broadcast(signedTx)`, reusing `Call`,
+`Prepared` and `Broadcasted` from the existing sender.
+
+Fork tests opt in explicitly with
+`enviador({ mode: "fork", env: { E2E_FORK: "1" }, deps: forkDeps })`.
+The injected environment must have **no `LIVE_PAYMENTS` property**, including no
+empty, invalid or `undefined` value. No environment file is loaded by the selector.
+`forkDeps` supplies `rpcUrl`, `attributionCode` and a local account generated in
+process by the test (`generatePrivateKey()` / `privateKeyToAccount()`); never use
+real keys or Anvil's default accounts. An optional `fetchFn` is a trusted test-only
+transport replacement, not an alternate endpoint or production configuration.
+
+Only HTTP(S) URLs with the literal hostname `localhost` or `127.0.0.1` are allowed;
+credentials, query strings, fragments, alternate IP spellings and redirects are
+rejected. Configuration is checked before signing or contacting the RPC.
+The fork uses tagged ordinary legacy transactions, **without CIP-64 or
+`feeCurrency`**, on chain 42220. Explicit `{ deploy: true, data }` is supported.
+Unlike production, fork gas is native currency: `maxGasCost18` is a native cost,
+not a stablecoin budget, and fork preparation does not enforce production caps.
+Fork broadcasts return `attributionCodes: null`; they are not mainnet evidence.
+These deterministic tests do not run Anvil or prove contract deployment:
+
+```sh
+npm exec -w @vaquita/core -- vitest run test/fork-sender.test.ts test/fondo-enviador.test.ts
+```
+
 Design and rules: [`docs/investigacion/10-scaffold-stable-agent.md`](../../docs/investigacion/10-scaffold-stable-agent.md).
