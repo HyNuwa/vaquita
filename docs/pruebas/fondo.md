@@ -2,6 +2,30 @@
 
 Lo que no está acá no está probado. Las transacciones de esta página corrieron en un **fork local**: no existen en mainnet.
 
+## Suite S1 del repositorio · 2026-11-08 · fork local
+
+`npm run fondo:fork` pasó con Anvil 1.8.7: un test de integración, 30,12 s.
+Se verificaron los seis hashes de referencia antes de financiar cuentas nuevas;
+se crearon Safe y Roles mediante el selector y el sender etiquetado de fork.
+Las assertions comprobaron tres responsables generados, umbral 2, dueño/avatar/target
+de Roles iguales al Safe y runtime exacto del proxy. También pasaron la carga
+local de wARS y USDC y el avance del tiempo.
+
+El check completo pasó 363 tests y los typechecks de core/web. Una verificación
+independiente ejecutó 17 tests focalizados, typecheck del core y probes en memoria;
+inspeccionó las assertions y reutilizó el resultado del fork anterior: **no ejecutó
+otro fork**. La revisión nativa de esta unidad todavía está pendiente.
+
+Dos corridas previas fallaron por timeout; el diagnóstico localizó el fallo en
+`anvil_dealERC20`. Se cambió exclusivamente su plazo de solicitud de 1 a 30 segundos,
+con test determinista; readiness y demás consultas conservan sus límites. Los
+intentos fallidos se conservan en `odd/tasks/fund-s1-contracts-fork.md`.
+No se observó Anvil activo después de la corrida exitosa.
+
+Esta evidencia cubre S1-5/S1-6 en fork, no permisos completos, concurrencia,
+CIP-64 ni despliegues en mainnet. El comando independiente `fondo:contratos`,
+el checker Zodiac y el cierre total de S1 siguen pendientes.
+
 ## Contratos en Celo · 2026-11-04 · solo lectura
 
 | Contrato | Resultado |

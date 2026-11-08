@@ -117,6 +117,33 @@ describe("anvil: ciclo de vida", () => {
     expect(s.fetchFn).not.toHaveBeenCalled();
   });
 
+  it("da 30 segundos solo a financiar tokens y conserva el límite de las otras consultas", async () => {
+    const s = setup();
+    const timeout = vi.spyOn(AbortSignal, "timeout");
+    const fork = await startAnvil(s.options);
+    try {
+      expect(timeout).toHaveBeenLastCalledWith(30);
+      await fork.rpc("anvil_dealERC20", []);
+      expect(timeout).toHaveBeenLastCalledWith(30000);
+      await fork.rpc("evm_mine", []);
+      expect(timeout).toHaveBeenLastCalledWith(30);
+    } finally { await fork.stop(); }
+    expect(s.child.kill).toHaveBeenCalledExactlyOnceWith("SIGTERM");
+  });
+
+  it("contextualiza el timeout administrativo sin filtrar parámetros ni mensajes externos", async () => {
+    const s = setup();
+    const fork = await startAnvil(s.options);
+    s.fetchFn.mockRejectedValue(new DOMException("private upstream detail", "TimeoutError"));
+    try {
+      await expect(fork.rpc("anvil_setBalance", ["private parameter"])).rejects.toMatchObject({
+        message: "Falló la consulta local anvil_setBalance (límite 30 ms).",
+        cause: { name: "TimeoutError", message: "La consulta local agotó su tiempo." },
+      });
+    } finally { await fork.stop(); }
+    expect(s.child.kill).toHaveBeenCalledExactlyOnceWith("SIGTERM");
+  });
+
   it("escala el cierre al mismo hijo y espera su salida", async () => {
     const s = setup();
     s.child.kill.mockImplementation((signal) => {

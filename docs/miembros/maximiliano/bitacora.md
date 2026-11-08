@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · test(core): verify fund deployments on isolated fork
+- **Qué hice:** fixture con cuentas generadas, hashes previos al envío y suite separada `fondo:fork`. Pasaron Safe 2 de 3, dueño/avatar/target de Roles, proxy exacto, fondos de prueba y tiempo en Anvil local. Dos corridas fallaron por timeout; después del diagnóstico, amplié solo `anvil_dealERC20` a 30 s. Pasan 363 tests y ambos typechecks. Verificación independiente: 17 tests, typecheck y probes; el fork exitoso se inspeccionó con evidencia de mi corrida, no se repitió.
+- **Archivos clave:** `packages/core/test/helpers/fondo-fixture.ts`, `packages/core/test-fork/fondo.test.ts`, configuración de Vitest/typecheck, `package.json`, helpers de diagnóstico y `docs/pruebas/fondo.md`.
+- **Próximo paso:** revisión nativa de T3b y verificador de contratos T4. T3 lifecycle ya tiene revisión aprobada y cerrada; no hay publicación de código ni despliegues en mainnet.
+
 ## 2026-11-07 · test(core): add bounded Anvil lifecycle harness
 - **Qué hice:** primera parte de T3: resolución de Anvil, puerto local libre, espera de red 42220 y cierre del proceso propio aun si falla el arranque o la prueba. Observé RED por módulo faltante y GREEN con 13 tests; el check completo pasó 359 tests y ambos typechecks. Una verificación independiente confirmó esos 13 tests, el typecheck y tres grupos de probes con procesos y red falsos. Anvil 1.8.7 respondió al chequeo de versión, pero todavía no se ejecutó el nuevo fork.
 - **Archivos clave:** `packages/core/test/helpers/anvil.ts`, `packages/core/test/anvil.test.ts`, `packages/core/README.md` y `odd/tasks/fund-s1-contracts-fork.md`.
