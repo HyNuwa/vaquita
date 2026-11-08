@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): close verified S1 staging integration
+- **Qué hice:** integré el tracker #24 a staging después de revisar e integrar los cinco hijos; merge e6884eb con CI de staging 42459205485 aprobada. Se comprobaron árbol completo y padres exactos, commits originales ancestros y main intacto. Cerré el estado de tareas con la evidencia observada; este PR solo persiste documentación.
+- **Archivos clave:** `odd/tasks/fund-s1-publication.md`, PRs #24–#29 y estado personal.
+- **Próximo paso:** decisión sobre el siguiente alcance; no se inició S2 ni se mergeó a main. Checker Zodiac pendiente humano, dos observaciones menores separadas y advertencias de CI existentes siguen registradas. Sin nuevos forks, RPC, pagos ni replay de revisiones.
+
 ## 2026-11-08 · docs(docs): record S1 child integration evidence
 - **Qué hice:** integré #29→#28→#27→#26→#25 mediante merges fijados por SHA, sin reescribir ni borrar ramas. En cada paso se comprobaron árbol completo, dos padres y ancestros, y pasó la nueva CI del padre. Verificación independiente: tracker 4613546 idéntico al árbol revisado 3527248, todos los originales preservados, sin bloqueantes.
 - **Archivos clave:** `odd/tasks/fund-s1-publication.md`, tracker y PRs #25–#29, bitácora y estado.

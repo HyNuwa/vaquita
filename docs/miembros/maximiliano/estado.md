@@ -48,4 +48,6 @@ Autorización posterior recibida: revisar e integrar S1 hasta staging, sin main.
 
 Hijos #29→#28→#27→#26→#25 integrados con merges preservando originales y CI nueva aprobada en cada padre. Tracker 4613546 verificado independientemente: árbol completo idéntico al candidato revisado 3527248 y todos los originales ancestros.
 
-Próximo paso: CI de evidencia, marcar listo #24 e integrar el tracker completo a staging, luego observar su CI. Merge a staging todavía pendiente; no se tocó main ni se inició S2, no hubo nuevos forks, RPC o pagos. Checker Zodiac sigue pendiente humano por la excepción acordada; no se presenta como PASS ni auditoría.
+S1 integrado en staging: PR #24 merge e6884eba2eefe9d34489cb172574bd3878f4bd7b, después de sus cinco hijos; CI de staging 42459205485 aprobada. Árbol exacto del tracker y originales ancestros comprobados. Revisión Standards sin infracciones duras y dos menores conocidas, Spec sin hallazgos. Main intacto en 8c0df02e28f84793701a43352c6c6abe48f90a3c.
+
+Próximo paso: decidir el siguiente alcance. Este cierre documental no inicia S2 ni cambia código. No hubo nuevos forks, RPC, pagos ni replay de revisiones nativas. Checker Zodiac y observaciones menores permanecen pendientes explícitos, sin presentarlos como aprobación o auditoría. Checker Zodiac sigue pendiente humano por la excepción acordada; no se presenta como PASS ni auditoría.
