@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): record authorized S1 integration review
+- **Qué hice:** registré la autorización humana para revisar e integrar la cadena hasta staging, no main. Dos revisiones independientes sobre 9b487e2–85049f9: Standards sin infracciones duras y dos observaciones menores conocidas; Spec sin hallazgos, ocho criterios cubiertos con la excepción humana del checker. Resultados y resolución registrados y confirmados en los seis PRs, sin cambios de código ni nuevas pruebas en vivo.
+- **Archivos clave:** `odd/tasks/fund-s1-publication.md`, PRs #24–#29, bitácora y estado personal.
+- **Próximo paso:** CI del registro y merges con SHA fijado desde #29 hacia #24, comprobando CI y árboles en cada paso; tracker a staging al final. Sin squash, rebase, borrado de ramas, force push ni S2.
+
 ## 2026-11-08 · docs(docs): record S1 publication and CI evidence
 - **Qué hice:** publiqué la issue aprobada #23, tracker #24 en borrador y las cinco unidades #25–#29 encadenadas por ramas feature. Todos tuvieron CI real en verde; cada integración pasó check local y routing tests. Verificación independiente: commits/árboles originales y evidencias preservados, sin reescribir historia. Revisión nativa del ajuste CI aprobada y cerrada. El registro del cierre documental requiere observar nuevamente la CI de #29 antes de entregar.
 - **Archivos clave:** `odd/tasks/fund-s1-publication.md`, ramas `feat/fund-s1-pub-*`, bitácora y estado.
