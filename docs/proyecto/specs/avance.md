@@ -37,9 +37,27 @@ Seguimiento completo: `odd/tasks/fund-s1-publication.md`.
 - [ ] Negativas N1 a N14
 - [ ] Criterios S2-1 a S2-21
 
-Primera unidad autorizada: primitivas Safe y constructores etiquetados aptos para
-navegador, con pruebas offline y revisión independiente. No incluye el resto de
-S2 ni nuevas corridas de fork/RPC. Seguimiento: `odd/tasks/fund-s2-primitives.md`.
+Primera unidad cerrada localmente: primitivas Safe y constructores etiquetados
+aptos para navegador, con pruebas offline y revisión independiente. No incluye
+el resto de S2 ni nuevas corridas de fork/RPC. Seguimiento: `odd/tasks/fund-s2-primitives.md`.
+Implementación local de esa unidad: constantes, hash Safe, firmas preaprobadas,
+MultiSend y los constructores `aportar`, `aprobarHash` y `ejecutarPropuesta`;
+`TxPersona` sustituye solo el tipo usado por la firma web. Check final: 408 tests
+y typechecks core/web aprobados; verificación funcional independiente aprobada.
+La prueba de navegador cubre el recorrido de dependencias del core e imports
+públicos, no un bundle ni los futuros lector/verificador de S2-18. No se marcan
+S2-15 ni S2-18 completos por estos tres constructores.
+
+**Corrección del registro de revisión:** las tres evaluaciones nativas fallidas
+se conservan. El diagnóstico estático confirmó que ASSESS no hereda la selección
+de archivos de INSPECT y que las llamadas carecían de una declaración propia;
+el rango comprometido sí se transmitía. No se probó un reintento corregido.
+Ese fallo no estableció `reviewDue` ni un gate nativo obligatorio adicional:
+para el riesgo de seguridad, los checks del autor y la verificación independiente
+exigidos por el plan de respaldo ya estaban aprobados. Se retira la inferencia
+de bloqueo, no se declara revisión nativa aprobada ni publicación. Este cambio
+solo corrige documentación; no repite pruebas ni cambia RDD.
+
 S2-11 necesita un vector fijo con procedencia de fork; no se encontró uno en la
 evidencia revisada. Un vector sintético no cierra ese criterio.
 

@@ -1,4 +1,4 @@
-import type { TxComprador } from "@vaquita/core/compra/firmas";
+import type { TxPersona } from "@vaquita/core/fondo/transacciones";
 import type { Hex } from "viem";
 import { getTransactionReceipt, sendTransaction, switchChain, waitForTransactionReceipt } from "wagmi/actions";
 import { celo } from "wagmi/chains";
@@ -23,7 +23,7 @@ function fueRechazada(e: unknown): boolean {
  * Único archivo de las apps que envía transacciones (D15.5, exceptuado en la guarda de la CI).
  * Solo pasa a la billetera del comprador lo que armó el core. Nunca maneja claves.
  */
-export async function firmarYEsperar(tx: TxComprador): Promise<ResultadoFirma> {
+export async function firmarYEsperar(tx: TxPersona): Promise<ResultadoFirma> {
   let hash: Hex;
   try {
     await switchChain(wagmiConfig, { chainId: celo.id });
