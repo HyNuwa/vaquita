@@ -2,23 +2,35 @@
 
 **Última actualización:** 2026-11-08
 
-## Publicación de S1 · 2026-11-08
+## Estado actual · S1 integrado y primera unidad de S2
 
-Preparación autorizada de tracker nuevo y CI para bases `feat/fund-s1-*`, sin
-reescribir los commits revisados ni mergear a staging. GREEN aprobado: 2 tests de routing, check base de 280 tests y typechecks;
-verificación independiente aprobada. Issue #23 creada y confirmada con
-`status:approved`; etiquetas autorizadas creadas. Revisión nativa del ajuste aprobada y cerrada (e228e6d).
-PRs y comprobación de CI remota pendientes.
-Seguimiento: `odd/tasks/fund-s1-publication.md`. La base de este tracker conserva
-el estado histórico inferior; los PRs hijos aportan la evidencia de implementación.
+S1 quedó integrado mediante los PRs #24–#29 y el cierre documental #30.
+`staging`: `01fcb81cf80ed7c64fbcc299221b2ed90fd16bf5`; CI final
+42460067821 aprobada. Los originales y las revisiones cerradas se preservaron;
+`main` sigue intacto. El checker Zodiac sigue pendiente humano, no aprobado.
+Seguimiento de esa entrega: `odd/tasks/fund-s1-publication.md`.
 
-## En qué estoy
-El producto cambió ([D16](../../proyecto/decisiones.md)): La Vaquita pasa a ser un fondo compartido con reglas, sobre Safe y Zodiac Roles, con Vaqui ejecutando dentro de límites en cadena. La compra colectiva queda en pausa, con su código y su evidencia. Las specs alineadas y revisadas se mergearon en el PR #22 con CI verde. S1 tiene configuración de contratos y ABI con revisión nativa aprobada y cerrada (T1). El sender local y selector seguro (T2) pasan 38 tests focalizados, check completo de 346 tests y verificación independiente directa (38 tests, typecheck y tres grupos de probes); dos intentos anteriores fallaron en preparación con cero tests. T2 ya tiene revisión nativa aprobada y cerrada. T3 lifecycle ya tiene revisión nativa aprobada y cerrada. T3b pasó la suite del repo en Anvil 1.8.7: Safe 2 de 3, configuración de Roles, proxy exacto, fondos y tiempo locales. El check pasó 363 tests y ambos typechecks; verificación independiente aprobada con 17 tests y typecheck, reutilizando evidencia del fork sin repetirlo. T3b ya tiene revisión nativa aprobada y cerrada. T4 agrega `fondo:contratos`: pasó la lectura pública de seis hashes con exit 0, 14 tests nuevos, check de 377 y ambos typechecks. Verificación independiente aprobada (14 tests, typecheck, dos escenarios del CLI con RPC loopback); revisión nativa aprobada y cerrada. El cierre funcional independiente de S1 pasó 377 tests y ambos typechecks, sin repetir fork/RPC. Los ocho criterios de aceptación quedaron documentados localmente; falta publicar la cadena y observar CI remota. Zodiac se retiró por decisión explícita ante alertas transitivas; su checker queda pendiente humano. Esta evidencia no convierte el spike en producto completo; el script suelto previo sigue siendo solo una prueba de viabilidad ([evidencia](../../pruebas/fondo.md)).
+Autorizado ahora: corregir el registro de avance y comenzar únicamente las
+primitivas Safe y los constructores etiquetados de S2 con tests offline y revisión
+independiente. Rama `feat/fund-s2-primitives`, seguimiento
+`odd/tasks/fund-s2-primitives.md`. No se inicia el resto de S2, no se agregan
+dependencias ni se repiten fork/RPC o acciones en mainnet. Falta el vector fijo de
+fork para S2-11; las pruebas sintéticas no lo acreditan.
+
+## Resumen histórico de implementación de S1
+Este resumen conserva la evidencia local anterior a la publicación; el estado
+vigente de entrega y el nuevo alcance figuran arriba.
+
+El producto cambió ([D16](../../proyecto/decisiones.md)): La Vaquita pasa a ser un fondo compartido con reglas, sobre Safe y Zodiac Roles, con Vaqui ejecutando dentro de límites en cadena. La compra colectiva queda en pausa, con su código y su evidencia. Las specs alineadas y revisadas se mergearon en el PR #22 con CI verde. S1 tiene configuración de contratos y ABI con revisión nativa aprobada y cerrada (T1). El sender local y selector seguro (T2) pasan 38 tests focalizados, check completo de 346 tests y verificación independiente directa (38 tests, typecheck y tres grupos de probes); dos intentos anteriores fallaron en preparación con cero tests. T2 ya tiene revisión nativa aprobada y cerrada. T3 lifecycle ya tiene revisión nativa aprobada y cerrada. T3b pasó la suite del repo en Anvil 1.8.7: Safe 2 de 3, configuración de Roles, proxy exacto, fondos y tiempo locales. El check pasó 363 tests y ambos typechecks; verificación independiente aprobada con 17 tests y typecheck, reutilizando evidencia del fork sin repetirlo. T3b ya tiene revisión nativa aprobada y cerrada. T4 agrega `fondo:contratos`: pasó la lectura pública de seis hashes con exit 0, 14 tests nuevos, check de 377 y ambos typechecks. Verificación independiente aprobada (14 tests, typecheck, dos escenarios del CLI con RPC loopback); revisión nativa aprobada y cerrada. El cierre funcional independiente de S1 pasó 377 tests y ambos typechecks, sin repetir fork/RPC. Los ocho criterios de aceptación quedaron documentados localmente; esa cadena se publicó e integró después, con la evidencia de CI registrada arriba. Zodiac se retiró por decisión explícita ante alertas transitivas; su checker queda pendiente humano. Esta evidencia no convierte el spike en producto completo; el script suelto previo sigue siendo solo una prueba de viabilidad ([evidencia](../../pruebas/fondo.md)).
 
 Control: [`control-entrega.md`](../../tareas/control-entrega.md). Producto: [`spec.md`](../../proyecto/spec.md). Plan y estado de cada pieza: [`plan-fondo-compartido.md`](../../proyecto/plan-fondo-compartido.md).
 
 ## Próximo paso
-Decidir la publicación de la cadena local de S1 hacia `staging` y observar su CI; checker Zodiac explícitamente pendiente como paso humano. No hay código de S1 publicado ni despliegues en mainnet; la evidencia nueva corresponde solo al fork local. Seguimiento: `odd/tasks/fund-s1-contracts-fork.md`, con PRs encadenados sobre una rama integradora. Los [pasos humanos](../../proyecto/specs/09-pasos-humanos.md) siguen separados.
+Implementar y verificar primero las primitivas Safe y después los constructores
+etiquetados, con migración solo del tipo `TxPersona` en la web. Sin despliegues ni
+nuevas pruebas de red. Checker Zodiac y vector de fork S2-11 quedan pendientes
+explícitos; los [pasos humanos](../../proyecto/specs/09-pasos-humanos.md) siguen
+separados.
 
 ## Bloqueos
 - Falta confirmar si Esteban y Daniel aceptan ser responsables. Si no, el piloto es una simulación (D16.20).
@@ -28,6 +40,9 @@ Decidir la publicación de la cadena local de S1 hacia `staging` y observar su C
 - La identidad ERC-8004 sigue en una cuenta personal de MetaMask (D15.10); las operaciones del fondo salen de otra wallet (D16.25).
 - Lo que toque plata se revisa con agentes, que no es una auditoría.
 
+
+## Historial de publicación de S1
+Las notas inferiores reflejan cada etapa; no son el estado actual.
 
 ### Rama de publicación sender · 2026-11-08
 Unidad original d070eaa preservada; checks de integración y publicación en curso. Sin nuevos forks ni pagos, sin merges a staging.

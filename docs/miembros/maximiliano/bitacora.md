@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): sync S1 delivery and scope first S2 unit
+- **Qué hice:** corregí el avance y el resumen vigente: S1 integrado en staging por #24 y #30, CI final 42460067821 aprobada. Registré la autorización para la primera unidad offline de S2, sin ampliar el alcance ni reabrir revisiones de S1.
+- **Archivos clave:** `docs/proyecto/specs/avance.md`, estado personal y `odd/tasks/fund-s2-primitives.md`.
+- **Próximo paso:** primitivas Safe con tests y revisión independiente; después constructores y tipo web. El vector de fork S2-11 y checker Zodiac siguen pendientes explícitos. Sin nuevas dependencias, fork/RPC, mainnet ni publicación de S2.
+
 ## 2026-11-08 · docs(docs): close verified S1 staging integration
 - **Qué hice:** integré el tracker #24 a staging después de revisar e integrar los cinco hijos; merge e6884eb con CI de staging 42459205485 aprobada. Se comprobaron árbol completo y padres exactos, commits originales ancestros y main intacto. Cerré el estado de tareas con la evidencia observada; este PR solo persiste documentación.
 - **Archivos clave:** `odd/tasks/fund-s1-publication.md`, PRs #24–#29 y estado personal.

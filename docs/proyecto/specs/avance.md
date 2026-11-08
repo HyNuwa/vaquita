@@ -8,7 +8,7 @@ Se actualiza en el mismo PR que hace el trabajo. Una casilla se marca solo cuand
 - D16 y `spec.md` alineados documentalmente con Web3-first en esta corrección; `contexto.md` y `stack.md` precisan sus dependencias. Revisión independiente documental completada según el registro inferior; no equivale a S8-5. Esto no marca criterios funcionales ni de revisión del código como cumplidos.
 
 ## S1 · Contratos y fork
-- [x] Criterios S1-1 a S1-8 — verificados localmente el 2026-11-08; código aún sin publicar.
+- [x] Criterios S1-1 a S1-8 — verificados e integrados en `staging` el 2026-11-08, con la excepción humana del checker indicada abajo.
 
 Unidades locales: T1 `50fd2e7`, T2 `d070eaa`, T3 `f6ab375`, T3b `16141c7`
 y T4 `6314087`, cada una con revisión nativa aprobada y cerrada. Verificación
@@ -22,12 +22,26 @@ independientemente, no nuevas corridas del verificador. Evidencia y límites:
 El responsable eligió retirar Zodiac 5.0.1 ante alertas transitivas; la dependencia
 y los cambios de lockfile se retiraron sin tocar otras dependencias. No equivale
 a un checker aprobado, auditoría, permisos efectivos completos, pruebas I1–I4 ni
-cierre de S8. Push, PRs, CI remota e integración en `staging` siguen pendientes
-de la decisión de publicación.
+cierre de S8.
+
+**Entrega observada:** PRs #24–#29 integrados preservando los commits originales;
+PR #24 llegó a `staging` como `e6884eba2eefe9d34489cb172574bd3878f4bd7b`.
+El cierre documental #30 dejó `staging` en
+`01fcb81cf80ed7c64fbcc299221b2ed90fd16bf5`; CI final
+[42460067821](https://github.com/HyNuwa/vaquita/actions/runs/42460067821)
+aprobada. Revisión independiente sin bloqueantes, con observaciones menores
+separadas. `main` no se integró y no hubo nuevas corridas de fork/RPC.
+Seguimiento completo: `odd/tasks/fund-s1-publication.md`.
 
 ## S2 · Core del fondo
 - [ ] Negativas N1 a N14
 - [ ] Criterios S2-1 a S2-21
+
+Primera unidad autorizada: primitivas Safe y constructores etiquetados aptos para
+navegador, con pruebas offline y revisión independiente. No incluye el resto de
+S2 ni nuevas corridas de fork/RPC. Seguimiento: `odd/tasks/fund-s2-primitives.md`.
+S2-11 necesita un vector fijo con procedencia de fork; no se encontró uno en la
+evidencia revisada. Un vector sintético no cierra ese criterio.
 
 ## S3 · Datos, acceso y API
 - [ ] Criterios S3-1 a S3-18
@@ -81,5 +95,6 @@ Lo que necesita a una persona: pieza, error exacto y qué se hizo mientras tanto
   5.0.1 retirado por decisión explícita ante alertas de seguridad transitivas;
   comprobación obligatoria de red/seis hashes completada sin SDK. El checker
   queda como paso humano, no se instala otra versión ni se aplica `audit fix`.
-- **Entrega de S1:** unidades locales verificadas y revisadas; publicación de la
-  cadena y CI remota aún no ejecutadas.
+- **S2-11, vector de hash:** falta un vector fijo obtenido del fork. Las pruebas
+  offline pueden verificar la implementación local, pero no reemplazan esa
+  procedencia ni autorizan otra corrida de red.
