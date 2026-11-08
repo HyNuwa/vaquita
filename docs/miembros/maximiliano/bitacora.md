@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): record S2 publication and CI evidence
+- **Qué hice:** publiqué tracker #32 en borrador y los hijos #33–#34 con `Refs #31`, padres exactos y un único tipo por PR, sin merges. CI real observada en verde: 42521590056 (3e12294), 42521660779 (98c7ac7) y 42521825595 (ce5f457). Código original, cinco ancestros, fallos y corrección documental preservados; verificación independiente de CI y de composición aprobadas.
+- **Archivos clave:** `odd/tasks/fund-s2-publication.md`, bitácora y estado propios; este registro es documental y no modifica código ni configuración.
+- **Próximo paso:** push de este registro y observar su nueva CI; persistir recibos finales en las descripciones de los PRs y memoria antes de entregar. Sin mergear PRs ni main/staging, nuevas pruebas de red o evaluación nativa. Se conservan dos fallos de preparación del publicador con cero llamadas API y el fallo cp1252 del verificador; los checks requeridos terminaron aprobados.
+
 ## 2026-11-08 · docs(docs): record S2 publication preparation evidence
 - **Qué hice:** cerré la preparación de los wrappers 98c7ac7 y 27996c2 con árboles fuente exactos, CI exacta del tracker y cinco originales preservados. Verificación estructural independiente aprobada, sin nuevos tests funcionales; presupuesto medido de 48/381/348 líneas por padre inmediato. Se conserva un fallo cp1252 al imprimir evidencia y la ejecución acotada del tramo no alcanzado, sin repetir el barrido.
 - **Archivos clave:** `odd/tasks/fund-s2-publication.md`, bitácora y estado propios; solo documentación pasiva, sin cambios del código ya comprobado.
