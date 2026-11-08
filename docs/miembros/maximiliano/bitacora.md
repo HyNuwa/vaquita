@@ -2,6 +2,14 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · feat(core): add browser-safe Safe primitives
+- **Qué hice:** implementé solo T2: constantes exactas de S2, hash Safe para Celo 42220 con reembolso en cero, dos firmas preaprobadas distintas en orden numérico y calldata ABI completa de MultiSend con llamadas internas sin valor ni delegatecall. Tests offline: RED por módulos ausentes; GREEN focalizado de 5 tests, con referencia sintética independiente y vector fijo de MultiSend.
+- **Corrección acotada S5 (lote 1):** el verificador independiente encontró `TypeError: x.replace is not a function` al invocar `encodeMultiSend([])`: `concat([])` devolvía un Uint8Array. Reproduje RED por la API pública (1 fallo/5 éxitos), fijé el caso vacío como bytes `0x` sin prohibir listas vacías y conservé el vector no vacío. GREEN: 6 tests focalizados; suite completa 383 tests/21 archivos y ambos typechecks aprobados. Se conserva el fallo inicial TS2345 del test de variantes en la implementación original, corregido una vez con `as const` antes de aprobar el typecheck.
+- **Archivos clave:** `packages/core/src/fondo/constantes.ts`, `safe.ts`, `packages/core/test/fondo-safe.test.ts` y README del core.
+- **Verificación independiente:** hash, firmas y MultiSend no vacío aprobados; el recheck dirigido del caso vacío pasó 1 test y un probe exacto, ambos exit 0, sin otro barrido. Se conserva el probe fallido original. Spot check del autor: 6 tests focalizados aprobados.
+- **Hook:** el primer commit fue rechazado por el digest sintético de 64 hex del test. Se identificó explícitamente como digest, no clave, con la excepción por línea que admite el propio scanner; no cambió el valor ni se desactivó el hook.
+- **Próximo paso:** revisión nativa de T2; después T3 (constructores y tipo web). S2-11 sigue pendiente: el hash sintético no proviene de fork. Sin nuevas dependencias, RPC, mainnet ni publicación; checker Zodiac sigue pendiente humano.
+
 ## 2026-11-08 · docs(docs): sync S1 delivery and scope first S2 unit
 - **Qué hice:** corregí el avance y el resumen vigente: S1 integrado en staging por #24 y #30, CI final 42460067821 aprobada. Registré la autorización para la primera unidad offline de S2, sin ampliar el alcance ni reabrir revisiones de S1.
 - **Archivos clave:** `docs/proyecto/specs/avance.md`, estado personal y `odd/tasks/fund-s2-primitives.md`.

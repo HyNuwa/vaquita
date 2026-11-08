@@ -17,6 +17,24 @@ independiente. Rama `feat/fund-s2-primitives`, seguimiento
 dependencias ni se repiten fork/RPC o acciones en mainnet. Falta el vector fijo de
 fork para S2-11; las pruebas sintéticas no lo acreditan.
 
+### Progreso local T2 · 2026-11-08
+Constantes y primitivas puras implementadas: hash Safe/Celo 42220 con campos de
+reembolso en cero, firmas preaprobadas de dos responsables distintos en orden
+numérico y MultiSend ABI completo con llamadas internas de operación y valor cero.
+RED observado por módulos ausentes; GREEN focalizado: 5 tests offline. El hash
+fijo se calculó con una referencia sintética independiente, no con un fork:
+S2-11 sigue pendiente. T3 y el resto de S2 no están implementados por esta unidad;
+verificación independiente y revisión siguen a cargo del orquestador.
+
+Corrección acotada S5, lote 1: el probe independiente de `encodeMultiSend([])`
+falló con `TypeError: x.replace is not a function`; RED local reprodujo 1 fallo y
+5 éxitos. Se codifica la lista vacía como bytes `0x`, sin una nueva restricción.
+GREEN: 6 tests focalizados, 383 tests/21 archivos y ambos typechecks aprobados;
+el vector no vacío se conserva. El fallo TS2345 inicial del test de variantes
+quedó corregido una vez con `as const`; no se borra esa evidencia. El recheck
+independiente limitado aprobó el caso vacío (1 test y probe exacto, ambos exit 0);
+se conservan los PASS previos y el probe fallido. S2-11 sigue sin vector de fork.
+
 ## Resumen histórico de implementación de S1
 Este resumen conserva la evidencia local anterior a la publicación; el estado
 vigente de entrega y el nuevo alcance figuran arriba.
@@ -26,8 +44,8 @@ El producto cambió ([D16](../../proyecto/decisiones.md)): La Vaquita pasa a ser
 Control: [`control-entrega.md`](../../tareas/control-entrega.md). Producto: [`spec.md`](../../proyecto/spec.md). Plan y estado de cada pieza: [`plan-fondo-compartido.md`](../../proyecto/plan-fondo-compartido.md).
 
 ## Próximo paso
-Implementar y verificar primero las primitivas Safe y después los constructores
-etiquetados, con migración solo del tipo `TxPersona` en la web. Sin despliegues ni
+Revisar nativamente T2 ya verificado independientemente; después implementar los constructores
+etiquetados de T3, con migración solo del tipo `TxPersona` en la web. Sin despliegues ni
 nuevas pruebas de red. Checker Zodiac y vector de fork S2-11 quedan pendientes
 explícitos; los [pasos humanos](../../proyecto/specs/09-pasos-humanos.md) siguen
 separados.
