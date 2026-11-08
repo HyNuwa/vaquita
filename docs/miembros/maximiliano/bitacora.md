@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · feat(core): encode deterministic fund creation
+- **Qué hice:** integré #34 → #33 → #32 en staging c16f081 con árbol revisado exacto y CI final 42527864054 aprobada; main e historia preservados. En rama local nueva agregué setup y predicción deterministas de Safe/Roles y ambos constructores etiquetados, con tres responsables válidos ajenos a las cuentas de Vaqui. RED 21 fallos/30 éxitos; GREEN 51 focalizados, 428 completos y typechecks core/web aprobados, sin red ni fondos reales.
+- **Archivos clave:** `packages/core/src/fondo/{safe,transacciones}.ts`, `packages/core/test/fondo-{creacion,browser}.test.ts`, README del core, `odd/tasks/fund-s2-creation.md` y estado propio.
+- **Próximo paso:** reanudación verificada C2 y configuración inicial C3. C1 pasó la nueva verificación independiente autorizada: 63 tests (51 focalizados + 12 probes aislados), tipos core y revisión de creación/Standards-dinero sin hallazgos; 85 archivos fuente/copia idénticos. Se conservan el timeout anterior con cero tests y el rechazo del preflight por la guarda; el nuevo intento usó lista blanca de 365KB y dependencias vinculadas, sin configuración privada. No se acredita fork, configuración desplegada, revisión nativa ni S2 completo; sin nueva publicación.
+
 ## 2026-11-08 · docs(docs): record S2 publication and CI evidence
 - **Qué hice:** publiqué tracker #32 en borrador y los hijos #33–#34 con `Refs #31`, padres exactos y un único tipo por PR, sin merges. CI real observada en verde: 42521590056 (3e12294), 42521660779 (98c7ac7) y 42521825595 (ce5f457). Código original, cinco ancestros, fallos y corrección documental preservados; verificación independiente de CI y de composición aprobadas.
 - **Archivos clave:** `odd/tasks/fund-s2-publication.md`, bitácora y estado propios; este registro es documental y no modifica código ni configuración.

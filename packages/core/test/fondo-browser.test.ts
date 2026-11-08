@@ -23,7 +23,7 @@ function browserClosure(): Set<string> {
         const dependency = resolve(dirname(file), specifier.replace(/\.js$/, ".ts"));
         // Lista cerrada: ningún adaptador nuevo puede colarse en el recorrido.
         expect(relative(SRC, dependency).replaceAll("\\", "/")).toMatch(
-          /^(?:fondo\/(?:constantes|safe|transacciones|abis)|config\/tokens|attribution\/tag)\.ts$/,
+          /^(?:fondo\/(?:constantes|safe|transacciones|abis)|config\/(?:tokens|fondo-contratos)|attribution\/tag)\.ts$/,
         );
         visit(dependency);
       } else {
@@ -35,11 +35,11 @@ function browserClosure(): Set<string> {
   return visited;
 }
 
-describe("frontera navegador de la primera unidad S2", () => {
+describe("frontera navegador del núcleo S2 implementado", () => {
   it("recorre las dependencias del core y luego importa los tres módulos públicos", async () => {
     const closure = browserClosure();
     expect([...closure].map((file) => relative(SRC, file).replaceAll("\\", "/")).sort()).toEqual([
-      "attribution/tag.ts", "config/tokens.ts", "fondo/abis.ts", "fondo/constantes.ts",
+      "attribution/tag.ts", "config/fondo-contratos.ts", "config/tokens.ts", "fondo/abis.ts", "fondo/constantes.ts",
       "fondo/safe.ts", "fondo/transacciones.ts",
     ]);
     const constants = await import("@vaquita/core/fondo/constantes");
@@ -47,7 +47,7 @@ describe("frontera navegador de la primera unidad S2", () => {
     const transactions = await import("@vaquita/core/fondo/transacciones");
     expect(constants.MAX_DESTINATARIOS).toBe(20);
     expect(typeof safe.hashTransaccionSafe).toBe("function");
-    expect(Object.keys(transactions).sort()).toEqual(["aportar", "aprobarHash", "ejecutarPropuesta"]);
+    expect(Object.keys(transactions).sort()).toEqual(["aportar", "aprobarHash", "crearSafe", "desplegarRoles", "ejecutarPropuesta"]);
   });
 
   it("la web recibe TxPersona por import type sin cambiar el flujo de envío", () => {

@@ -24,7 +24,7 @@ npm test -w @vaquita/core
 npm run typecheck -w @vaquita/core
 ```
 
-## Browser-safe Safe primitives (offline)
+## Browser-safe Safe primitives and creation (offline)
 
 `@vaquita/core/fondo/constantes` exports the S2 limits in 18-decimal bigint
 units (plus recipient count and hashed role/budget keys). The UI contribution
@@ -44,7 +44,7 @@ limit and group objective are operational, not on-chain restrictions.
   and data. Any outer delegatecall is separate from these inner calls.
 
 `@vaquita/core/fondo/transacciones` exports `TxPersona = { to: Address, data: Hex }`
-and three synchronous, pure builders with an **explicit attribution code**:
+and five synchronous, pure builders with an **explicit attribution code**:
 
 - `aportar(safe, monto, code)`: wARS `transfer` to the Safe, not `approve`.
   Amounts are 18-decimal bigint units; agent caps do not limit human amounts.
@@ -52,6 +52,33 @@ and three synchronous, pure builders with an **explicit attribution code**:
 - `ejecutarPropuesta(safe, txSafe, firmas, code)`: Safe `execTransaction` with
   the exact body and signatures and the shared frozen `SAFE_GAS_FIELDS` zeros.
   The nonce belongs to the hash; Safe reads it on-chain, not from an ABI argument.
+- `crearSafe(config, code)`: official factory `createProxyWithNonce`, Safe L2
+  singleton and the validated setup described below. No module is enabled yet.
+- `desplegarRoles(safe, groupId, code)`: official module factory `deployModule`,
+  pinned Roles mastercopy and that Safe as owner, avatar and target. This does not
+  enable the module or grant spending permissions.
+
+### Deterministic setup and address prediction
+
+The `safe` subpath also exports `CreationConfig`: `{ groupId, owners,
+operatingWallet, identityWallet }`, with readonly inputs. `encodeSafeSetup(config)`
+requires exactly three distinct, nonzero owners, excluding both supplied agent
+accounts. It preserves their order, uses threshold two and the pinned fallback
+handler, and initializes with no delegatecall, payment or refund.
+`encodeRolesSetup(safe)` encodes the three Safe addresses for Roles 2.1.1.
+
+`creationSalt(groupId)` is the uint256 value of keccak256 of the literal UTF-8
+identifier. `predictSafeAddress(config, proxyCreationCode)` combines the official
+factory, hashed initializer, that nonce and padded singleton. The creation code
+must come from the **verified factory**; an arbitrary supplied value is not
+verified by this pure function. `predictRolesAddress(groupId, safe)` uses the
+module factory's distinct EIP-1167 creation template and its corresponding setup.
+The same complete inputs reproduce the same addresses; changing owner order or
+other setup inputs changes the address even with the same group identifier.
+
+Prediction does not establish that code at an address is the expected deployment.
+Verified RPC resumption and the initial permissions batch remain the next units;
+never skip a deployment merely because an address has nonempty code.
 
 Each outer transaction validates the live-format code, appends ERC-8021 and asserts
 its tag. Inner Safe data stays byte-for-byte unchanged, even if empty or tagged.
@@ -66,8 +93,8 @@ core import closure and public imports, not a browser bundle or future reader an
 verifier modules; full S2-18 remains pending.
 Tests use synthetic fixtures and an independent reference encoding, never RPC.
 The fixed hash is **not fork evidence**: S2-11 remains pending. This unit does
-not implement prediction, deployment or Roles permissions, verify a deployed fund,
-or establish full S2 completion.
+not submit deployments, implement initial Roles permissions, verify a deployed
+fund or establish full S2 completion.
 
 ## Fund sender (local fork tests)
 

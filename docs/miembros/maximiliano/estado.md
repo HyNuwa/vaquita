@@ -2,6 +2,16 @@
 
 **Última actualización:** 2026-11-08
 
+## Foco vigente · creación determinista S2
+Primera unidad integrada en staging `c16f081029e761371968a9750a480e26c45b9fe3`: PRs #34, #33 y #32 mergeados en ese orden, árbol revisado exacto y CI final 42527864054 aprobada. Main, ramas e historia original preservados; issues23/31 siguen abiertas.
+Rama local nueva sin publicar: `feat/fund-s2-create`. C1 puro implementado: setup/predicción de ambas direcciones y constructores `crearSafe`/`desplegarRoles` con etiqueta exterior. Valida tres responsables distintos, no nulos y ajenos a ambas cuentas suministradas de Vaqui; no consulta ni afirma la identidad real de esas cuentas en cadena. RED 21 fallos/30 éxitos; GREEN 51 focalizados, 428 completos y typechecks core/web aprobados.
+C1 pasó la nueva verificación independiente mw8gqnjj-i-qe2c: 51 tests focalizados, 12 probes públicos aislados y typecheck core, exit0; revisión de creación/Standards-dinero sin hallazgos. Los 85 archivos del payload y originales permanecieron idénticos. Los 428 tests completos y tipos web siguen siendo evidencia del autor.
+Próximo paso: cerrar C1 en su commit local y continuar reanudación verificada C2 y configuración inicial C3. Seguimiento: `odd/tasks/fund-s2-creation.md`.
+Bloqueos actuales: ninguno en C1. Se conservan el timeout previo de preparación (cero tests) y el rechazo posterior del preflight por la guarda, sin bypass; el nuevo intento fue autorizado y preparado por lista blanca (85 archivos/365KB, dependencias vinculadas). No hizo falta leer configuración privada. C2/C3 todavía no implementados; no se declara T3 ni S2 completo. No se autorizan nuevos fork/RPC público, movimientos reales, dependencias, evaluación nativa ni publicación de esta implementación. El checker Zodiac, S2-11 y la aceptación completa de S2 siguen pendientes y no se declaran aprobados.
+
+## Historial anterior a la integración
+Las secciones siguientes conservan la evidencia de sus etapas anteriores: sus cabezas, PRs abiertos y restricciones de no-merge describen esos momentos, no el foco vigente autorizado arriba.
+
 ## Publicación de la primera unidad S2 · 2026-11-08
 Foco actual: publicación de la primera unidad S2 confirmada en #32 (tracker en borrador), #33 (primitivas) y #34 (builders/cierre), con `Refs #31`. CI de sus cabezas fuente aprobada: 42521590056, 42521660779 y 42521825595. Hooks/guardas, verificación independiente de CI y preservación estructural aprobados; ningún PR mergeado ni push a staging/main.
 Wrapper de primitivas: fuente exacta e5, CI del tracker, 2 tests de routing, 6 focalizados, 383 completos y ambos typechecks aprobados; delta final de 381 líneas. Wrapper builders: fuente f4/CI del tracker exactas, 2 tests de routing, 96 focalizados, 408 completos y ambos typechecks aprobados. Verificación estructural independiente aprobada: fuentes exactas, cinco originales ancestros y bitácoras/diagnóstico preservados; presupuestos fuente 48/381/348 y primer cierre pasivo del hijo 357 líneas. Próximo paso: observar CI del nuevo registro documental y persistir recibos finales en los PRs antes de entregar; después corresponde una nueva decisión de alcance, no un merge automático.

@@ -1,8 +1,10 @@
 import {
-  concat, encodeFunctionData, encodePacked, hashTypedData, pad, size, toHex,
+  concat, encodeAbiParameters, encodeFunctionData, encodePacked, getAddress,
+  getCreate2Address, hashTypedData, isAddress, keccak256, pad, size, toHex,
   zeroAddress, type Address, type Hex,
 } from "viem";
-import { multiSendCallOnlyAbi } from "./abis.js";
+import { contratosFondo } from "../config/fondo-contratos.js";
+import { multiSendCallOnlyAbi, rolesAbi, safeAbi } from "./abis.js";
 
 /** Cuerpo portable; sin campos de reembolso configurables. */
 export interface TxSafe {
@@ -72,5 +74,69 @@ export function encodeMultiSend(calls: readonly { to: Address; data: Hex }[]): H
     abi: multiSendCallOnlyAbi,
     functionName: "multiSend",
     args: [packed],
+  });
+}
+
+/** Entradas explícitas: sin claves, entorno ni resolución de identidad por RPC. */
+export interface CreationConfig {
+  readonly groupId: string;
+  readonly owners: readonly Address[];
+  readonly operatingWallet: Address;
+  readonly identityWallet: Address;
+}
+
+/** El identificador se usa literalmente; no normaliza espacios ni mayúsculas. */
+export function creationSalt(groupId: string): bigint {
+  return BigInt(keccak256(toHex(groupId)));
+}
+
+/** Safe nuevo: tres responsables ajenos a Vaqui, dos firmas y sin reembolso. */
+export function encodeSafeSetup(config: CreationConfig): Hex {
+  const { owners, operatingWallet, identityWallet } = config;
+  if (owners.length !== 3
+    || ![...owners, operatingWallet, identityWallet].every((a) => isAddress(a, { strict: false }))
+    || new Set(owners.map((a) => a.toLowerCase())).size !== 3
+    || owners.some((a) => [zeroAddress, operatingWallet, identityWallet]
+      .some((excluded) => a.toLowerCase() === excluded.toLowerCase()))) {
+    throw new Error("Necesitás tres responsables distintos, válidos y ajenos a las cuentas de Vaqui.");
+  }
+  return encodeFunctionData({
+    abi: safeAbi, functionName: "setup",
+    args: [owners.map((a) => getAddress(a)), 2n, zeroAddress, "0x",
+      contratosFondo(42220).fallbackHandler.address, zeroAddress, 0n, zeroAddress],
+  });
+}
+
+/** Roles 2.1.1: el Safe es dueño, avatar y target; no habilita permisos todavía. */
+export function encodeRolesSetup(safe: Address): Hex {
+  return encodeFunctionData({
+    abi: rolesAbi, functionName: "setUp",
+    args: [encodeAbiParameters([{ type: "address" }, { type: "address" }, { type: "address" }], [safe, safe, safe])],
+  });
+}
+
+function deploymentSalt(initializer: Hex, groupId: string): Hex {
+  return keccak256(concat([keccak256(initializer), toHex(creationSalt(groupId), { size: 32 })]));
+}
+
+/** La orquestación obtiene proxyCreationCode de la fábrica verificada, no de memoria. */
+export function predictSafeAddress(config: CreationConfig, proxyCreationCode: Hex): Address {
+  const contracts = contratosFondo(42220);
+  const initializer = encodeSafeSetup(config);
+  return getCreate2Address({
+    from: contracts.proxyFactory.address,
+    salt: deploymentSalt(initializer, config.groupId),
+    bytecode: concat([proxyCreationCode, pad(contracts.safeL2.address, { size: 32 })]),
+  });
+}
+
+/** Proxy EIP-1167 de la ModuleProxyFactory de Zodiac; no es el proxy de Safe. */
+export function predictRolesAddress(groupId: string, safe: Address): Address {
+  const contracts = contratosFondo(42220);
+  return getCreate2Address({
+    from: contracts.moduleFactory.address,
+    salt: deploymentSalt(encodeRolesSetup(safe), groupId),
+    bytecode: concat(["0x602d8060093d393df3363d3d373d3d3d363d73",
+      contracts.rolesMastercopy.address, "0x5af43d82803e903d91602b57fd5bf3"]),
   });
 }
