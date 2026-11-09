@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-09 · fix(core): harden error lookup and payout destinations
+- **Qué hice:** una razón de revert como `constructor` ya no se resuelve por el prototipo, y gasto o reparto rechazan el token como destino. Verificación independiente del bloque offline sin bloqueantes; estas dos líneas son posteriores a ese veredicto.
+- **Archivos clave:** `packages/core/src/fondo/errores.ts`, `safe.ts`, sus tests y `odd/tasks/fund-s2-completion.md`.
+- **Próximo paso:** suite de fork, que espera el RPC de Celo. No se declara S2 completo.
+
 ## 2026-11-09 · feat(core): add public recovery manifest
 - **Qué hice:** manifiesto público sin claves ni responsables; importar valida forma y derivación, y revalidar corre `verificarGrupo`. Frontera de navegador extendida a los módulos nuevos. Evidencia del autor: core 793/793 y tipos core/web aprobados.
 - **Archivos clave:** `packages/core/src/fondo/manifiesto.ts`, su test, `test/fondo-browser.test.ts`, README y seguimiento.

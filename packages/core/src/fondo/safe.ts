@@ -85,7 +85,7 @@ const SENTINEL = "0x0000000000000000000000000000000000000001";
 const same = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
 const cuentaReal = (a: Address) => isAddress(a, { strict: false }) && !same(a, zeroAddress) && !same(a, SENTINEL);
 const transferencia = (destino: Address, monto: bigint): Hex => {
-  if (!cuentaReal(destino) || monto <= 0n) throw new Error("Revisá el destinatario y el monto.");
+  if (!cuentaReal(destino) || same(destino, WFIAT.wARS.address) || monto <= 0n) throw new Error("Revisá el destinatario y el monto.");
   return encodeFunctionData({ abi: erc20Abi, functionName: "transfer", args: [destino, monto] });
 };
 

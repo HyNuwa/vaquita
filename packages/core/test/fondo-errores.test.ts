@@ -50,6 +50,10 @@ describe("clasificarError", () => {
     expect(clasificarError(error)).toMatchObject({ codigo: "ERROR_DESCONOCIDO", transitorio: false });
   });
 
+  it.each(["constructor", "__proto__", "toString", "GS999"])("no toma la razón %s como un código conocido", (text) => {
+    expect(clasificarError(revert(reason(text)))).toMatchObject({ codigo: "ERROR_DESCONOCIDO", transitorio: false });
+  });
+
   it("escribe para personas: sin jerga ni direcciones", () => {
     for (const data of [viol(1), viol(5), viol(9), viol(17), "0xfd8e9f28", notAuth, reason("GS020"), reason("GS025"), reason("GS013")] as Hex[]) {
       expect(clasificarError(revert(data)).mensaje).not.toMatch(/0x|wei|gas|calldata|safe|revert/i);

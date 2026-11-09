@@ -26,6 +26,11 @@ describe("txGasto", () => {
     "rechaza %s", (_n, to, amount) => { expect(() => txGasto(to as Address, amount as bigint)).toThrow(); });
 });
 
+describe("destino igual al token", () => {
+  it("txGasto lo rechaza, porque esos fondos se perderían", () => { expect(() => txGasto(wars, 1n)).toThrow(); });
+  it("txReparto lo rechaza", () => { expect(() => txReparto([{ destino: wars, monto: 1n }])).toThrow(); });
+});
+
 describe("txCancelar", () => {
   it("es una llamada vacía al propio fondo", () => {
     expect(txCancelar(safe)).toEqual({ to: safe, value: 0n, data: "0x", operation: 0 });

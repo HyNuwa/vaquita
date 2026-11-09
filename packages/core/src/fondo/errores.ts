@@ -49,7 +49,7 @@ function porRevert(data: Hex): CodigoError | undefined {
   }
   try {
     const { args } = decodeErrorResult({ abi: errorStringAbi, data });
-    return POR_RAZON[args[0]];
+    return Object.hasOwn(POR_RAZON, args[0]) ? POR_RAZON[args[0]] : undefined;
   } catch { return undefined; }
 }
 
