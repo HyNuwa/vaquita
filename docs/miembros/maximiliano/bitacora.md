@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · feat(core): encode initial Roles rules
+- **Qué hice:** codifiqué condiciones BFS de Roles 2.1.1 con destinatarios normalizados/deduplicados, tope inclusivo y presupuesto periódico, más el cuerpo inicial de cinco llamadas exactas. Reutiliza constantes, MultiSend completo y ejecución etiquetada existentes; no firma, envía ni reinicia automáticamente presupuestos. RED por módulo ausente/78 previos aprobados; GREEN corregido 94 focalizados, 471 completos y tipos core/web aprobados.
+- **Archivos clave:** `packages/core/src/fondo/roles.ts`, `packages/core/test/fondo-{roles,browser}.test.ts`, README del core, seguimiento y estado propios.
+- **Próximo paso:** commit local y cierre offline. Verificación independiente C3 mw8insc2-m-ivo4 aprobada: 94 focalizados + 16 probes (110 tests), tipos core y revisión de dinero/especificación sin hallazgos; 89 originales/copias y estado idénticos. Los 471 completos y tipos web siguen como evidencia del autor. Se conservan cuatro fallos del primer GREEN (tres filas de it.each desplegadas incorrectamente y casing hexadecimal al decodificar); corrección solo del test, producción idéntica, nuevo GREEN job52. C2 confirmado en 4848324 con 92 tests independientes. Sin red, configuración privada, publicación ni nueva revisión nativa; no se acredita permiso desplegado ni S2 completo.
+
 ## 2026-11-08 · feat(core): plan verified fund creation
 - **Qué hice:** agregué reanudación de los dos despliegues mediante lecturas inyectadas a un bloque fijo: autentica cinco referencias, deriva las direcciones y verifica el estado de los contratos existentes antes de devolver solo transacciones faltantes. No firma, envía ni declara permisos activos. RED por módulo nuevo ausente: 1 test fallido, suite nueva sin recolectar y 50 previos aprobados; GREEN 79 focalizados, 456 completos y tipos core/web aprobados, también tras exigir el mensaje exacto sin detalles del transporte.
 - **Archivos clave:** `packages/core/src/fondo/{creacion,abis}.ts`, `packages/core/test/fondo-{reanudacion,browser}.test.ts`, README del core, seguimiento y estado propios.

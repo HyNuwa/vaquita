@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 const SRC = fileURLToPath(new URL("../src/", import.meta.url));
-const ROOTS = ["fondo/constantes.ts", "fondo/safe.ts", "fondo/transacciones.ts", "fondo/creacion.ts"];
+const ROOTS = ["fondo/constantes.ts", "fondo/safe.ts", "fondo/transacciones.ts", "fondo/creacion.ts", "fondo/roles.ts"];
 
 /** Inspecciona fuentes del core antes de permitir su importación pública. */
 function browserClosure(): Set<string> {
@@ -23,7 +23,7 @@ function browserClosure(): Set<string> {
         const dependency = resolve(dirname(file), specifier.replace(/\.js$/, ".ts"));
         // Lista cerrada: ningún adaptador nuevo puede colarse en el recorrido.
         expect(relative(SRC, dependency).replaceAll("\\", "/")).toMatch(
-          /^(?:fondo\/(?:constantes|safe|transacciones|abis|creacion)|config\/(?:tokens|fondo-contratos)|attribution\/tag)\.ts$/,
+          /^(?:fondo\/(?:constantes|safe|transacciones|abis|creacion|roles)|config\/(?:tokens|fondo-contratos)|attribution\/tag)\.ts$/,
         );
         visit(dependency);
       } else {
@@ -40,7 +40,7 @@ describe("frontera navegador del núcleo S2 implementado", () => {
     const closure = browserClosure();
     expect([...closure].map((file) => relative(SRC, file).replaceAll("\\", "/")).sort()).toEqual([
       "attribution/tag.ts", "config/fondo-contratos.ts", "config/tokens.ts", "fondo/abis.ts", "fondo/constantes.ts",
-      "fondo/creacion.ts", "fondo/safe.ts", "fondo/transacciones.ts",
+      "fondo/creacion.ts", "fondo/roles.ts", "fondo/safe.ts", "fondo/transacciones.ts",
     ]);
     const constants = await import("@vaquita/core/fondo/constantes");
     const safe = await import("@vaquita/core/fondo/safe");
@@ -49,6 +49,8 @@ describe("frontera navegador del núcleo S2 implementado", () => {
     expect(typeof safe.hashTransaccionSafe).toBe("function");
     const creation = await import("@vaquita/core/fondo/creacion");
     expect(typeof creation.planCreation).toBe("function");
+    const roles = await import("@vaquita/core/fondo/roles");
+    expect(Object.keys(roles).sort()).toEqual(["buildInitialRules", "condicionesVaqui"]);
     expect(Object.keys(transactions).sort()).toEqual(["aportar", "aprobarHash", "crearSafe", "desplegarRoles", "ejecutarPropuesta"]);
   });
 

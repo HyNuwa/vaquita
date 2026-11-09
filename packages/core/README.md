@@ -94,8 +94,7 @@ core import closure and public imports, not a browser bundle or future reader an
 verifier modules; full S2-18 remains pending.
 Tests use synthetic fixtures and an independent reference encoding, never RPC.
 The fixed hash is **not fork evidence**: S2-11 remains pending. This unit does
-not submit deployments, implement initial Roles permissions, verify a deployed
-fund or establish full S2 completion.
+not submit deployments, verify a deployed fund or establish full S2 completion.
 
 ## Read-injected creation resumption
 
@@ -123,6 +122,40 @@ they are never treated as absence.
 There is no retry, persistence, signing, broadcast or automatic permission reset.
 Numeric block pinning is not finality; callers must re-read/simulate before later
 signatures. Initial rules, full verification and fork evidence remain separate.
+
+## Initial Roles rules (pure encoding)
+
+`@vaquita/core/fondo/roles` exports `condicionesVaqui(recipients)` and
+`buildInitialRules({ safe, roles, operatingWallet, recipients, nonce })`.
+Recipients are checksum-normalized, deduplicated and sorted numerically without
+mutating inputs. The effective list must contain 1–20 valid addresses; no owner
+exclusions are silently applied to recipients. Invalid lists throw
+`Elegí entre 1 y 20 destinatarios con cuentas válidas.` Invalid group account
+formats or a nonce outside uint256 throw
+`Revisá las cuentas del grupo y el número de operación.`
+
+The Roles 2.1.1 BFS tree is `Matches(Or(recipients), And(LessThan(L+1),
+WithinAllowance(K)))`: recipient leaves first, then both amount leaves, with
+32-byte left-padded addresses/unsigned words. Fixed constants encode an inclusive
+5,000 wARS transfer bound and 20,000 wARS per 2,592,000-second allowance.
+The interface's 20-recipient maximum is not an immutable on-chain limit.
+
+The resulting `TxSafe` delegatecalls pinned MultiSendCallOnly with zero value and
+the explicit nonce. Its five internal zero-value CALLs are, in order: Safe
+`enableModule`, Roles `setAllowance`, `scopeTarget`, `scopeFunction` for only wARS
+`transfer(address,uint256)`/options 0, then `assignRoles` to the operating wallet.
+It reuses complete `encodeMultiSend` calldata exactly once; there are no extra
+permissions, ERC-20 approvals or default-role changes. Existing
+`ejecutarPropuesta` supplies outer attribution and zero refund fields.
+
+**Initial setup is not idempotent:** replaying the allowance setter resets its
+balance. Never automatically replay this batch to resume missing deployments.
+Addresses/state are caller-supplied and not authenticated by this pure encoder;
+verify current configuration and simulate before signatures. Timestamp zero
+starts the period at execution; refill equals maxRefill, but two budgets may be
+spent across a renewal boundary. No additional on-chain frequency claim is made.
+Offline encoding tests do not attest deployed permissions, a browser bundle,
+new fork evidence or full S2 acceptance.
 
 ## Fund sender (local fork tests)
 
