@@ -2,6 +2,16 @@
 
 Lo que no está acá no está probado. Las transacciones de esta página corrieron en un **fork local**: no existen en mainnet.
 
+## Suite S2 del repositorio · 2026-11-09 · fork local
+
+`packages/core/test-fork/fondo-s2.test.ts` pasó 20/20 con Anvil 1.8.7 sobre `https://forno.celo.org` (chainId 42220), con cuentas generadas en cada corrida. Ninguna transacción salió del fork.
+
+**Cubre:** S2-1 a S2-11, N1 a N14, S2-19, S2-21 y S2-20 de punta a punta (responsables, bytecode y módulo). Vector de S2-11, fijado en `test/fondo-safe.test.ts`: Safe `0x34B0b659358A43a5636a0279407474DFe2EDC020`, hash `0x72dd3b1a0246ea09001c4cb84bd981b9cb6882efee55ad7b08b040d7bad2442e`.
+
+**Límites:** N1 a N10 pasan por el control `simulacion` real y se afirman como control aprobado, no uno por uno. El caso "Roles 2.1.0" de S2-10 usa un proxy a una dirección sin código: prueba el control de mastercopy, no el comportamiento de esa versión. S2-21 corre sin aplicación ni base porque la suite no las importa; no se apagó un servidor. La suite no tuvo verificación independiente.
+
+**Sin cerrar:** `TOKEN_RESTRINGIDO`, porque no se obtuvo una señal exacta de wARS. Fuera de S2: checker de Zodiac, I1 a I4 y S8.
+
 ## Suite S1 del repositorio · 2026-11-08 · fork local
 
 `npm run fondo:fork` pasó con Anvil 1.8.7: un test de integración, 30,12 s.

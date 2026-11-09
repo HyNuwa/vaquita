@@ -143,3 +143,5 @@ Ninguna app consume todavía `verificarGrupo`.
 Las casillas generales de S2 siguen abiertas: el vector de fork S2-11, las negativas
 contra el contrato real, el bundle transitivo, el checker Zodiac humano, I1–I4 y S8.
 Un resultado `ok` offline no acredita permisos desplegados.
+
+**Actualización 2026-11-09:** el vector S2-11 y las negativas contra el contrato real quedaron probados en fork local, 20/20 (`docs/pruebas/fondo.md`). Siguen abiertos `TOKEN_RESTRINGIDO`, el checker Zodiac humano, I1–I4 y S8; S2 no se declara completo.
