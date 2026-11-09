@@ -2,6 +2,21 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-09 · docs(core): record final S2 independent verification
+- **Qué hice:** cerré la revisión independiente del candidato ae6e4da y reconcilié el README. La suite registró 806 PASS / 1 FAIL por timeout browser; el único fallo pasó luego sin cambiar assertions ni los 5000 ms (2/2, 2247 ms). Tipos exit 0, probes 6/6 e integridad de 99.761 archivos admitidos. No declaro una nueva suite completa toda verde ni una causa del timeout. Fallos de helpers y permisos acotados quedan en el seguimiento; no hubo correcciones de producción ni nueva ejecución de fork.
+- **Archivos clave:** `packages/core/README.md`, `odd/tasks/fund-s2-final-integration.md`, estado propio y esta bitácora. Issues #40 y #41 aprobadas; revisión financiera estática sin nuevos graves, advisory `ModuleProxyCreation` no bloqueante preservado.
+- **Próximo paso:** publicar tracker draft y cinco hijos con CI por cabeza e integrar sólo en staging; después, S3-1 Db/migraciones offline en rama nueva. Esta entrada prepara el commit documental, no afirma publicación ni merge.
+
+## 2026-11-09 · docs(core): reconcile S2 evidence and review preparation
+- **Qué hice:** corregí sólo las afirmaciones desactualizadas del README sobre vector de fork, señales reales y pausa, manteniendo la atribución al autor. Registré L11 y T3 BLOCKED por PROFILE CONFLICT del verificador independiente (0 comandos/lecturas/escrituras/setup/tests), distinto de un hallazgo de código o rechazo nativo. La revisión del proyecto fue estática, sin graves y con dos menores; no es PASS financiero independiente global.
+- **Archivos clave:** `packages/core/README.md`, `odd/tasks/fund-s2-final-integration.md`, estado propio y esta bitácora. Sólo coherencia documental y comprobaciones estructurales; sin tests, fork, copias, commits ni publicación. Se preservan todas las entradas anteriores, incluida la preparación siguiente.
+- **Próximo paso:** permiso exacto de destino/preparación/verificación fuera del proyecto, hijos finalizados e inventario/capacidad antes de aislamiento fresco; no reusar la copia vieja del reader ni reintentar automáticamente. Tracker más cinco hijos ya elegidos y ambas issues aprobadas pero sin crear; rutas privadas/cápsula aún sin permiso. Comparación explícita de `ModuleProxyCreation` queda como seguimiento no bloqueante separado. S3 sólo empieza por Db/migraciones después del merge de S2.
+
+## 2026-11-09 · docs(repo): track final S2 integration
+- **Qué hice:** preparé el seguimiento canónico de la integración final de S2 hacia staging y actualicé el foco vigente. Registré la autorización, las pruebas previas como evidencia del autor y las decisiones/recibos aún pendientes; sólo documentación, sin cambiar código ni ejecutar tests, fork, publicación o merges. Esta entrada prepara un eventual commit, no afirma que ya se haya creado.
+- **Archivos clave:** `odd/tasks/fund-s2-final-integration.md`, `docs/miembros/maximiliano/estado.md` y esta bitácora. Historial anterior preservado.
+- **Próximo paso:** completar inventario/cortes, revisión de dinero del candidato exacto y coherencia documental, publicación/CI e integración hacia staging; después, tarea y rama separadas para S3-1 (Db, pg/PGlite, migraciones y tests offline), no toda la API/autenticación.
+
 ## 2026-11-09 · feat(core): classify paused wARS as restricted token
 - **Qué hice:** `TOKEN_RESTRINGIDO` usa `EnforcedPause`, forzada en fork: 21/21 dos veces y 801/801 offline. Se marcan N1 a N14 y S2-1 a S2-21 con evidencia de fork.
 - **Archivos clave:** `packages/core/src/fondo/errores.ts`, `packages/core/test/fondo-errores.test.ts`, `packages/core/test-fork/fondo-s2.test.ts`, `docs/proyecto/specs/02-core-fondo.md`, `docs/proyecto/specs/avance.md`, `docs/pruebas/fondo.md` y `odd/tasks/fund-s2-completion.md`.
