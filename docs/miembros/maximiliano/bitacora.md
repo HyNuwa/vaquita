@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-09 · feat(core): add public recovery manifest
+- **Qué hice:** manifiesto público sin claves ni responsables; importar valida forma y derivación, y revalidar corre `verificarGrupo`. Frontera de navegador extendida a los módulos nuevos. Evidencia del autor: core 793/793 y tipos core/web aprobados.
+- **Archivos clave:** `packages/core/src/fondo/manifiesto.ts`, su test, `test/fondo-browser.test.ts`, README y seguimiento.
+- **Próximo paso:** verificación independiente y suite de fork, que espera el RPC de Celo. No se declara S2 completo.
+
 ## 2026-11-09 · feat(core): add Safe proposal bodies
 - **Qué hice:** siete cuerpos de propuesta sin nonce: gasto, cancelación, cambio de responsable, reparto, destinatarios, revocación y cierre. `buildInitialRules` reutiliza el mismo scope.
 - **Archivos clave:** `packages/core/src/fondo/safe.ts`, `roles.ts` y `test/fondo-cuerpos.test.ts`.

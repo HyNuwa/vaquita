@@ -195,6 +195,19 @@ logs. Replay alone cannot detect a log the RPC omitted from the middle of the
 history, and its budget balance is the last value set, not the current one, which
 the `presupuesto` control reads.
 
+## Proposal bodies, rules and recovery manifest
+
+`safe.ts` and `roles.ts` build Safe proposal bodies without a nonce (`txGasto`,
+`txCancelar`, `txCambiarResponsable`, `txReparto`, `txCambiarDestinatarios`,
+`txRevocar`, `txCerrarVaqui`). Linked-list predecessors come from the on-chain order
+the caller passes in. `errores.ts` classifies structured signals only; message text
+never decides a code, and the wARS restriction code awaits its exact signal from a
+fork test. `saldos.ts`, `cuotas.ts` and `reparto.ts` are pure rules in `bigint`.
+
+`manifiesto.ts` exports a public JSON with no keys, names or owners. Importing checks
+shape, references and address derivation only; `revalidarManifiesto` is what proves
+anything, by running `verificarGrupo` with owners supplied by the caller.
+
 ## Injected fund reader
 
 `createFondoReader(publicClient)` from `@vaquita/core/fondo/lectura` adapts an
