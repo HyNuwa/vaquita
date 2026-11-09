@@ -63,6 +63,14 @@ describe("primitivas Safe sin red", () => {
     expect(tx).toEqual({ to: target, value: 123n, data: "0x123456", operation: 0, nonce: 7n });
   });
 
+  it("S2-11: coincide con el vector que calculó getTransactionHash en el fork", async () => {
+    const { hashTransaccionSafe } = await import("../src/fondo/safe.js");
+    const { WFIAT } = await import("../src/config/tokens.js");
+    expect(hashTransaccionSafe("0x34B0b659358A43a5636a0279407474DFe2EDC020", {
+      to: WFIAT.wARS.address, value: 0n, data: "0xa9059cbb", operation: 0, nonce: 7n,
+    })).toBe("0x72dd3b1a0246ea09001c4cb84bd981b9cb6882efee55ad7b08b040d7bad2442e"); // Hash público de la transacción; secret-scan: allow
+  });
+
   it("S4: dos entradas exactas de 65 bytes en orden numérico, no por mayúsculas", async () => {
     const { firmasPreaprobadas } = await import("../src/fondo/safe.js");
     const low = "0x000000000000000000000000000000000000000a";

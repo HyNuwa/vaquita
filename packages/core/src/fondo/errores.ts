@@ -2,7 +2,7 @@ import { decodeErrorResult, parseAbi, type Hex } from "viem";
 
 export type CodigoError = "OPERACION_NO_PERMITIDA" | "DESTINATARIO_NO_AUTORIZADO" | "SUPERA_TOPE_POR_PAGO" | "PRESUPUESTO_AGOTADO"
   | "VAQUI_REVOCADO" | "CUENTA_NO_AUTORIZADA" | "FALTAN_FIRMAS" | "FIRMA_NO_VALIDA" | "GASTO_RECHAZADO"
-  | "RED_NO_DISPONIBLE" | "SIN_SALDO_COMISION" | "ERROR_DESCONOCIDO";
+  | "TOKEN_RESTRINGIDO" | "RED_NO_DISPONIBLE" | "SIN_SALDO_COMISION" | "ERROR_DESCONOCIDO";
 export interface ErrorClasificado { codigo: CodigoError; mensaje: string; transitorio: boolean }
 
 const MENSAJES: Record<CodigoError, string> = {
@@ -15,6 +15,7 @@ const MENSAJES: Record<CodigoError, string> = {
   FALTAN_FIRMAS: "Faltan aprobaciones de los responsables.",
   FIRMA_NO_VALIDA: "Una de las aprobaciones no es válida.",
   GASTO_RECHAZADO: "El pago fue rechazado y sigue pendiente.",
+  TOKEN_RESTRINGIDO: "El emisor de los pesos digitales frenó los movimientos por ahora.",
   RED_NO_DISPONIBLE: "La red no responde. Probá de nuevo en un rato.",
   SIN_SALDO_COMISION: "No hay saldo para pagar la comisión de la operación.",
   ERROR_DESCONOCIDO: "No pudimos completar la operación.",
@@ -43,13 +44,14 @@ function cadena(error: unknown): Record<string, unknown>[] {
 function porRevert(data: Hex): CodigoError | undefined {
   const lower = data.toLowerCase();
   if (lower === "0xfd8e9f28") return "VAQUI_REVOCADO";
+  if (lower === "0xd93c0665") return "TOKEN_RESTRINGIDO"; // EnforcedPause de wARS, observado en fork.
   if (lower.startsWith("0x4a0bfec1") && lower.length === 74) return "CUENTA_NO_AUTORIZADA";
   if (lower.startsWith("0xd0a9bf58") && lower.length === 138) {
     return POR_STATUS[BigInt(`0x${lower.slice(10, 74)}`).toString()] ?? "OPERACION_NO_PERMITIDA";
   }
   try {
     const { args } = decodeErrorResult({ abi: errorStringAbi, data });
-    return POR_RAZON[args[0]];
+    return Object.hasOwn(POR_RAZON, args[0]) ? POR_RAZON[args[0]] : undefined;
   } catch { return undefined; }
 }
 

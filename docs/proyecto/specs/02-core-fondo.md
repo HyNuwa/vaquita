@@ -160,6 +160,8 @@ La simulación positiva no se exige si el Safe no tiene saldo o el presupuesto e
 
 Status de `ConditionViolation` observados en fork: `1` delegatecall, `2` destino, `3` función, `4` valor, `5` destinatario, `9` tope por pago, `17` presupuesto. Mapean a `OPERACION_NO_PERMITIDA` salvo `5` a `DESTINATARIO_NO_AUTORIZADO`, `9` a `SUPERA_TOPE_POR_PAGO` y `17` a `PRESUPUESTO_AGOTADO`.
 
+Señal de wARS observada en fork el 2026-11-09: en pausa, una llamada directa a `transfer` revierte con `0xd93c0665` `EnforcedPause`, que mapea a `TOKEN_RESTRINGIDO`. Con `blockUser` forzado e `isBlocked` en verdadero, `transfer` siguió pasando desde y hacia esa cuenta, así que el bloqueo no tiene señal sobre `transfer`. Por Roles o por Safe el error interno no llega: da `ERROR_DESCONOCIDO` y `GASTO_RECHAZADO`.
+
 Los textos para personas no usan jerga ni direcciones.
 
 ## Reglas puras
