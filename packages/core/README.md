@@ -88,13 +88,18 @@ existing purchase transactions remain structurally compatible.
 
 These helpers do not load environment, filesystem, SQL or server adapters.
 They do not simulate, compare on-chain hashes, check current owners/approvals or
-submit transactions. Later RPC orchestration must compare the current hash and
-simulate before requesting the second signature. Tests cover the scoped browser
-core import closure and public imports, not a browser bundle or future reader and
-verifier modules; full S2-18 remains pending.
+submit transactions. RPC orchestration remains responsible for comparing the current
+hash and simulating before requesting the second signature. These helper tests cover
+the scoped browser core import closure and public imports; they are not, by themselves,
+evidence of a full browser bundle. Current S2-18 acceptance and its distinct bundle
+evidence are recorded in the fund evidence and completion log referenced below.
 Tests use synthetic fixtures and an independent reference encoding, never RPC.
-The fixed hash is **not fork evidence**: S2-11 remains pending. This unit does
-not submit deployments, verify a deployed fund or establish full S2 completion.
+The original synthetic hash was not fork evidence. The current fixed vector in
+`test/fondo-safe.test.ts` comes from the later local fork suite (S2-11), as recorded
+in [fund evidence](../../docs/pruebas/fondo.md) and completion log L7–L8 in
+`odd/tasks/fund-s2-completion.md`. Those are author results, not independent fork
+verification. These pure helpers still do not submit deployments or verify a
+deployed fund.
 
 ## Read-injected creation resumption
 
@@ -156,6 +161,99 @@ starts the period at execution; refill equals maxRefill, but two budgets may be
 spent across a renewal boundary. No additional on-chain frequency claim is made.
 Offline encoding tests do not attest deployed permissions, a browser bundle,
 new fork evidence or full S2 acceptance.
+
+## Group verifier
+
+`verificarGrupo(reader, grupo)` from `@vaquita/core/fondo/verificar` returns
+`{ ok, controles: [{ id, ok, detalle }] }` for the ten canonical controls, all read
+at one block through the injected reader. `grupo` is
+`{ chainId, safe, roles, bloqueInicio?, esperado? }`, with no SQL or session.
+`esperado.duenos` is the explicit expected current owners; without it `safe-config`
+fails rather than trusting the chain's own list.
+
+Controls depending on a failed control fail too. A failed read never passes.
+`ok` is `true` only when all ten controls pass. `simulacion` runs negatives N1 to
+N10 through `eth_call` from the operating wallet and accepts only the expected
+revert signal of each one (selector, arguments and, for `ConditionViolation`, the
+status, whatever its `info` word); a passing call, a network error or a revert
+without data fails it. N3 needs `stateDiff` overrides and alters only the balance and timestamp of an
+allowance word already authenticated against the getter. A transport that loses
+revert bytes, such as a plain EIP-1193 error, fails closed. These tests use a modeled
+Roles. The later local fork suite exercises N1–N10 through the real `simulacion`
+control and asserts that control passes, not each negative individually. Completion
+log L8 records the author's 21/21 twice; this is not independent verification or
+mainnet proof. See [fund evidence](../../docs/pruebas/fondo.md) for the limits.
+Structural checks are unlike `planCreation`, which accepts five references and
+zero modules because it only resumes deployment.
+
+`reconstruirPermisos(logs, { roles, desde, hasta })` from
+`@vaquita/core/fondo/verificacion-eventos` is a pure, ordered replay of every
+Roles event into effective memberships, targets, functions, default roles, unwrap
+adapters and budgets. A function stays latent after `RevokeTarget`, so it counts
+even if its target is closed today. History without exactly one `RolesModSetup`
+in range, a removed log, a foreign address, an unknown event or a duplicate
+position yields `ok: false`.
+
+The `eventos` control replays Roles logs from `bloqueInicio` (default: block 0)
+up to the block of the other reads, then `compararPermisos` from
+`@vaquita/core/fondo/verificacion-politica` requires an exact match with the fixed
+policy: `esperado.walletOperativa`, `esperado.destinatarios`, the wARS `transfer`
+conditions and the budget. Without those fields the control fails and reads no
+logs. Replay alone cannot detect a log the RPC omitted from the middle of the
+history, and its budget balance is the last value set, not the current one, which
+the `presupuesto` control reads.
+
+## Proposal bodies, rules and recovery manifest
+
+`safe.ts` and `roles.ts` build Safe proposal bodies without a nonce (`txGasto`,
+`txCancelar`, `txCambiarResponsable`, `txReparto`, `txCambiarDestinatarios`,
+`txRevocar`, `txCerrarVaqui`). Linked-list predecessors come from the on-chain order
+the caller passes in. `errores.ts` classifies structured signals only; message text
+never decides a code. `TOKEN_RESTRINGIDO` recognizes `EnforcedPause`
+(`0xd93c0665`), observed by the author after forcing pause storage in the local
+fork. Roles masks it as `ERROR_DESCONOCIDO`, and Safe as `GASTO_RECHAZADO`;
+a paused Vaqui payment is therefore not identified as token restricted. This is
+not an independently verified fork result or a mainnet claim; see
+[fund evidence](../../docs/pruebas/fondo.md) and completion log L8.
+`saldos.ts`, `cuotas.ts` and `reparto.ts` are pure rules in `bigint`.
+
+`manifiesto.ts` exports a public JSON with no keys, names or owners. Importing checks
+shape, references and address derivation only; `revalidarManifiesto` is what proves
+anything, by running `verificarGrupo` with owners supplied by the caller.
+
+## Injected fund reader
+
+`createFondoReader(publicClient)` from `@vaquita/core/fondo/lectura` adapts an
+already-provided viem public client. It does not create transports, load private
+configuration, add retries, sign, send or activate a fund. Its five creation-reader
+methods remain structurally compatible with `CreationReader`; `getBlockNumber`
+explicitly disables the client's block-number cache.
+
+The client must be built with `ccipRead: false`; any other value throws
+`FondoReadError` with kind `invalid-request` before any read. With offchain
+lookups enabled, a revert from an untrusted contract could choose a URL to
+contact and replace the revert the verifier relies on.
+
+`getBlock({ blockNumber })` returns only `{ number, hash, timestamp }`.
+`getLogs({ address, fromBlock, toBlock })` returns validated mined raw logs with
+block/transaction identities, indices and `removed`; removed logs are preserved
+for the verifier to reject. `getCode`, `getStorageAt` and `call` keep empty results
+explicit. These reads do not themselves establish snapshot coherence, finality,
+complete history, expected owners or effective permissions.
+
+`call` also accepts `account`, `value` and simulation-only
+`stateOverride: [{ address, stateDiff: [{ slot, value }] }]`. Only 32-byte storage
+keys/values are permitted. Code, balance, nonce and full-state overrides are
+rejected before a client call; input is copied, not mutated. A hypothetical call
+result is not evidence that the original fund's configuration is correct.
+
+`FondoReadError` exposes `kind`: `revert`, `transport`, `unsupported`,
+`invalid-response` or `invalid-request`. Its message is always
+`No pudimos leer los datos del grupo.`; original causes, URLs and provider bodies
+are not retained. Only structured RPC code 3 may retain validated hex `data` for
+machine decoding. Missing/empty bytes or message-only failures cannot prove a
+specific negative. Provider support and actual enforcement still need verification;
+offline tests and the static browser import check are not fork or bundle proof.
 
 ## Fund sender (local fork tests)
 
