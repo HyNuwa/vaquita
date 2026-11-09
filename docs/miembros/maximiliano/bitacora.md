@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-09 · feat(core): replay roles events into effective state
+- **Qué hice:** reconstrucción pura y ordenada de permisos desde los eventos de Roles, con ABI aditivo de 22 eventos cotejado de forma independiente contra el artefacto. Verificación independiente: 123/123 y tipos core.
+- **Archivos clave:** `packages/core/src/fondo/verificacion-eventos.ts`, `abis.ts` y su test.
+- **Próximo paso:** comparar el estado efectivo con la política fija. Sin fuente Solidity ni prueba EVM.
+
 ## 2026-11-09 · feat(core): add injected fund reader
 - **Qué hice:** implementé el lector público inyectado, compatible con creación y sin env/SQL/firma/envío/reintentos propios. Valida bloques/logs minados y respuestas; limita simulaciones a diferencias de almacenamiento y separa bytes de rechazo de errores de transporte, sin conservar causas ni URLs privadas. RED 37 fallos/2 previos aprobados; GREEN final 42 focalizados, 511 completos y tipos core/web aprobados.
 - **Archivos clave:** `packages/core/src/fondo/lectura.ts`, tests de lectura/frontera navegador, README del core, seguimiento y estado propios. Se conserva el primer fallo de expectativa del SDK, errores de tipos Celo y el RED adicional de tres respuestas nulas/array antes de su corrección; no se cambió creación, permisos ni transacciones existentes.
