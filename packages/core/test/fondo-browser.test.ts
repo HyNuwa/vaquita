@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 const SRC = fileURLToPath(new URL("../src/", import.meta.url));
-const ROOTS = ["fondo/constantes.ts", "fondo/safe.ts", "fondo/transacciones.ts"];
+const ROOTS = ["fondo/constantes.ts", "fondo/safe.ts", "fondo/transacciones.ts", "fondo/creacion.ts", "fondo/roles.ts"];
 
 /** Inspecciona fuentes del core antes de permitir su importación pública. */
 function browserClosure(): Set<string> {
@@ -23,7 +23,7 @@ function browserClosure(): Set<string> {
         const dependency = resolve(dirname(file), specifier.replace(/\.js$/, ".ts"));
         // Lista cerrada: ningún adaptador nuevo puede colarse en el recorrido.
         expect(relative(SRC, dependency).replaceAll("\\", "/")).toMatch(
-          /^(?:fondo\/(?:constantes|safe|transacciones|abis)|config\/tokens|attribution\/tag)\.ts$/,
+          /^(?:fondo\/(?:constantes|safe|transacciones|abis|creacion|roles)|config\/(?:tokens|fondo-contratos)|attribution\/tag)\.ts$/,
         );
         visit(dependency);
       } else {
@@ -35,19 +35,23 @@ function browserClosure(): Set<string> {
   return visited;
 }
 
-describe("frontera navegador de la primera unidad S2", () => {
-  it("recorre las dependencias del core y luego importa los tres módulos públicos", async () => {
+describe("frontera navegador del núcleo S2 implementado", () => {
+  it("recorre las dependencias del core y luego importa los módulos públicos", async () => {
     const closure = browserClosure();
     expect([...closure].map((file) => relative(SRC, file).replaceAll("\\", "/")).sort()).toEqual([
-      "attribution/tag.ts", "config/tokens.ts", "fondo/abis.ts", "fondo/constantes.ts",
-      "fondo/safe.ts", "fondo/transacciones.ts",
+      "attribution/tag.ts", "config/fondo-contratos.ts", "config/tokens.ts", "fondo/abis.ts", "fondo/constantes.ts",
+      "fondo/creacion.ts", "fondo/roles.ts", "fondo/safe.ts", "fondo/transacciones.ts",
     ]);
     const constants = await import("@vaquita/core/fondo/constantes");
     const safe = await import("@vaquita/core/fondo/safe");
     const transactions = await import("@vaquita/core/fondo/transacciones");
     expect(constants.MAX_DESTINATARIOS).toBe(20);
     expect(typeof safe.hashTransaccionSafe).toBe("function");
-    expect(Object.keys(transactions).sort()).toEqual(["aportar", "aprobarHash", "ejecutarPropuesta"]);
+    const creation = await import("@vaquita/core/fondo/creacion");
+    expect(typeof creation.planCreation).toBe("function");
+    const roles = await import("@vaquita/core/fondo/roles");
+    expect(Object.keys(roles).sort()).toEqual(["buildInitialRules", "condicionesVaqui"]);
+    expect(Object.keys(transactions).sort()).toEqual(["aportar", "aprobarHash", "crearSafe", "desplegarRoles", "ejecutarPropuesta"]);
   });
 
   it("la web recibe TxPersona por import type sin cambiar el flujo de envío", () => {

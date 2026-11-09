@@ -1,8 +1,9 @@
 import { encodeFunctionData, erc20Abi, type Address, type Hex } from "viem";
 import { appendTag, assertTagged, assertValidCode } from "../attribution/tag.js";
 import { WFIAT } from "../config/tokens.js";
-import { safeAbi } from "./abis.js";
-import { SAFE_GAS_FIELDS, type TxSafe } from "./safe.js";
+import { contratosFondo } from "../config/fondo-contratos.js";
+import { moduleFactoryAbi, proxyFactoryAbi, safeAbi } from "./abis.js";
+import { creationSalt, encodeRolesSetup, encodeSafeSetup, SAFE_GAS_FIELDS, type CreationConfig, type TxSafe } from "./safe.js";
 
 /** Transacción etiquetada que firma una persona desde su propia billetera. */
 export interface TxPersona {
@@ -43,5 +44,23 @@ export function ejecutarPropuesta(safe: Address, txSafe: TxSafe, firmas: Hex, co
     functionName: "execTransaction",
     args: [txSafe.to, txSafe.value, txSafe.data, txSafe.operation,
       safeTxGas, baseGas, gasPrice, gasToken, refundReceiver, firmas],
+  }), code);
+}
+
+/** Primera firma de una persona: crea el Safe sin habilitar ningún módulo. */
+export function crearSafe(config: CreationConfig, code: string): TxPersona {
+  const contracts = contratosFondo(42220);
+  return etiquetar(contracts.proxyFactory.address, encodeFunctionData({
+    abi: proxyFactoryAbi, functionName: "createProxyWithNonce",
+    args: [contracts.safeL2.address, encodeSafeSetup(config), creationSalt(config.groupId)],
+  }), code);
+}
+
+/** Segunda firma de una persona: despliega Roles, todavía sin permisos de gasto. */
+export function desplegarRoles(safe: Address, groupId: string, code: string): TxPersona {
+  const contracts = contratosFondo(42220);
+  return etiquetar(contracts.moduleFactory.address, encodeFunctionData({
+    abi: moduleFactoryAbi, functionName: "deployModule",
+    args: [contracts.rolesMastercopy.address, encodeRolesSetup(safe), creationSalt(groupId)],
   }), code);
 }
