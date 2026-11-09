@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-09 · feat(core): check exact negative simulation signals
+- **Qué hice:** N1 a N10 por eth_call con señal exacta; N3 altera sólo saldo y fecha de una palabra autenticada contra el getter. Verificación independiente offline: 220/220, con selectores y layout cotejados contra el artefacto.
+- **Archivos clave:** `packages/core/src/fondo/verificacion-simulacion.ts`, su test y el Roles modelado.
+- **Próximo paso:** integrar los diez controles. Las pruebas usan un Roles modelado: el contrato real sigue sin probarse.
+
 ## 2026-11-09 · feat(core): compare effective permissions with policy
 - **Qué hice:** comparación exacta del replay con la wallet operativa, los destinatarios, las condiciones de wARS y el presupuesto; las funciones latentes rechazan. Verificación independiente: 174/174 sobre la unidad.
 - **Archivos clave:** `packages/core/src/fondo/verificacion-politica.ts` y su test.
