@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): prepare fund creation PR chain
+- **Qué hice:** preparé tres ramas conservando C1 1a50eba, C2 4848324 y C3 5d96d52/cierre c27a141. Publicación autorizada hacia staging, C1 como ancla en borrador y cada hijo sobre su padre; sin merge ni fork. Issue #35 creada y confirmada exactamente con `status:approved`/`type:feature` tras consentimiento específico; no amplío issues23/31.
+- **Archivos clave:** `odd/tasks/fund-s2-creation-publication.md`, bitácora y estado propios. Solo seguimiento documental; código, tests, configuración e historia verificados sin cambios.
+- **Próximo paso:** verificar composición, publicar los tres PRs con referencias no cerrantes y observar CI existente. Pruebas offline anteriores y fallos preservados; todavía no se declara CI de publicación aprobada ni integración.
+
 ## 2026-11-08 · docs(docs): close offline fund creation evidence
 - **Qué hice:** consolidé la unidad offline C1 1a50eba → C2 4848324 → C3 5d96d52, con 802 líneas repartidas en tres commits de menos de 400. Check final del autor: 471 tests/tipos core+web; verificación independiente por unidad: 63/92/110 tests, tipos core y revisión sin hallazgos, sin sumar escenarios repetidos. Los fallos previos y sus recuperaciones quedan registrados.
 - **Archivos clave:** `docs/pruebas/fondo.md`, `docs/proyecto/specs/avance.md`, `odd/tasks/fund-s2-creation.md`, bitácora y estado propios. Cierre pasivo, sin modificar código ni dependencias.

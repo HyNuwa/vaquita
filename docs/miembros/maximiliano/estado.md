@@ -2,7 +2,15 @@
 
 **Última actualización:** 2026-11-08
 
-## Foco vigente · unidad offline de creación/configuración verificada
+## Foco vigente · publicación autorizada de creación/configuración S2
+Publicar tres PRs hacia staging: C1 como ancla en borrador, C2 sobre C1 y C3/cierre sobre C2. Ramas locales preparadas: `feat/fund-s2-create-anchor` en 1a50eba, `feat/fund-s2-create-resume` en 4848324 y `feat/fund-s2-create-rules` en c27a141 antes del seguimiento pasivo. Los commits originales y `feat/fund-s2-create` se conservan.
+Issue #35 creada y confirmada con `status:approved`/`type:feature`, referencias no cerrantes y autorización específica. Temporal privado eliminado tras corregir solo la DACL con consentimiento, sin elevar privilegios; se conservan fallos de preparación y rechazo previo. Próximo paso: composición y guardas, verificación estructural independiente, publicación y observación de CI existente. No se declara CI de publicación aprobada ni integración. Sin merge, fork/RPC, dinero real, dependencia, cambio del harness ni nueva autoridad nativa.
+Seguimiento: `odd/tasks/fund-s2-creation-publication.md`. Los permisos desplegados, verificador/bundle completos, S2-11, checker Zodiac y aceptación completa de S2 siguen fuera de esta entrega.
+
+## Historial del cierre offline anterior a la autorización de publicación
+Las restricciones de no publicación que siguen describen aquella etapa; el alcance vigente es el indicado arriba. Se conservan todas las pruebas, fallos y recuperaciones.
+
+## Unidad offline de creación/configuración verificada
 Primera unidad integrada en staging `c16f081029e761371968a9750a480e26c45b9fe3`: PRs #34, #33 y #32 mergeados en ese orden, árbol revisado exacto y CI final 42527864054 aprobada. Main, ramas e historia original preservados; issues23/31 siguen abiertas.
 Rama local nueva sin publicar: `feat/fund-s2-create`. C1 puro implementado: setup/predicción de ambas direcciones y constructores `crearSafe`/`desplegarRoles` con etiqueta exterior. Valida tres responsables distintos, no nulos y ajenos a ambas cuentas suministradas de Vaqui; no consulta ni afirma la identidad real de esas cuentas en cadena. RED 21 fallos/30 éxitos; GREEN 51 focalizados, 428 completos y typechecks core/web aprobados.
 C1 pasó la nueva verificación independiente mw8gqnjj-i-qe2c: 51 tests focalizados, 12 probes públicos aislados y typecheck core, exit0; revisión de creación/Standards-dinero sin hallazgos. Los 85 archivos del payload y originales permanecieron idénticos. Los 428 tests completos y tipos web siguen siendo evidencia del autor.
