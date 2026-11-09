@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): close offline fund creation evidence
+- **Qué hice:** consolidé la unidad offline C1 1a50eba → C2 4848324 → C3 5d96d52, con 802 líneas repartidas en tres commits de menos de 400. Check final del autor: 471 tests/tipos core+web; verificación independiente por unidad: 63/92/110 tests, tipos core y revisión sin hallazgos, sin sumar escenarios repetidos. Los fallos previos y sus recuperaciones quedan registrados.
+- **Archivos clave:** `docs/pruebas/fondo.md`, `docs/proyecto/specs/avance.md`, `odd/tasks/fund-s2-creation.md`, bitácora y estado propios. Cierre pasivo, sin modificar código ni dependencias.
+- **Próximo paso:** decisión humana de publicación/revisión y, por separado, eventual fork acotado. Implementación nueva local sin publicar; no se leyó configuración privada ni se usó red, dinero real o nueva autoridad nativa. No se cierra S2-11, verificador/bundle completos, checker Zodiac, I1–I4, S8 ni aceptación completa S2.
+
 ## 2026-11-08 · feat(core): encode initial Roles rules
 - **Qué hice:** codifiqué condiciones BFS de Roles 2.1.1 con destinatarios normalizados/deduplicados, tope inclusivo y presupuesto periódico, más el cuerpo inicial de cinco llamadas exactas. Reutiliza constantes, MultiSend completo y ejecución etiquetada existentes; no firma, envía ni reinicia automáticamente presupuestos. RED por módulo ausente/78 previos aprobados; GREEN corregido 94 focalizados, 471 completos y tipos core/web aprobados.
 - **Archivos clave:** `packages/core/src/fondo/roles.ts`, `packages/core/test/fondo-{roles,browser}.test.ts`, README del core, seguimiento y estado propios.

@@ -150,3 +150,31 @@ Mainnet, CIP-64 con Roles, la disolución completa, billeteras reales y la concu
 ## Mainnet
 
 Sin transacciones todavía.
+
+## Unidad S2 de creación/configuración · 2026-11-08 · solo offline
+
+La primera unidad se integró con #34 → #33 → #32: staging `c16f081`, CI
+42527864054 aprobada. Esta nueva unidad sigue **sin publicar**, en
+`feat/fund-s2-create`; no ejecutó transacciones ni repitió fork/RPC.
+
+| Unidad local | Commit | Autor: focalizados / completos | Verificación independiente |
+|---|---|---|---|
+| C1: setup, direcciones y constructores | `1a50eba` | 51 / 428 | 51 + 12 probes = 63 |
+| C2: reanudar solo despliegues faltantes | `4848324` | 79 / 456 | 79 + 13 probes = 92 |
+| C3: BFS y cinco llamadas iniciales | `5d96d52` | 94 / 471 | 94 + 16 probes = 110 |
+
+Tipos core/web del autor aprobados; cada verificador ejecutó tipos core y revisión
+de dinero/especificación sin hallazgos. Los conteos se superponen: no son sumables
+como casos únicos. Manifiestos, resultados y probes exactos están preservados
+localmente en `.verification/c1-evidence-20261108`, `c2-evidence-20261108` y
+`c3-evidence-20261108`; los payloads propios se retiraron sin borrar dependencias.
+
+`planCreation` comprueba cinco referencias y estado de creación mediante lecturas
+inyectadas a un bloque; una lista vacía no significa permisos activos. El lote
+inicial no es idempotente: repetir `setAllowance` reinicia el saldo; se documenta
+el posible doble presupuesto al cruzar la renovación. No hay envío automático.
+Se conservan RED, timeout/rechazo de preparación C1 y cuatro fallos de fixtures
+C3 corregidos sin cambiar producción en `odd/tasks/fund-s2-creation.md`.
+No fue necesario acceder a configuración privada. No se acredita nuevo fork,
+permisos efectivos, verificador completo, bundle, revisión nativa ni S2 completo;
+S2-11, checker Zodiac, I1–I4 y S8 siguen pendientes.
