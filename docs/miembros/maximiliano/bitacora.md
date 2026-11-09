@@ -1,5 +1,15 @@
 # Bitácora · Maximiliano
 
+## 2026-11-09 · chore(repo): preserve landing in final S2 chain
+- **Qué hice:** combiné las dos historias documentales propias al incorporar el ancla y la landing #39 al candidato completo; los módulos, tests y contratos S2 revisados siguen idénticos. #47, #46, #45 y #44 se integraron hoja a raíz sólo tras CI verde por cabeza.
+- **Archivos clave:** bitácora/estado propios, seguimiento ODD y archivos de landing ya existentes en staging. No se eligió un lado completo ni se reescribió historia.
+- **Próximo paso:** CI de esta cabeza de #43, incorporación al tracker #42 y CI final de staging; después S3-1.
+
+## 2026-11-09 · docs(repo): seed final S2 integration tracker
+- **Qué hice:** abrí el ancla documental desde staging actualizado para la cadena final de S2; preservé la landing #39 y los commits originales. El tracker queda en borrador hasta integrar los cinco hijos con CI por cabeza; referencia no cerrante a #40.
+- **Archivos clave:** estado y bitácora propios. Sin cambios de producción, tests, RPC ni dinero.
+- **Próximo paso:** recibir hoja a raíz sólo con checks verdes y verificar staging final; después empezar únicamente S3-1.
+
 Una entrada por commit, la más nueva arriba.
 
 ## 2026-11-09 · docs(core): record final S2 independent verification
@@ -81,6 +91,11 @@ Una entrada por commit, la más nueva arriba.
 - **Qué hice:** registré la integración autorizada #38 → #37 → #36 en staging acbd8a0, con revisión independiente sin hallazgos, árbol exacto y CI heredadas/final 42550244133/42550389408/42550531575 aprobadas. Preparé la rama local nueva y el plan de ocho tareas del lector/verificador; sin implementar S3 ni publicar esta rama.
 - **Archivos clave:** `odd/tasks/fund-s2-reader-verifier.md`, bitácora y estado propios. Investigación estática: artifact de Roles con runtime idéntico al hash permitido y layout corroborado; proxy oficial identificado, sin compilación propia, EVM ni nuevos RPC. Se conserva el fallo previo por sufijo de origin y su corrección acotada.
 - **Próximo paso:** lector inyectado con RED/GREEN, tipos/frontera navegador y verificación independiente, antes de permisos efectivos/simulaciones. Registro pasivo: no cambia comportamiento y no tiene RED significativo; comprobación estructural y hooks normales. No se declara lector, permisos desplegados ni S2 completos; sin configuración privada, dependencias, dinero o nueva autoridad nativa.
+
+## 2026-11-09 · feat(web): add shared fund landing site
+- **Qué hice:** adapté el primer diseño de la landing de Vaqui al fondo compartido (D16): el copy de compras grupales salió y lo que se afirma sigue `spec.md` §6, con aviso de que las garantías valen cuando terminen las pruebas. Workflow de GitHub Pages que publica `.site/`.
+- **Archivos clave:** `.site/`, `.github/workflows/site.yml`.
+- **Próximo paso:** sumar el enlace real a Telegram o a la web cuando estén disponibles.
 
 ## 2026-11-08 · docs(docs): record fund creation publication evidence
 - **Qué hice:** publiqué #36 (C1/ancla en borrador) → #37 (C2) → #38 (C3/cierre), cada hijo sobre su padre, con `Refs #35` y un único `type:feature`. Heads, bases, cuerpos, tamaños y enlaces confirmados; CI fuente 42544945983/42544951761/42544959291 aprobada en primer intento. Verificación estructural independiente y tres guardas completas por SHA aprobadas; código e historia originales preservados.

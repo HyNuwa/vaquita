@@ -1,8 +1,17 @@
 # Estado · Maximiliano
 
+## Foco vigente · integrar candidato completo con landing preservada
+Actualización: 2026-11-09. #47 → #46 → #45 → #44 integrados con CI de cada cabeza exacta; la revisión independiente de dinero quedó satisfecha. Se combina ahora el candidato completo con la landing/ancla, preservando ambas historias documentales. Falta CI de #43, integración al tracker #42 y CI final de staging. No hay nuevo fork, RPC, dinero ni cambio de producción en esta resolución. Después corresponde sólo S3-1 Db/migraciones offline desde staging actualizado.
+
+## Registro previo · ancla de publicación S2
+Actualización: 2026-11-09. Tracker desde staging 09466d0 para cinco PRs hijos, con Refs #40; sin cambios de código. Mantener el borrador hasta incorporar la implementación completa y confirmar CI de cada cabeza acumulada. La landing y los registros anteriores permanecen intactos. Próximo paso: CI e integración a staging, luego S3-1 Db/migraciones offline en rama separada. No se declara merge, permisos desplegados ni nueva ejecución de fork.
+
 **Última actualización:** 2026-11-09
 
-## Foco vigente · revisión S2 satisfecha, publicación en curso
+## Landing del fondo compartido
+Landing en `.site/`, publicada con GitHub Pages desde `staging` y `main`. Falta un enlace real a Telegram o a la web; hoy el llamado a la acción lleva a GitHub.
+
+## Registro previo · revisión S2 satisfecha, publicación en curso
 Seguimiento: `odd/tasks/fund-s2-final-integration.md`, L34. T1–T3 completos; T4 en preparación. Issues [#40](https://github.com/HyNuwa/vaquita/issues/40) y [#41](https://github.com/HyNuwa/vaquita/issues/41) creadas y aprobadas con referencias no cerrantes; elegidos tracker draft y cinco PRs hijos. Destino exclusivo: staging; se preserva la landing #39 y toda la historia original.
 Verificación independiente final admitida por el mismo agente: integridad de 99.761 archivos origen/copia, tipos core exit 0 y seis probes aprobados. La suite completa dio 806 PASS / 1 FAIL (timeout browser de 5000 ms); ese único test original luego pasó en recheck autorizado: 2/2, imports en 2247 ms, sin cambiar assertions ni límite. **No es una nueva suite completa toda verde**. Causa del timeout anterior desconocida; fallos de preparación y evidencia conservados. Revisión financiera estática sin nuevos graves; comparación explícita del evento `ModuleProxyCreation` sigue como advisory no bloqueante. Fork previo 21/21 dos veces sigue siendo evidencia del autor, no nueva ejecución independiente.
 **Próximo paso:** confirmar y publicar las cinco cabezas con CI por PR, integrar hoja a raíz y verificar staging final. Después, nueva rama desde staging para S3-1 Db/pg/PGlite/migraciones/tests offline; no API/auth completa. Aún no hay nuevos PRs ni merges. Sin RPC/fork, dinero real, cambios de producción, dependencias ni aprobación nativa nuevos.
