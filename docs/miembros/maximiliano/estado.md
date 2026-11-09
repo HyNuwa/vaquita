@@ -1,6 +1,9 @@
 # Estado · Maximiliano
 
-**Última actualización:** 2026-11-08
+**Última actualización:** 2026-11-09
+
+## Landing del fondo compartido
+Landing en `.site/`, publicada con GitHub Pages desde `staging` y `main`. Falta un enlace real a Telegram o a la web; hoy el llamado a la acción lleva a GitHub.
 
 ## Foco vigente · creación/configuración S2 publicada, sin merge
 Cadena publicada y confirmada: #36 C1/ancla en borrador hacia staging (1a50eba), #37 C2 hacia el ancla (4848324), #38 C3/cierre hacia C2. `feat/fund-s2-create-rules` conserva c27a141, preparación ef5a63a y este recibo pasivo; la cabeza exacta y su CI vigente se consultan en el PR #38. Originales y rama fuente `feat/fund-s2-create` preservados. Cada PR usa `Refs #35` no cerrante y exactamente un `type:feature`.

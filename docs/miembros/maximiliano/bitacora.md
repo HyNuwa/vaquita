@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-09 · feat(web): add shared fund landing site
+- **Qué hice:** adapté el primer diseño de la landing de Vaqui al fondo compartido (D16): el copy de compras grupales salió y lo que se afirma sigue `spec.md` §6, con aviso de que las garantías valen cuando terminen las pruebas. Workflow de GitHub Pages que publica `.site/`.
+- **Archivos clave:** `.site/`, `.github/workflows/site.yml`.
+- **Próximo paso:** sumar el enlace real a Telegram o a la web cuando estén disponibles.
+
 ## 2026-11-08 · docs(docs): record fund creation publication evidence
 - **Qué hice:** publiqué #36 (C1/ancla en borrador) → #37 (C2) → #38 (C3/cierre), cada hijo sobre su padre, con `Refs #35` y un único `type:feature`. Heads, bases, cuerpos, tamaños y enlaces confirmados; CI fuente 42544945983/42544951761/42544959291 aprobada en primer intento. Verificación estructural independiente y tres guardas completas por SHA aprobadas; código e historia originales preservados.
 - **Archivos clave:** `odd/tasks/fund-s2-creation-publication.md`, bitácora y estado propios. Registro pasivo; se conservan fallos de preparación Windows, rechazo de privilegio y recuperación DACL expresamente autorizada, además del RED/GREEN del falso positivo de URL, sin repetir creaciones remotas.
