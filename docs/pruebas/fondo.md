@@ -2,6 +2,18 @@
 
 Lo que no está acá no está probado. Las transacciones de esta página corrieron en un **fork local**: no existen en mainnet.
 
+## Suite S2 del repositorio · 2026-11-09 · fork local
+
+`packages/core/test-fork/fondo-s2.test.ts` pasó 21/21, dos corridas seguidas, con Anvil 1.8.7 sobre `https://forno.celo.org` (chainId 42220), con cuentas generadas en cada corrida. Ninguna transacción salió del fork.
+
+**Cubre:** S2-1 a S2-11, N1 a N14, S2-19, S2-21 y S2-20 de punta a punta (responsables, bytecode y módulo). Vector de S2-11, fijado en `test/fondo-safe.test.ts`: Safe `0x34B0b659358A43a5636a0279407474DFe2EDC020`, hash `0x72dd3b1a0246ea09001c4cb84bd981b9cb6882efee55ad7b08b040d7bad2442e`.
+
+**Límites:** N1 a N10 pasan por el control `simulacion` real y se afirman como control aprobado, no uno por uno. El caso "Roles 2.1.0" de S2-10 usa un proxy a una dirección sin código: prueba el control de mastercopy, no el comportamiento de esa versión. S2-21 corre sin aplicación ni base porque la suite no las importa; no se apagó un servidor. La suite no tuvo verificación independiente.
+
+**`TOKEN_RESTRINGIDO` (S2-16):** la pausa se forzó escribiendo el slot de `Pausable` en el fork y `transfer` directo devolvió `EnforcedPause` (`0xd93c0665`). Por Roles da `ERROR_DESCONOCIDO` y por Safe `GASTO_RECHAZADO`, porque no reenvían el error interno: un pago de Vaqui en pausa no se identifica como token restringido. El bloqueo por `blockUser` no frenó `transfer` en una sonda aparte, sin test en el repo.
+
+**Fuera de S2:** checker de Zodiac (S1 y paso humano H3), I1 a I4 (S6) y S8.
+
 ## Suite S1 del repositorio · 2026-11-08 · fork local
 
 `npm run fondo:fork` pasó con Anvil 1.8.7: un test de integración, 30,12 s.
@@ -178,3 +190,31 @@ C3 corregidos sin cambiar producción en `odd/tasks/fund-s2-creation.md`.
 No fue necesario acceder a configuración privada. No se acredita nuevo fork,
 permisos efectivos, verificador completo, bundle, revisión nativa ni S2 completo;
 S2-11, checker Zodiac, I1–I4 y S8 siguen pendientes.
+
+## Lector y verificador S2 · 2026-11-09 · solo offline
+
+Evidencia offline de `createFondoReader` y `verificarGrupo`, sin red, fork, EVM ni
+fondos. El detalle y cada intento, incluidos los fallidos, están en
+`odd/tasks/fund-s2-reader-verifier.md` (L26 a L47).
+
+| Unidad | Contenido | Verificación independiente sobre copia aislada |
+|---|---|---|
+| T3 | Lector inyectado, con rechazo de CCIP | PASS: 46/46 y tipos core |
+| T4 | Ocho controles estructurales | PASS: 91/91 y tipos core |
+| T5 | Replay ordenado de eventos de Roles | PASS: 123/123, tipos core y ABI 22/22 contra el artefacto |
+| T5b | Control `eventos` contra la política fija | PASS: 174/174 |
+| T6 | Control `simulacion`, N1 a N10 con señal exacta | PASS offline: 220/220, y 226/226 con sus sondas |
+
+Reconciliación final del autor, no independiente: suite del core 689/689 en 31
+archivos, frontera de navegador 2/2, tipos core y web con exit 0.
+
+En las corridas de T5b y T6, `tsc` dentro de la copia aislada salió con exit 1 por
+cuatro errores en una sonda anterior del checker, ajena a la fuente. Después de T6
+sólo cambió una frase del README del core.
+
+**No se probó:** que el Roles desplegado emita esas señales, los números de status
+(el artefacto no expone los miembros del enum), el argumento de `NotAuthorized`, la
+aceptación EVM del `stateDiff`, ni que `ScopeFunction` emita las condiciones tal como
+se enviaron. Las negativas usan un Roles modelado. El replay no detecta un log que
+el RPC omita, y tampoco se comprobó contra la fuente Solidity, que no está en el
+artefacto. No se acredita fork, mainnet, permisos desplegados ni S2 completo.
