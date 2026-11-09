@@ -9,7 +9,7 @@ import {
   CLAVE_PRESUPUESTO, LIMITE_POR_TRANSFERENCIA, MAX_DESTINATARIOS,
   PERIODO_SEGUNDOS, PRESUPUESTO_PERIODO, ROL_VAQUI,
 } from "./constantes.js";
-import { encodeMultiSend, type TxSafe } from "./safe.js";
+import { anteriorEnLista, encodeMultiSend, type CuerpoSafe, type TxSafe } from "./safe.js";
 
 type Condition = { parent: number; paramType: number; operator: number; compValue: Hex };
 export interface InitialRulesConfig {
@@ -42,6 +42,29 @@ export function condicionesVaqui(recipients: readonly Address[]): readonly Condi
   return conditions;
 }
 
+const scopeTransferencia = (recipients: readonly Address[]): Hex => encodeFunctionData({ abi: rolesAbi, functionName: "scopeFunction", args: [
+  ROL_VAQUI, WFIAT.wARS.address, toFunctionSelector("transfer(address,uint256)"), condicionesVaqui(recipients), 0,
+] });
+const quitarRol = (wallet: Address): Hex => encodeFunctionData({ abi: rolesAbi, functionName: "assignRoles", args: [wallet, [ROL_VAQUI], [false]] });
+
+/** Reemplaza el scope completo: los destinatarios que no estén en la lista dejan de estar autorizados. */
+export function txCambiarDestinatarios(roles: Address, lista: readonly Address[]): CuerpoSafe {
+  return { to: roles, value: 0n, data: scopeTransferencia(lista), operation: 0 };
+}
+
+export function txRevocar(roles: Address, wallet: Address): CuerpoSafe {
+  return { to: roles, value: 0n, data: quitarRol(wallet), operation: 0 };
+}
+
+/** `modulos` es la lista leída de `getModulesPaginated`, en su orden, para calcular el previo. */
+export function txCerrarVaqui(safe: Address, roles: Address, wallet: Address, modulos: readonly Address[]): CuerpoSafe {
+  const prev = anteriorEnLista(modulos, roles);
+  return { to: contratosFondo(42220).multiSendCallOnly.address, value: 0n, operation: 1, data: encodeMultiSend([
+    { to: roles, data: quitarRol(wallet) },
+    { to: safe, data: encodeFunctionData({ abi: safeAbi, functionName: "disableModule", args: [prev, roles] }) },
+  ]) };
+}
+
 /** Solo para configuración inicial: no es un plan de recuperación ni un reinicio de presupuesto. */
 export function buildInitialRules(config: InitialRulesConfig): TxSafe {
   const { safe, roles, operatingWallet, recipients, nonce } = config;
@@ -49,7 +72,6 @@ export function buildInitialRules(config: InitialRulesConfig): TxSafe {
     || typeof nonce !== "bigint" || nonce < 0n || nonce >= (1n << 256n)) {
     throw new Error("Revisá las cuentas del grupo y el número de operación.");
   }
-  const conditions = condicionesVaqui(recipients);
   const token = WFIAT.wARS.address;
   const calls = [
     { to: safe, data: encodeFunctionData({ abi: safeAbi, functionName: "enableModule", args: [roles] }) },
@@ -57,9 +79,7 @@ export function buildInitialRules(config: InitialRulesConfig): TxSafe {
       CLAVE_PRESUPUESTO, PRESUPUESTO_PERIODO, PRESUPUESTO_PERIODO, PRESUPUESTO_PERIODO, PERIODO_SEGUNDOS, 0n,
     ] }) },
     { to: roles, data: encodeFunctionData({ abi: rolesAbi, functionName: "scopeTarget", args: [ROL_VAQUI, token] }) },
-    { to: roles, data: encodeFunctionData({ abi: rolesAbi, functionName: "scopeFunction", args: [
-      ROL_VAQUI, token, toFunctionSelector("transfer(address,uint256)"), conditions, 0,
-    ] }) },
+    { to: roles, data: scopeTransferencia(recipients) },
     { to: roles, data: encodeFunctionData({ abi: rolesAbi, functionName: "assignRoles", args: [operatingWallet, [ROL_VAQUI], [true]] }) },
   ];
   return { to: contratosFondo(42220).multiSendCallOnly.address, value: 0n, data: encodeMultiSend(calls), operation: 1, nonce };

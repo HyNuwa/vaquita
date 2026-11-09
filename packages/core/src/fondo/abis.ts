@@ -48,6 +48,33 @@ export const rolesAbi = parseAbi([
   "function execTransactionWithRole(address to,uint256 value,bytes data,uint8 operation,bytes32 roleKey,bool shouldRevert) returns (bool)",
 ]);
 
+// Eventos de Roles 2.1.1, todos, del artifact verificado cuyo runtime coincide con la referencia de Celo.
+export const rolesEventsAbi = parseAbi([
+  "struct ConditionFlat {uint8 parent;uint8 paramType;uint8 operator;bytes compValue;}",
+  "event AllowFunction(bytes32 roleKey, address targetAddress, bytes4 selector, uint8 options)",
+  "event AllowTarget(bytes32 roleKey, address targetAddress, uint8 options)",
+  "event AssignRoles(address module, bytes32[] roleKeys, bool[] memberOf)",
+  "event AvatarSet(address indexed previousAvatar, address indexed newAvatar)",
+  "event ConsumeAllowance(bytes32 allowanceKey, uint128 consumed, uint128 newBalance)",
+  "event DisabledModule(address module)",
+  "event EnabledModule(address module)",
+  "event ExecutionFromModuleFailure(address indexed module)",
+  "event ExecutionFromModuleSuccess(address indexed module)",
+  "event HashExecuted(bytes32)",
+  "event HashInvalidated(bytes32)",
+  "event Initialized(uint64 version)",
+  "event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)",
+  "event RevokeFunction(bytes32 roleKey, address targetAddress, bytes4 selector)",
+  "event RevokeTarget(bytes32 roleKey, address targetAddress)",
+  "event RolesModSetup(address indexed initiator, address indexed owner, address indexed avatar, address target)",
+  "event ScopeFunction(bytes32 roleKey, address targetAddress, bytes4 selector, ConditionFlat[] conditions, uint8 options)",
+  "event ScopeTarget(bytes32 roleKey, address targetAddress)",
+  "event SetAllowance(bytes32 allowanceKey, uint128 balance, uint128 maxRefill, uint128 refill, uint64 period, uint64 timestamp)",
+  "event SetDefaultRole(address module, bytes32 defaultRoleKey)",
+  "event SetUnwrapAdapter(address to, bytes4 selector, address adapter)",
+  "event TargetSet(address indexed previousTarget, address indexed newTarget)",
+]);
+
 export const multiSendCallOnlyAbi = parseAbi([
   "function multiSend(bytes transactions) payable",
 ]);
