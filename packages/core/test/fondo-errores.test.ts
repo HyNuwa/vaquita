@@ -14,6 +14,7 @@ describe("clasificarError", () => {
     [viol(5), "DESTINATARIO_NO_AUTORIZADO"], [viol(9), "SUPERA_TOPE_POR_PAGO"], [viol(17), "PRESUPUESTO_AGOTADO"],
     ["0xfd8e9f28", "VAQUI_REVOCADO"], [notAuth, "CUENTA_NO_AUTORIZADA"],
     [reason("GS020"), "FALTAN_FIRMAS"], [reason("GS025"), "FIRMA_NO_VALIDA"], [reason("GS013"), "GASTO_RECHAZADO"],
+    ["0xd93c0665", "TOKEN_RESTRINGIDO"],
   ] as [Hex, string][])("clasifica %s", (data, codigo) => {
     const result = clasificarError(revert(data));
     expect(result.codigo).toBe(codigo);
