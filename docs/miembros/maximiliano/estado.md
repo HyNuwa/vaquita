@@ -3,9 +3,9 @@
 **Última actualización:** 2026-11-09
 
 ## Foco vigente · lector/verificador S2 verificado offline
-**Unidades con commit local, sin publicar:** lector, replay, política, negativas, verificador.
+**Unidades con commit local, sin publicar:** lector, replay, política, negativas, verificador, errores.
 T3 a T7 cerrados en la rama local `feat/fund-s2-reader`: lector inyectado y `verificarGrupo` con diez controles. Verificación independiente offline por unidad (T3, T4, T5, T5b y T6); suite del core 689/689 y tipos core/web aprobados. Detalle en `docs/pruebas/fondo.md` y `odd/tasks/fund-s2-reader-verifier.md` (L26 a L48).
-**Próximo paso:** autorización explícita para los commits de fuente; después, decisión separada de publicar. **Bloqueos:** nada técnico en este alcance. Siguen abiertos fuera de él el fork y S2-11 (incluidas las negativas contra el contrato real), bundle, checker Zodiac, I1–I4 y S8. No se declara S2 completo.
+**Próximo paso:** bloque restante de S2 en `odd/tasks/fund-s2-completion.md`; la suite de fork espera el RPC de Celo a usar. Publicar la rama es una decisión separada. **Bloqueos:** nada técnico en este alcance. Siguen abiertos fuera de él el fork y S2-11 (incluidas las negativas contra el contrato real), bundle, checker Zodiac, I1–I4 y S8. No se declara S2 completo.
 
 ## Registro previo · creación integrada, lector/verificador S2 en curso
 **Traspaso a Claude externo:** contexto en [s2-reader-verifier-handoff.md](../../tareas/s2-reader-verifier-handoff.md) y [prompt listo para pegar](../../tareas/s2-reader-verifier-claude-prompt.md). Próximo paso: continuar T3–T7 en la misma tarea ODD; el humano debe enviar el prompt para solicitar el nuevo intento acotado sobre la cápsula existente. Este traspaso es sólo documental: no ejecuta pruebas ni desbloquea por sí mismo la verificación independiente/commit de fuente; preserva los límites y la historia que siguen.

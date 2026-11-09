@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-09 · feat(core): classify fund errors by structured signal
+- **Qué hice:** `clasificarError` con cada fila de la tabla, sólo por señales estructuradas. `TOKEN_RESTRINGIDO` espera su señal exacta en fork. Registro también los hashes de la unidad anterior.
+- **Archivos clave:** `packages/core/src/fondo/errores.ts`, su test, `odd/tasks/fund-s2-completion.md`.
+- **Próximo paso:** reglas puras, cuerpos y manifiesto; luego la suite de fork.
+
 ## 2026-11-09 · feat(core): add effective fund group verifier
 - **Qué hice:** `verificarGrupo` con diez controles en un solo bloque; `ok` sólo si pasan todos. Verificación independiente offline por unidad; reconciliación del autor: core 689/689 y tipos core/web aprobados.
 - **Archivos clave:** `packages/core/src/fondo/verificar.ts`, frontera de navegador, README, `docs/pruebas/fondo.md`, avance y seguimiento.
