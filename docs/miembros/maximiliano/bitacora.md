@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-09 · feat(core): add fund balance, dues and payout rules
+- **Qué hice:** `saldos`, `cuotas` y `reparto` en bigint, con cruce de mes en hora argentina e invariante del reparto probada con entradas aleatorias reproducibles.
+- **Archivos clave:** `packages/core/src/fondo/saldos.ts`, `cuotas.ts`, `reparto.ts` y `test/fondo-reglas.test.ts`.
+- **Próximo paso:** cuerpos de propuestas.
+
 ## 2026-11-09 · feat(core): classify fund errors by structured signal
 - **Qué hice:** `clasificarError` con cada fila de la tabla, sólo por señales estructuradas. `TOKEN_RESTRINGIDO` espera su señal exacta en fork. Registro también los hashes de la unidad anterior.
 - **Archivos clave:** `packages/core/src/fondo/errores.ts`, su test, `odd/tasks/fund-s2-completion.md`.
