@@ -2,10 +2,10 @@
 
 **Última actualización:** 2026-11-08
 
-## Foco vigente · publicación autorizada de creación/configuración S2
-Publicar tres PRs hacia staging: C1 como ancla en borrador, C2 sobre C1 y C3/cierre sobre C2. Ramas locales preparadas: `feat/fund-s2-create-anchor` en 1a50eba, `feat/fund-s2-create-resume` en 4848324 y `feat/fund-s2-create-rules` en c27a141 antes del seguimiento pasivo. Los commits originales y `feat/fund-s2-create` se conservan.
-Issue #35 creada y confirmada con `status:approved`/`type:feature`, referencias no cerrantes y autorización específica. Temporal privado eliminado tras corregir solo la DACL con consentimiento, sin elevar privilegios; se conservan fallos de preparación y rechazo previo. Próximo paso: composición y guardas, verificación estructural independiente, publicación y observación de CI existente. No se declara CI de publicación aprobada ni integración. Sin merge, fork/RPC, dinero real, dependencia, cambio del harness ni nueva autoridad nativa.
-Seguimiento: `odd/tasks/fund-s2-creation-publication.md`. Los permisos desplegados, verificador/bundle completos, S2-11, checker Zodiac y aceptación completa de S2 siguen fuera de esta entrega.
+## Foco vigente · creación/configuración S2 publicada, sin merge
+Cadena publicada y confirmada: #36 C1/ancla en borrador hacia staging (1a50eba), #37 C2 hacia el ancla (4848324), #38 C3/cierre hacia C2. `feat/fund-s2-create-rules` conserva c27a141, preparación ef5a63a y este recibo pasivo; la cabeza exacta y su CI vigente se consultan en el PR #38. Originales y rama fuente `feat/fund-s2-create` preservados. Cada PR usa `Refs #35` no cerrante y exactamente un `type:feature`.
+CI de las tres cabezas fuente observada en verde, primer intento: 42544945983/42544951761/42544959291. Verificación independiente mw8kgjuc-p-n2k8 y tres guardas completas por SHA aprobadas; deltas iniciales 311/265/319. Registro actual solo documental, sin cambiar producción, tests, configuración ni historia. Se conserva el rechazo de privilegios y la corrección DACL explícitamente autorizada, sin elevación; temporales privados eliminados y ninguna configuración privada leída.
+Seguimiento: `odd/tasks/fund-s2-creation-publication.md`; recibo de la cabeza documental final/CI en #38. Próximo paso: decisión humana separada de revisión/integración y, por separado, eventual fork. Sin merge, fork/RPC, dinero, dependencias, cambios del harness ni nueva autoridad nativa; issues23/31/35 abiertas. Permisos desplegados, verificador/bundle completos, S2-11, checker Zodiac y aceptación completa de S2 siguen fuera de esta entrega.
 
 ## Historial del cierre offline anterior a la autorización de publicación
 Las restricciones de no publicación que siguen describen aquella etapa; el alcance vigente es el indicado arriba. Se conservan todas las pruebas, fallos y recuperaciones.

@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · docs(docs): record fund creation publication evidence
+- **Qué hice:** publiqué #36 (C1/ancla en borrador) → #37 (C2) → #38 (C3/cierre), cada hijo sobre su padre, con `Refs #35` y un único `type:feature`. Heads, bases, cuerpos, tamaños y enlaces confirmados; CI fuente 42544945983/42544951761/42544959291 aprobada en primer intento. Verificación estructural independiente y tres guardas completas por SHA aprobadas; código e historia originales preservados.
+- **Archivos clave:** `odd/tasks/fund-s2-creation-publication.md`, bitácora y estado propios. Registro pasivo; se conservan fallos de preparación Windows, rechazo de privilegio y recuperación DACL expresamente autorizada, además del RED/GREEN del falso positivo de URL, sin repetir creaciones remotas.
+- **Próximo paso:** publicar este recibo y observar su CI automática; luego decidir por separado revisión/integración o fork. No mergeé ni moví dinero; no cambié dependencias, Windows/harness ni autoridad nativa. Temporales privados eliminados, sin leer configuración privada; no se declara S2 completo.
+
 ## 2026-11-08 · docs(docs): prepare fund creation PR chain
 - **Qué hice:** preparé tres ramas conservando C1 1a50eba, C2 4848324 y C3 5d96d52/cierre c27a141. Publicación autorizada hacia staging, C1 como ancla en borrador y cada hijo sobre su padre; sin merge ni fork. Issue #35 creada y confirmada exactamente con `status:approved`/`type:feature` tras consentimiento específico; no amplío issues23/31.
 - **Archivos clave:** `odd/tasks/fund-s2-creation-publication.md`, bitácora y estado propios. Solo seguimiento documental; código, tests, configuración e historia verificados sin cambios.
