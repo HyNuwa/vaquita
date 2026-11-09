@@ -1,5 +1,10 @@
 # Bitácora · Maximiliano
 
+## 2026-11-09 · docs(repo): seed final S2 integration tracker
+- **Qué hice:** abrí el ancla documental desde staging actualizado para la cadena final de S2; preservé la landing #39 y los commits originales. El tracker queda en borrador hasta integrar los cinco hijos con CI por cabeza; referencia no cerrante a #40.
+- **Archivos clave:** estado y bitácora propios. Sin cambios de producción, tests, RPC ni dinero.
+- **Próximo paso:** recibir hoja a raíz sólo con checks verdes y verificar staging final; después empezar únicamente S3-1.
+
 Una entrada por commit, la más nueva arriba.
 
 ## 2026-11-09 · feat(web): add shared fund landing site

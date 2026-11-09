@@ -1,5 +1,8 @@
 # Estado · Maximiliano
 
+## Integración final S2 · ancla de publicación
+Actualización: 2026-11-09. Tracker desde staging 09466d0 para cinco PRs hijos, con Refs #40; sin cambios de código. Mantener el borrador hasta incorporar la implementación completa y confirmar CI de cada cabeza acumulada. La landing y los registros anteriores permanecen intactos. Próximo paso: CI e integración a staging, luego S3-1 Db/migraciones offline en rama separada. No se declara merge, permisos desplegados ni nueva ejecución de fork.
+
 **Última actualización:** 2026-11-09
 
 ## Landing del fondo compartido
