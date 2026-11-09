@@ -3,7 +3,7 @@
 **Última actualización:** 2026-11-09
 
 ## Foco vigente · lector/verificador S2 verificado offline
-**Unidades con commit local, sin publicar:** lector, replay, política, negativas, verificador, errores, reglas.
+**Unidades con commit local, sin publicar:** lector, replay, política, negativas, verificador, errores, reglas, cuerpos.
 T3 a T7 cerrados en la rama local `feat/fund-s2-reader`: lector inyectado y `verificarGrupo` con diez controles. Verificación independiente offline por unidad (T3, T4, T5, T5b y T6); suite del core 689/689 y tipos core/web aprobados. Detalle en `docs/pruebas/fondo.md` y `odd/tasks/fund-s2-reader-verifier.md` (L26 a L48).
 **Próximo paso:** bloque restante de S2 en `odd/tasks/fund-s2-completion.md`; la suite de fork espera el RPC de Celo a usar. Publicar la rama es una decisión separada. **Bloqueos:** nada técnico en este alcance. Siguen abiertos fuera de él el fork y S2-11 (incluidas las negativas contra el contrato real), bundle, checker Zodiac, I1–I4 y S8. No se declara S2 completo.
 

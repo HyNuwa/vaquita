@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-09 · feat(core): add Safe proposal bodies
+- **Qué hice:** siete cuerpos de propuesta sin nonce: gasto, cancelación, cambio de responsable, reparto, destinatarios, revocación y cierre. `buildInitialRules` reutiliza el mismo scope.
+- **Archivos clave:** `packages/core/src/fondo/safe.ts`, `roles.ts` y `test/fondo-cuerpos.test.ts`.
+- **Próximo paso:** manifiesto público; los efectos en cadena se prueban en fork.
+
 ## 2026-11-09 · feat(core): add fund balance, dues and payout rules
 - **Qué hice:** `saldos`, `cuotas` y `reparto` en bigint, con cruce de mes en hora argentina e invariante del reparto probada con entradas aleatorias reproducibles.
 - **Archivos clave:** `packages/core/src/fondo/saldos.ts`, `cuotas.ts`, `reparto.ts` y `test/fondo-reglas.test.ts`.

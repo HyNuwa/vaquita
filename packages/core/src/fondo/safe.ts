@@ -1,9 +1,10 @@
 import {
-  concat, encodeAbiParameters, encodeFunctionData, encodePacked, getAddress,
+  concat, encodeAbiParameters, encodeFunctionData, encodePacked, erc20Abi, getAddress,
   getCreate2Address, hashTypedData, isAddress, keccak256, pad, size, toHex,
   zeroAddress, type Address, type Hex,
 } from "viem";
 import { contratosFondo } from "../config/fondo-contratos.js";
+import { WFIAT } from "../config/tokens.js";
 import { multiSendCallOnlyAbi, rolesAbi, safeAbi } from "./abis.js";
 
 /** Cuerpo portable; sin campos de reembolso configurables. */
@@ -75,6 +76,48 @@ export function encodeMultiSend(calls: readonly { to: Address; data: Hex }[]): H
     functionName: "multiSend",
     args: [packed],
   });
+}
+
+/** Cuerpo sin `nonce`: quien arma la propuesta lo lee en cadena. */
+export type CuerpoSafe = Omit<TxSafe, "nonce">;
+
+const SENTINEL = "0x0000000000000000000000000000000000000001";
+const same = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
+const cuentaReal = (a: Address) => isAddress(a, { strict: false }) && !same(a, zeroAddress) && !same(a, SENTINEL);
+const transferencia = (destino: Address, monto: bigint): Hex => {
+  if (!cuentaReal(destino) || monto <= 0n) throw new Error("Revisá el destinatario y el monto.");
+  return encodeFunctionData({ abi: erc20Abi, functionName: "transfer", args: [destino, monto] });
+};
+
+/** Previo en una lista enlazada de Safe, en el orden leído de la cadena. */
+export function anteriorEnLista(lista: readonly Address[], elemento: Address): Address {
+  const index = lista.findIndex((a) => same(a, elemento));
+  if (index < 0) throw new Error("No encontramos esa cuenta en el fondo.");
+  return index === 0 ? SENTINEL : lista[index - 1]!;
+}
+
+export function txGasto(destino: Address, monto: bigint): CuerpoSafe {
+  return { to: WFIAT.wARS.address, value: 0n, data: transferencia(destino, monto), operation: 0 };
+}
+
+/** Se propone con el mismo `nonce` de la propuesta que reemplaza. */
+export function txCancelar(safe: Address): CuerpoSafe {
+  if (!cuentaReal(safe)) throw new Error("Revisá la cuenta del fondo.");
+  return { to: safe, value: 0n, data: "0x", operation: 0 };
+}
+
+/** `duenos` es la lista leída de `getOwners`, en su orden, para calcular el previo. */
+export function txCambiarResponsable(safe: Address, duenos: readonly Address[], sale: Address, entra: Address): CuerpoSafe {
+  if (!cuentaReal(entra) || same(entra, safe) || duenos.some((a) => same(a, entra))) throw new Error("Revisá la cuenta del nuevo responsable.");
+  const prev = anteriorEnLista(duenos, sale);
+  return { to: safe, value: 0n, operation: 0, data: encodeFunctionData({ abi: safeAbi, functionName: "swapOwner", args: [prev, sale, entra] }) };
+}
+
+export function txReparto(filas: readonly { destino: Address; monto: bigint }[]): CuerpoSafe {
+  if (filas.length === 0) throw new Error("El reparto no tiene destinatarios.");
+  const token = WFIAT.wARS.address;
+  return { to: contratosFondo(42220).multiSendCallOnly.address, value: 0n, operation: 1,
+    data: encodeMultiSend(filas.map((f) => ({ to: token, data: transferencia(f.destino, f.monto) }))) };
 }
 
 /** Entradas explícitas: sin claves, entorno ni resolución de identidad por RPC. */
