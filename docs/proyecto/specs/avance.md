@@ -34,8 +34,8 @@ separadas. `main` no se integró y no hubo nuevas corridas de fork/RPC.
 Seguimiento completo: `odd/tasks/fund-s1-publication.md`.
 
 ## S2 · Core del fondo
-- [ ] Negativas N1 a N14
-- [ ] Criterios S2-1 a S2-21
+- [x] Negativas N1 a N14
+- [x] Criterios S2-1 a S2-21 — evidencia en fork local del 2026-11-09, sin publicar y sin verificador independiente de la suite de fork; ver la actualización al final de esta sección.
 
 Primera unidad cerrada localmente: primitivas Safe y constructores etiquetados
 aptos para navegador, con pruebas offline y revisión independiente. No incluye
@@ -143,3 +143,5 @@ Ninguna app consume todavía `verificarGrupo`.
 Las casillas generales de S2 siguen abiertas: el vector de fork S2-11, las negativas
 contra el contrato real, el bundle transitivo, el checker Zodiac humano, I1–I4 y S8.
 Un resultado `ok` offline no acredita permisos desplegados.
+
+**Actualización 2026-11-09:** N1 a N14 y S2-1 a S2-21 quedaron probados en fork local, 21/21 (`docs/pruebas/fondo.md`), incluida la pausa de wARS. Son evidencia de fork, no permisos desplegados en mainnet. Las ramas siguen locales. El checker Zodiac (paso humano H3), I1–I4 (S6) y S8 no son criterios de S2 y siguen abiertos.

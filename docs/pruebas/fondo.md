@@ -2,6 +2,18 @@
 
 Lo que no está acá no está probado. Las transacciones de esta página corrieron en un **fork local**: no existen en mainnet.
 
+## Suite S2 del repositorio · 2026-11-09 · fork local
+
+`packages/core/test-fork/fondo-s2.test.ts` pasó 21/21, dos corridas seguidas, con Anvil 1.8.7 sobre `https://forno.celo.org` (chainId 42220), con cuentas generadas en cada corrida. Ninguna transacción salió del fork.
+
+**Cubre:** S2-1 a S2-11, N1 a N14, S2-19, S2-21 y S2-20 de punta a punta (responsables, bytecode y módulo). Vector de S2-11, fijado en `test/fondo-safe.test.ts`: Safe `0x34B0b659358A43a5636a0279407474DFe2EDC020`, hash `0x72dd3b1a0246ea09001c4cb84bd981b9cb6882efee55ad7b08b040d7bad2442e`.
+
+**Límites:** N1 a N10 pasan por el control `simulacion` real y se afirman como control aprobado, no uno por uno. El caso "Roles 2.1.0" de S2-10 usa un proxy a una dirección sin código: prueba el control de mastercopy, no el comportamiento de esa versión. S2-21 corre sin aplicación ni base porque la suite no las importa; no se apagó un servidor. La suite no tuvo verificación independiente.
+
+**`TOKEN_RESTRINGIDO` (S2-16):** la pausa se forzó escribiendo el slot de `Pausable` en el fork y `transfer` directo devolvió `EnforcedPause` (`0xd93c0665`). Por Roles da `ERROR_DESCONOCIDO` y por Safe `GASTO_RECHAZADO`, porque no reenvían el error interno: un pago de Vaqui en pausa no se identifica como token restringido. El bloqueo por `blockUser` no frenó `transfer` en una sonda aparte, sin test en el repo.
+
+**Fuera de S2:** checker de Zodiac (S1 y paso humano H3), I1 a I4 (S6) y S8.
+
 ## Suite S1 del repositorio · 2026-11-08 · fork local
 
 `npm run fondo:fork` pasó con Anvil 1.8.7: un test de integración, 30,12 s.

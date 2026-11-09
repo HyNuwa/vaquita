@@ -88,13 +88,18 @@ existing purchase transactions remain structurally compatible.
 
 These helpers do not load environment, filesystem, SQL or server adapters.
 They do not simulate, compare on-chain hashes, check current owners/approvals or
-submit transactions. Later RPC orchestration must compare the current hash and
-simulate before requesting the second signature. Tests cover the scoped browser
-core import closure and public imports, not a browser bundle or future reader and
-verifier modules; full S2-18 remains pending.
+submit transactions. RPC orchestration remains responsible for comparing the current
+hash and simulating before requesting the second signature. These helper tests cover
+the scoped browser core import closure and public imports; they are not, by themselves,
+evidence of a full browser bundle. Current S2-18 acceptance and its distinct bundle
+evidence are recorded in the fund evidence and completion log referenced below.
 Tests use synthetic fixtures and an independent reference encoding, never RPC.
-The fixed hash is **not fork evidence**: S2-11 remains pending. This unit does
-not submit deployments, verify a deployed fund or establish full S2 completion.
+The original synthetic hash was not fork evidence. The current fixed vector in
+`test/fondo-safe.test.ts` comes from the later local fork suite (S2-11), as recorded
+in [fund evidence](../../docs/pruebas/fondo.md) and completion log L7–L8 in
+`odd/tasks/fund-s2-completion.md`. Those are author results, not independent fork
+verification. These pure helpers still do not submit deployments or verify a
+deployed fund.
 
 ## Read-injected creation resumption
 
@@ -174,7 +179,10 @@ status, whatever its `info` word); a passing call, a network error or a revert
 without data fails it. N3 needs `stateDiff` overrides and alters only the balance and timestamp of an
 allowance word already authenticated against the getter. A transport that loses
 revert bytes, such as a plain EIP-1193 error, fails closed. These tests use a modeled
-Roles; EVM and fork behavior of the exact signals remain separately unproven.
+Roles. The later local fork suite exercises N1–N10 through the real `simulacion`
+control and asserts that control passes, not each negative individually. Completion
+log L8 records the author's 21/21 twice; this is not independent verification or
+mainnet proof. See [fund evidence](../../docs/pruebas/fondo.md) for the limits.
 Structural checks are unlike `planCreation`, which accepts five references and
 zero modules because it only resumes deployment.
 
@@ -194,6 +202,24 @@ conditions and the budget. Without those fields the control fails and reads no
 logs. Replay alone cannot detect a log the RPC omitted from the middle of the
 history, and its budget balance is the last value set, not the current one, which
 the `presupuesto` control reads.
+
+## Proposal bodies, rules and recovery manifest
+
+`safe.ts` and `roles.ts` build Safe proposal bodies without a nonce (`txGasto`,
+`txCancelar`, `txCambiarResponsable`, `txReparto`, `txCambiarDestinatarios`,
+`txRevocar`, `txCerrarVaqui`). Linked-list predecessors come from the on-chain order
+the caller passes in. `errores.ts` classifies structured signals only; message text
+never decides a code. `TOKEN_RESTRINGIDO` recognizes `EnforcedPause`
+(`0xd93c0665`), observed by the author after forcing pause storage in the local
+fork. Roles masks it as `ERROR_DESCONOCIDO`, and Safe as `GASTO_RECHAZADO`;
+a paused Vaqui payment is therefore not identified as token restricted. This is
+not an independently verified fork result or a mainnet claim; see
+[fund evidence](../../docs/pruebas/fondo.md) and completion log L8.
+`saldos.ts`, `cuotas.ts` and `reparto.ts` are pure rules in `bigint`.
+
+`manifiesto.ts` exports a public JSON with no keys, names or owners. Importing checks
+shape, references and address derivation only; `revalidarManifiesto` is what proves
+anything, by running `verificarGrupo` with owners supplied by the caller.
 
 ## Injected fund reader
 
