@@ -77,8 +77,9 @@ The same complete inputs reproduce the same addresses; changing owner order or
 other setup inputs changes the address even with the same group identifier.
 
 Prediction does not establish that code at an address is the expected deployment.
-Verified RPC resumption and the initial permissions batch remain the next units;
-never skip a deployment merely because an address has nonempty code.
+The read-injected resumption module below checks occupied addresses; the initial
+permissions batch remains separate. Never skip a deployment merely because an
+address has nonempty code.
 
 Each outer transaction validates the live-format code, appends ERC-8021 and asserts
 its tag. Inner Safe data stays byte-for-byte unchanged, even if empty or tagged.
@@ -95,6 +96,33 @@ Tests use synthetic fixtures and an independent reference encoding, never RPC.
 The fixed hash is **not fork evidence**: S2-11 remains pending. This unit does
 not submit deployments, implement initial Roles permissions, verify a deployed
 fund or establish full S2 completion.
+
+## Read-injected creation resumption
+
+`@vaquita/core/fondo/creacion` exports `planCreation(config, code, reader)` and
+`CreationReader`/`CreationPlan`. The caller injects chain ID, block number, code,
+storage and low-level call reads; this module creates no transport or wallet.
+It validates owners/code before reads, then checks actual Celo chain ID and pins
+all reference, factory and deployed-state reads to one block number.
+
+The five creation references must match their cached code hashes. Creation code
+comes from that authenticated factory. An occupied predicted Safe must retain
+its singleton, expected owner set/threshold, handler, zero guard and no module
+except possibly predicted Roles. Occupied Roles must have the exact proxy runtime
+for the authenticated mastercopy and Safe as owner/avatar/target. Allowing Roles
+as a module **does not attest its spending permissions**. MultiSend and full
+fund verification remain separate from this creation-only check.
+
+The result contains `{ safe, roles, blockNumber, steps }`; each ordered missing
+step has `{ step: "safe" | "roles", tx: TxPersona }`. Neither deployment is
+returned twice, including when Roles was deployed before Safe. An empty list
+means only **no deployments missing at that block**, not configured/active fund.
+Read failures, malformed data or mismatches throw
+`No pudimos verificar la creación del fondo.` without raw transport details;
+they are never treated as absence.
+There is no retry, persistence, signing, broadcast or automatic permission reset.
+Numeric block pinning is not finality; callers must re-read/simulate before later
+signatures. Initial rules, full verification and fork evidence remain separate.
 
 ## Fund sender (local fork tests)
 

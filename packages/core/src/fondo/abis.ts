@@ -7,6 +7,7 @@ export const safeAbi = parseAbi([
   "function getOwners() view returns (address[])",
   "function getThreshold() view returns (uint256)",
   "function isModuleEnabled(address) view returns (bool)",
+  "function getModulesPaginated(address,uint256) view returns (address[] array,address next)",
   "function getStorageAt(uint256,uint256) view returns (bytes)",
   "function approveHash(bytes32)",
   "function approvedHashes(address,bytes32) view returns (uint256)",
@@ -21,6 +22,7 @@ export const safeAbi = parseAbi([
 ]);
 
 export const proxyFactoryAbi = parseAbi([
+  "function proxyCreationCode() view returns (bytes)",
   "function createProxyWithNonce(address _singleton,bytes initializer,uint256 saltNonce) returns (address)",
   "event ProxyCreation(address indexed proxy, address singleton)",
 ]);

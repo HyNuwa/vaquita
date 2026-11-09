@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-08 · feat(core): plan verified fund creation
+- **Qué hice:** agregué reanudación de los dos despliegues mediante lecturas inyectadas a un bloque fijo: autentica cinco referencias, deriva las direcciones y verifica el estado de los contratos existentes antes de devolver solo transacciones faltantes. No firma, envía ni declara permisos activos. RED por módulo nuevo ausente: 1 test fallido, suite nueva sin recolectar y 50 previos aprobados; GREEN 79 focalizados, 456 completos y tipos core/web aprobados, también tras exigir el mensaje exacto sin detalles del transporte.
+- **Archivos clave:** `packages/core/src/fondo/{creacion,abis}.ts`, `packages/core/test/fondo-{reanudacion,browser}.test.ts`, README del core, seguimiento y estado propios.
+- **Próximo paso:** configuración inicial C3. C2 pasó verificación independiente mw8hysz3-k-o9te: 79 focalizados + 13 probes aislados (92 tests), tipos core y revisión de dinero/especificación sin hallazgos; los 87 originales/copias y HEAD/estado quedaron idénticos. Los 456 completos y tipos web son evidencia del autor, no repetida por el verificador. C1 permanece confirmado en 1a50eba con sus 63 tests independientes. No se usaron credenciales ni red; sin publicación, nueva evaluación nativa, fork ni afirmación de S2 completo.
+
 ## 2026-11-08 · feat(core): encode deterministic fund creation
 - **Qué hice:** integré #34 → #33 → #32 en staging c16f081 con árbol revisado exacto y CI final 42527864054 aprobada; main e historia preservados. En rama local nueva agregué setup y predicción deterministas de Safe/Roles y ambos constructores etiquetados, con tres responsables válidos ajenos a las cuentas de Vaqui. RED 21 fallos/30 éxitos; GREEN 51 focalizados, 428 completos y typechecks core/web aprobados, sin red ni fondos reales.
 - **Archivos clave:** `packages/core/src/fondo/{safe,transacciones}.ts`, `packages/core/test/fondo-{creacion,browser}.test.ts`, README del core, `odd/tasks/fund-s2-creation.md` y estado propio.
