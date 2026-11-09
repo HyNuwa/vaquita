@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-09 · docs(repo): track S2 reader verification work
+- **Qué hice:** registré la integración autorizada #38 → #37 → #36 en staging acbd8a0, con revisión independiente sin hallazgos, árbol exacto y CI heredadas/final 42550244133/42550389408/42550531575 aprobadas. Preparé la rama local nueva y el plan de ocho tareas del lector/verificador; sin implementar S3 ni publicar esta rama.
+- **Archivos clave:** `odd/tasks/fund-s2-reader-verifier.md`, bitácora y estado propios. Investigación estática: artifact de Roles con runtime idéntico al hash permitido y layout corroborado; proxy oficial identificado, sin compilación propia, EVM ni nuevos RPC. Se conserva el fallo previo por sufijo de origin y su corrección acotada.
+- **Próximo paso:** lector inyectado con RED/GREEN, tipos/frontera navegador y verificación independiente, antes de permisos efectivos/simulaciones. Registro pasivo: no cambia comportamiento y no tiene RED significativo; comprobación estructural y hooks normales. No se declara lector, permisos desplegados ni S2 completos; sin configuración privada, dependencias, dinero o nueva autoridad nativa.
+
 ## 2026-11-08 · docs(docs): record fund creation publication evidence
 - **Qué hice:** publiqué #36 (C1/ancla en borrador) → #37 (C2) → #38 (C3/cierre), cada hijo sobre su padre, con `Refs #35` y un único `type:feature`. Heads, bases, cuerpos, tamaños y enlaces confirmados; CI fuente 42544945983/42544951761/42544959291 aprobada en primer intento. Verificación estructural independiente y tres guardas completas por SHA aprobadas; código e historia originales preservados.
 - **Archivos clave:** `odd/tasks/fund-s2-creation-publication.md`, bitácora y estado propios. Registro pasivo; se conservan fallos de preparación Windows, rechazo de privilegio y recuperación DACL expresamente autorizada, además del RED/GREEN del falso positivo de URL, sin repetir creaciones remotas.
