@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-09 · feat(core): add injected fund reader
+- **Qué hice:** implementé el lector público inyectado, compatible con creación y sin env/SQL/firma/envío/reintentos propios. Valida bloques/logs minados y respuestas; limita simulaciones a diferencias de almacenamiento y separa bytes de rechazo de errores de transporte, sin conservar causas ni URLs privadas. RED 37 fallos/2 previos aprobados; GREEN final 42 focalizados, 511 completos y tipos core/web aprobados.
+- **Archivos clave:** `packages/core/src/fondo/lectura.ts`, tests de lectura/frontera navegador, README del core, seguimiento y estado propios. Se conserva el primer fallo de expectativa del SDK, errores de tipos Celo y el RED adicional de tres respuestas nulas/array antes de su corrección; no se cambió creación, permisos ni transacciones existentes.
+- **Próximo paso:** unidad posterior: replay de eventos. Tras la entrada original se agregó el rechazo de CCIP; verificación independiente del lector: 46/46 y tipos core. El lector no acredita fondo activo, ejecución EVM, bundle ni S2 completo.
+
 ## 2026-11-09 · docs(repo): track S2 reader verification work
 - **Qué hice:** registré la integración autorizada #38 → #37 → #36 en staging acbd8a0, con revisión independiente sin hallazgos, árbol exacto y CI heredadas/final 42550244133/42550389408/42550531575 aprobadas. Preparé la rama local nueva y el plan de ocho tareas del lector/verificador; sin implementar S3 ni publicar esta rama.
 - **Archivos clave:** `odd/tasks/fund-s2-reader-verifier.md`, bitácora y estado propios. Investigación estática: artifact de Roles con runtime idéntico al hash permitido y layout corroborado; proxy oficial identificado, sin compilación propia, EVM ni nuevos RPC. Se conserva el fallo previo por sufijo de origin y su corrección acotada.
