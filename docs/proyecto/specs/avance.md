@@ -131,3 +131,15 @@ y `odd/tasks/fund-s2-creation.md`. No hubo red, fondos reales ni nueva revisión
 nativa. Las casillas generales de S2 permanecen abiertas: faltan el vector de
 fork S2-11, lector/verificador completo, bundle transitivo y aceptación completa;
 el checker Zodiac humano, I1–I4 y S8 tampoco quedan acreditados.
+
+### Lector y verificador · 2026-11-09 · offline
+
+`createFondoReader` y `verificarGrupo`, con sus diez controles, están implementados
+en la rama local `feat/fund-s2-reader`, sin commit de fuente todavía. T3, T4, T5, T5b
+y T6 tienen verificación independiente offline sobre copia aislada. La suite del core
+da 689/689 y los tipos core y web pasan. Evidencia: `docs/pruebas/fondo.md`.
+Ninguna app consume todavía `verificarGrupo`.
+
+Las casillas generales de S2 siguen abiertas: el vector de fork S2-11, las negativas
+contra el contrato real, el bundle transitivo, el checker Zodiac humano, I1–I4 y S8.
+Un resultado `ok` offline no acredita permisos desplegados.

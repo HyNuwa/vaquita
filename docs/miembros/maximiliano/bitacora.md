@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-09 · feat(core): add effective fund group verifier
+- **Qué hice:** `verificarGrupo` con diez controles en un solo bloque; `ok` sólo si pasan todos. Verificación independiente offline por unidad; reconciliación del autor: core 689/689 y tipos core/web aprobados.
+- **Archivos clave:** `packages/core/src/fondo/verificar.ts`, frontera de navegador, README, `docs/pruebas/fondo.md`, avance y seguimiento.
+- **Próximo paso:** decidir la publicación de esta rama. Siguen abiertos fork y S2-11, bundle, checker Zodiac, I1–I4 y S8; no se declara S2 completo.
+
 ## 2026-11-09 · feat(core): check exact negative simulation signals
 - **Qué hice:** N1 a N10 por eth_call con señal exacta; N3 altera sólo saldo y fecha de una palabra autenticada contra el getter. Verificación independiente offline: 220/220, con selectores y layout cotejados contra el artefacto.
 - **Archivos clave:** `packages/core/src/fondo/verificacion-simulacion.ts`, su test y el Roles modelado.

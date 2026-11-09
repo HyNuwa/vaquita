@@ -178,3 +178,31 @@ C3 corregidos sin cambiar producción en `odd/tasks/fund-s2-creation.md`.
 No fue necesario acceder a configuración privada. No se acredita nuevo fork,
 permisos efectivos, verificador completo, bundle, revisión nativa ni S2 completo;
 S2-11, checker Zodiac, I1–I4 y S8 siguen pendientes.
+
+## Lector y verificador S2 · 2026-11-09 · solo offline
+
+Evidencia offline de `createFondoReader` y `verificarGrupo`, sin red, fork, EVM ni
+fondos. El detalle y cada intento, incluidos los fallidos, están en
+`odd/tasks/fund-s2-reader-verifier.md` (L26 a L47).
+
+| Unidad | Contenido | Verificación independiente sobre copia aislada |
+|---|---|---|
+| T3 | Lector inyectado, con rechazo de CCIP | PASS: 46/46 y tipos core |
+| T4 | Ocho controles estructurales | PASS: 91/91 y tipos core |
+| T5 | Replay ordenado de eventos de Roles | PASS: 123/123, tipos core y ABI 22/22 contra el artefacto |
+| T5b | Control `eventos` contra la política fija | PASS: 174/174 |
+| T6 | Control `simulacion`, N1 a N10 con señal exacta | PASS offline: 220/220, y 226/226 con sus sondas |
+
+Reconciliación final del autor, no independiente: suite del core 689/689 en 31
+archivos, frontera de navegador 2/2, tipos core y web con exit 0.
+
+En las corridas de T5b y T6, `tsc` dentro de la copia aislada salió con exit 1 por
+cuatro errores en una sonda anterior del checker, ajena a la fuente. Después de T6
+sólo cambió una frase del README del core.
+
+**No se probó:** que el Roles desplegado emita esas señales, los números de status
+(el artefacto no expone los miembros del enum), el argumento de `NotAuthorized`, la
+aceptación EVM del `stateDiff`, ni que `ScopeFunction` emita las condiciones tal como
+se enviaron. Las negativas usan un Roles modelado. El replay no detecta un log que
+el RPC omita, y tampoco se comprobó contra la fuente Solidity, que no está en el
+artefacto. No se acredita fork, mainnet, permisos desplegados ni S2 completo.

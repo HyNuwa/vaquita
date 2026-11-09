@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 const SRC = fileURLToPath(new URL("../src/", import.meta.url));
-const ROOTS = ["fondo/constantes.ts", "fondo/safe.ts", "fondo/transacciones.ts", "fondo/creacion.ts", "fondo/roles.ts"];
+const ROOTS = ["fondo/constantes.ts", "fondo/safe.ts", "fondo/transacciones.ts", "fondo/creacion.ts", "fondo/roles.ts", "fondo/lectura.ts", "fondo/verificar.ts", "fondo/verificacion-eventos.ts", "fondo/verificacion-politica.ts", "fondo/verificacion-simulacion.ts"];
 
 /** Inspecciona fuentes del core antes de permitir su importación pública. */
 function browserClosure(): Set<string> {
@@ -14,7 +14,7 @@ function browserClosure(): Set<string> {
     expect(file.startsWith(SRC)).toBe(true);
     visited.add(file);
     const source = readFileSync(file, "utf8");
-    // No eval, require, imports dinámicos ni accesos a entorno/red en este núcleo puro.
+    // Sin eval, require, imports dinámicos ni entorno/red global; el lector recibe su cliente.
     expect(source).not.toMatch(/\b(?:process|fetch|XMLHttpRequest|require|eval)\s*[.(]|\bimport\s*\(/);
     const imports = [...source.matchAll(/\b(?:import|export)\s+(?:[^;]*?\s+from\s+)?["']([^"']+)["']/g)];
     for (const match of imports) {
@@ -23,7 +23,7 @@ function browserClosure(): Set<string> {
         const dependency = resolve(dirname(file), specifier.replace(/\.js$/, ".ts"));
         // Lista cerrada: ningún adaptador nuevo puede colarse en el recorrido.
         expect(relative(SRC, dependency).replaceAll("\\", "/")).toMatch(
-          /^(?:fondo\/(?:constantes|safe|transacciones|abis|creacion|roles)|config\/(?:tokens|fondo-contratos)|attribution\/tag)\.ts$/,
+          /^(?:fondo\/(?:constantes|safe|transacciones|abis|creacion|roles|lectura|verificar|verificacion-eventos|verificacion-politica|verificacion-simulacion)|config\/(?:tokens|fondo-contratos)|attribution\/tag)\.ts$/,
         );
         visit(dependency);
       } else {
@@ -40,7 +40,7 @@ describe("frontera navegador del núcleo S2 implementado", () => {
     const closure = browserClosure();
     expect([...closure].map((file) => relative(SRC, file).replaceAll("\\", "/")).sort()).toEqual([
       "attribution/tag.ts", "config/fondo-contratos.ts", "config/tokens.ts", "fondo/abis.ts", "fondo/constantes.ts",
-      "fondo/creacion.ts", "fondo/roles.ts", "fondo/safe.ts", "fondo/transacciones.ts",
+      "fondo/creacion.ts", "fondo/lectura.ts", "fondo/roles.ts", "fondo/safe.ts", "fondo/transacciones.ts", "fondo/verificacion-eventos.ts", "fondo/verificacion-politica.ts", "fondo/verificacion-simulacion.ts", "fondo/verificar.ts",
     ]);
     const constants = await import("@vaquita/core/fondo/constantes");
     const safe = await import("@vaquita/core/fondo/safe");
@@ -51,6 +51,16 @@ describe("frontera navegador del núcleo S2 implementado", () => {
     expect(typeof creation.planCreation).toBe("function");
     const roles = await import("@vaquita/core/fondo/roles");
     expect(Object.keys(roles).sort()).toEqual(["buildInitialRules", "condicionesVaqui"]);
+    const reader = await import("@vaquita/core/fondo/lectura");
+    expect(Object.keys(reader).sort()).toEqual(["FondoReadError", "createFondoReader"]);
+    const verifier = await import("@vaquita/core/fondo/verificar");
+    expect(Object.keys(verifier)).toEqual(["verificarGrupo"]);
+    const events = await import("@vaquita/core/fondo/verificacion-eventos");
+    expect(Object.keys(events)).toEqual(["reconstruirPermisos"]);
+    const policy = await import("@vaquita/core/fondo/verificacion-politica");
+    expect(Object.keys(policy)).toEqual(["compararPermisos"]);
+    const simulation = await import("@vaquita/core/fondo/verificacion-simulacion");
+    expect(Object.keys(simulation)).toEqual(["comprobarNegativas"]);
     expect(Object.keys(transactions).sort()).toEqual(["aportar", "aprobarHash", "crearSafe", "desplegarRoles", "ejecutarPropuesta"]);
   });
 
