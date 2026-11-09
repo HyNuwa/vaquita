@@ -116,3 +116,18 @@ Lo que necesita a una persona: pieza, error exacto y qué se hizo mientras tanto
 - **S2-11, vector de hash:** falta un vector fijo obtenido del fork. Las pruebas
   offline pueden verificar la implementación local, pero no reemplazan esa
   procedencia ni autorizan otra corrida de red.
+
+## Registro posterior · unidad offline de creación/configuración · 2026-11-08
+
+La primera unidad S2 se integró mediante #34 → #33 → #32 en `staging`
+`c16f081`, con CI 42527864054 aprobada; `main` e historia preservados.
+La nueva unidad queda **local y sin publicar** en `feat/fund-s2-create`:
+C1 `1a50eba` (creación/predicción), C2 `4848324` (reanudación verificada a
+bloque fijo) y C3 `5d96d52` (condiciones BFS/lote inicial de cinco llamadas).
+Check final del autor: **471 tests y tipos core/web**. Revisiones independientes
+por unidad: 63, 92 y 110 tests respectivamente, tipos core y cero hallazgos.
+No se suman esos conteos como casos únicos. Evidencia: `docs/pruebas/fondo.md`
+y `odd/tasks/fund-s2-creation.md`. No hubo red, fondos reales ni nueva revisión
+nativa. Las casillas generales de S2 permanecen abiertas: faltan el vector de
+fork S2-11, lector/verificador completo, bundle transitivo y aceptación completa;
+el checker Zodiac humano, I1–I4 y S8 tampoco quedan acreditados.
