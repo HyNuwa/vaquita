@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-09 · feat(core): compare effective permissions with policy
+- **Qué hice:** comparación exacta del replay con la wallet operativa, los destinatarios, las condiciones de wARS y el presupuesto; las funciones latentes rechazan. Verificación independiente: 174/174 sobre la unidad.
+- **Archivos clave:** `packages/core/src/fondo/verificacion-politica.ts` y su test.
+- **Próximo paso:** negativas con señal exacta. El replay no detecta un log omitido por el RPC.
+
 ## 2026-11-09 · feat(core): replay roles events into effective state
 - **Qué hice:** reconstrucción pura y ordenada de permisos desde los eventos de Roles, con ABI aditivo de 22 eventos cotejado de forma independiente contra el artefacto. Verificación independiente: 123/123 y tipos core.
 - **Archivos clave:** `packages/core/src/fondo/verificacion-eventos.ts`, `abis.ts` y su test.
