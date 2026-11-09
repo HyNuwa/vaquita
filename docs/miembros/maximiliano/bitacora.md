@@ -2,6 +2,11 @@
 
 Una entrada por commit, la más nueva arriba.
 
+## 2026-11-09 · feat(core): classify paused wARS as restricted token
+- **Qué hice:** `TOKEN_RESTRINGIDO` usa `EnforcedPause`, forzada en fork: 21/21 dos veces y 801/801 offline. Se marcan N1 a N14 y S2-1 a S2-21 con evidencia de fork.
+- **Archivos clave:** `packages/core/src/fondo/errores.ts`, `packages/core/test/fondo-errores.test.ts`, `packages/core/test-fork/fondo-s2.test.ts`, `docs/proyecto/specs/02-core-fondo.md`, `docs/proyecto/specs/avance.md`, `docs/pruebas/fondo.md` y `odd/tasks/fund-s2-completion.md`.
+- **Próximo paso:** publicar las ramas y pasar la revisión de `control-entrega.md`, decisión humana. Siguen fuera de S2: checker Zodiac (H3), I1 a I4 (S6) y S8.
+
 ## 2026-11-09 · test(core): prove fund rules on a local Celo fork
 - **Qué hice:** suite de fork con contratos reales: S2-1 a S2-11, N1 a N14, S2-19, S2-20 y S2-21, 20/20 en Anvil, sin enviar nada a mainnet. Vector S2-11 fijado en la suite offline, 800/800.
 - **Archivos clave:** `packages/core/test-fork/fondo-s2.test.ts`, `packages/core/test/fondo-safe.test.ts`, `docs/pruebas/fondo.md`, `docs/proyecto/specs/avance.md` y `odd/tasks/fund-s2-completion.md`.

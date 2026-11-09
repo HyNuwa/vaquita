@@ -34,6 +34,8 @@ const cuenta = () => privateKeyToAccount(generatePrivateKey());
 const fijo = (n: number) => pad(toHex(n + 0x1000), { size: 20 }) as Address;
 const SLOT_GUARD = "0x4a204f620c8c5ccdca3fd54d003badd85ba500436a431f0cbda4f558c93c34c8" as const; // Slot público de Safe; secret-scan: allow
 
+const SLOT_PAUSA = "0xcd5ed15c6e187e77e9aee88184c21f4f2182ab5827cb3b7e07fbedcd63f03300" as const; // Slot ERC-7201 público de Pausable; secret-scan: allow
+
 type Fork = Awaited<ReturnType<typeof startAnvil>>;
 interface Grupo { grupoId: string; safe: Address; roles: Address; bloque: bigint }
 
@@ -98,7 +100,9 @@ describe("S2 en fork local", () => {
       enviadas.length = antes; // Esas transacciones ya no existen en el fork.
     }
   };
-  const avanzarPeriodo = async () => { await fork.rpc("evm_increaseTime", [Number(PERIODO_SEGUNDOS) + 1]); await fork.rpc("evm_mine"); };
+  // evm_mine puede traer estado remoto y superar el límite de 1 s de fork.rpc.
+  const minar = () => (client as unknown as { request(args: { method: string }): Promise<unknown> }).request({ method: "evm_mine" });
+  const avanzarPeriodo = async () => { await fork.rpc("evm_increaseTime", [Number(PERIODO_SEGUNDOS) + 1]); await minar(); };
 
   beforeAll(async () => {
     fork = await startAnvil({ env: { CELO_RPC_URL: "https://forno.celo.org" }, startupTimeoutMs: 60000 });
@@ -191,6 +195,19 @@ describe("S2 en fork local", () => {
     const onChain = await client.readContract({ address: g.safe, abi: extraAbi, functionName: "getTransactionHash",
       args: [tx.to, tx.value, tx.data, tx.operation, 0n, 0n, 0n, zeroAddress, zeroAddress, tx.nonce] });
     expect(hashTransaccionSafe(g.safe, tx)).toBe(onChain);
+  });
+
+  it("S2-16: con wARS en pausa, cada camino da la señal que se observa en cadena", async () => {
+    await conSnapshot(async () => {
+      await fork.rpc("anvil_setStorageAt", [wars, SLOT_PAUSA, pad("0x01", { size: 32 })]);
+      expect(await client.readContract({ address: wars, abi: parseAbi(["function paused() view returns (bool)"]), functionName: "paused" })).toBe(true);
+      expect(await codigoRechazo({ ...aportar(g.safe, ONE, CODE), account: duenos[0].address })).toBe("TOKEN_RESTRINGIDO");
+      // Roles y Safe no reenvían el error interno: la señal de pausa sólo llega en la llamada directa.
+      expect(await pagoRechazo(g, r1, ONE)).toBe("ERROR_DESCONOCIDO");
+      const tx = await armar(g.safe, txGasto(r2, ONE));
+      await enviar(duenos[0], aprobarHash(g.safe, hashTransaccionSafe(g.safe, tx), CODE));
+      expect(await codigoRechazo({ ...ejecutarPropuesta(g.safe, tx, firmasPreaprobadas([duenos[0].address, duenos[1].address]), CODE), account: duenos[1].address })).toBe("GASTO_RECHAZADO");
+    });
   });
 
   it("S2-1: pasa un pago de $ 5.000 exactos", async () => {
